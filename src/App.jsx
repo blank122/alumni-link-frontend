@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Login";
+import Login from "./pages/Login";
 
 const Dashboard = () => <h2>Welcome to the Dashboard</h2>;
 
