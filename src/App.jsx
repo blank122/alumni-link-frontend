@@ -15,7 +15,10 @@ const App = () => {
             <Hero />
             <UpcomingEvents />
           </>} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<>
+            <Navbar isAdminPage={false} /> {/* Landing Page Navbar */}
+            <Login /></>
+          } />
           <Route path="/admin" element={<AdminDashboard />} /> {/* Admin Dashboard route */}
 
         </Routes>
