@@ -7,7 +7,7 @@ const AdminLayout = ({ children }) => {
     return (
         <div>
             <Header />
-            <div className="flex mt-16"> {/* Add mt-16 or any value to create space */}
+            <div className="flex"> {/* Add mt-16 or any value to create space */}
                 <Sidebar />
                 <div className="ml-64 p-6 w-full">
                     {children}  {/* Render the specific content for each admin page */}

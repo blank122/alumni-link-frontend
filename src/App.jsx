@@ -9,9 +9,9 @@ const App = () => {
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
       <Router>
-        <Navbar isAdminPage={false} /> {/* Landing Page Navbar */}
         <Routes>
           <Route path="/" element={<>
+            <Navbar isAdminPage={false} /> {/* Landing Page Navbar */}
             <Hero />
             <UpcomingEvents />
           </>} />
