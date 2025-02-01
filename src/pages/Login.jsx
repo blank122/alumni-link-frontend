@@ -17,7 +17,7 @@ const Login = () => {
             const response = await login(email, password);
             if (response.token) {
                 storeToken(response.token);
-                navigate("/dashboard");
+                navigate("/admin");  // Change this to "/admin"
             }
         } catch (err) {
             console.log(err);

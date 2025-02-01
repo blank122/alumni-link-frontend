@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ isAdminPage }) => {
     return (
         <nav className="bg-green-700 p-4 flex justify-between items-center">
             <h1 className="text-white text-xl font-bold">ALUMNILINK</h1>
