@@ -1,4 +1,4 @@
-import React from "react";
+import "react";
 import EventCard from "./EventCard";
 
 const UpcomingEvents = () => {
