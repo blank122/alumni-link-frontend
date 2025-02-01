@@ -1,8 +1,25 @@
-import 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { logout } from '../../services/authService';
 
 const DashboardCard = () => {
-    const handleLogout = () => {
-        alert('You have logged out!');
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            await axios.post("http://127.0.0.1:8000/api/logout", {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                }
+            });
+
+            logout(); // Clear the token from localStorage
+            alert('You have logged out!');
+            navigate("/"); // Use React Router's navigate to redirect to the landing page
+        } catch (error) {
+            console.error('Logout error:', error);
+            alert('Logout failed. Please try again.');
+        }
     };
 
     return (
@@ -17,5 +34,6 @@ const DashboardCard = () => {
         </div>
     );
 };
+
 
 export default DashboardCard;
