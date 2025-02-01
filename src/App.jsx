@@ -1,18 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import UpcomingEvents from "./components/UpcomingEvents";
 
-const Dashboard = () => <h2>Welcome to the Dashboard</h2>;
-
-function App() {
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </Router>
+    <div className="font-sans bg-gray-100 min-h-screen">
+      <Navbar />
+      <Hero />
+      <UpcomingEvents />
+    </div>
   );
-}
+};
 
 export default App;
