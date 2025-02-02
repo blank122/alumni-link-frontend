@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import 'react';
-import Sidebar from '../admin_layouts/SidebarAdmin'; // Your Sidebar Component
-import Header from '../admin_layouts/HeaderAdmin'; // Your Header Component
+import Sidebar from '../alumni_layouts/SidebarAlumni'; // Your Sidebar Component
+import Header from '../alumni_layouts/HeaderAlumni'; // Your Header Component
 
-const AdminLayout = ({ children }) => {
+const AlumniLayout = ({ children }) => {
     return (
         <div>
             <Header />
@@ -17,4 +17,4 @@ const AdminLayout = ({ children }) => {
     );
 };
 
-export default AdminLayout;
+export default AlumniLayout;

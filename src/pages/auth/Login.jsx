@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, storeToken } from '../../services/authService';
-import Account from "../models/Account"; // Import model
+import Account from "../../models/Account"; // Import model
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -20,15 +20,19 @@ const Login = () => {
             //     storeToken(response.token);
             //     navigate("/admin");  // Change this to "/admin"
             // }
-            if (response.data.success) {
-                const userData = response.data.user;
-                const token = response.data.token;
+            if (response.success) {
+                console.log('user account data');
+                console.log(response.user);
+                console.log('token');
+                console.log(response.token);
+                const userData = response.user;
+                const token = response.token;
 
                 // Create an Accounts object
                 const user = new Account(userData.id, userData.email, userData.alumni_id, userData.status, userData.account_type);
 
                 // Store user in localStorage
-                localStorage.setItem("user", JSON.stringify(user.toJSON()));
+                // localStorage.setItem("user", JSON.stringify(user.toJSON()));
                 storeToken(token);
 
                 // Redirect based on role
