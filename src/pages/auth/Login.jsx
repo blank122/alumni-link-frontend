@@ -29,8 +29,12 @@ const Login = () => {
                 const token = response.token;
 
                 // Create an Accounts object
-                const user = new Account(userData.id, userData.email, userData.alumni_id, userData.status, userData.account_type);
+                const user = new Account(userData.id, userData.email, userData.email_verified_at, userData.password, userData.alumni_id, userData.status, userData.account_type);
 
+                console.log('user parse:');
+                console.log(user);
+                console.log('status:', user.status);
+                console.log('account_type:', user.account_type);
                 // Store user in localStorage
                 // localStorage.setItem("user", JSON.stringify(user.toJSON()));
                 storeToken(token);
