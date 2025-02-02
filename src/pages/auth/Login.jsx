@@ -29,7 +29,7 @@ const Login = () => {
 
                 // Store user in localStorage
                 localStorage.setItem("user", JSON.stringify(user.toJSON()));
-                storeToken(response.token);
+                storeToken(token);
 
                 // Redirect based on role
                 navigate(user.isAdmin() ? "/admin-dashboard" : "/alumni-dashboard");
