@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 
-const Sidebar = () => {
+const SidebarAdmin = () => {
     return (
         <aside className="w-64 bg-gray-200 p-6 fixed h-full">
             <ul className="space-y-4">
@@ -13,4 +13,4 @@ const Sidebar = () => {
     );
 };
 
-export default Sidebar;
+export default SidebarAdmin;

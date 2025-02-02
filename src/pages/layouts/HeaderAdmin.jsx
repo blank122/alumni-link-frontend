@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 
-const Header = () => {
+const HeaderAdmin = () => {
     return (
         <header className="bg-gray-800 text-white p-4 text-center">
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
@@ -9,4 +9,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default HeaderAdmin;
