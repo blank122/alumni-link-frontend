@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, storeToken } from '../../services/authService';
+import Account from "../models/Account"; // Import model
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -15,9 +16,23 @@ const Login = () => {
 
         try {
             const response = await login(email, password);
-            if (response.token) {
+            // if (response.token) {
+            //     storeToken(response.token);
+            //     navigate("/admin");  // Change this to "/admin"
+            // }
+            if (response.data.success) {
+                const userData = response.data.user;
+                const token = response.data.token;
+
+                // Create an Accounts object
+                const user = new Account(userData.id, userData.email, userData.alumni_id, userData.status, userData.account_type);
+
+                // Store user in localStorage
+                localStorage.setItem("user", JSON.stringify(user.toJSON()));
                 storeToken(response.token);
-                navigate("/admin");  // Change this to "/admin"
+
+                // Redirect based on role
+                navigate(user.isAdmin() ? "/admin-dashboard" : "/alumni-dashboard");
             }
         } catch (err) {
             console.log(err);

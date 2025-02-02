@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { logout } from '../../services/authService';
 
-const DashboardCard = () => {
+const AlumniDashboardCard = () => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -36,4 +36,4 @@ const DashboardCard = () => {
 };
 
 
-export default DashboardCard;
+export default AlumniDashboardCard;

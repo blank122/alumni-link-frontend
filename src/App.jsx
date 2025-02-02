@@ -4,6 +4,8 @@ import UpcomingEvents from "./components/UpcomingEvents";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login"; // Import Login Page
 import AdminDashboard from "./pages/AdminDashboard"; // Import Admin Dashboard
+import ProtectedRoute from "./routes/ProtectedRoute";
+import AlumniDashboard from "./pages/AlumniDashboard"; // Import Admin Dashboard
 
 const App = () => {
   return (
@@ -19,8 +21,24 @@ const App = () => {
             <Navbar isAdminPage={false} /> {/* Landing Page Navbar */}
             <Login /></>
           } />
-          <Route path="/admin" element={<AdminDashboard />} /> {/* Admin Dashboard route */}
+          {/* Protected Routes */}
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={[1]}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
 
+          <Route
+            path="/alumni-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={[0]}>
+                <AlumniDashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </div>
