@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "../pages/admin/DashboardAdmin";
-import Products from "../pages/admin/Products";
-import Profile from "../pages/admin/Profile";
-import Orders from "../pages/admin/Orders";
-import Settings from "../pages/admin/Settings";
+import Jobs from "../pages/admin/Jobs";
+import Announcement from "../pages/admin/Announcement";
+import Events from "../pages/admin/Events";
+import Forums from "../pages/admin/Forums";
 
 
 import Login from "../pages/Login";
@@ -46,10 +46,10 @@ const AppRoutes = () => {
             <Route element={<ProtectedRoute />}>
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="products" element={<Products />} />
-                    <Route path="orders" element={<Orders />} />
-                    <Route path="profile" element={<Profile />} />
-                    <Route path="settings" element={<Settings />} />
+                    <Route path="jobs" element={<Jobs />} />
+                    <Route path="announcement" element={<Announcement />} />
+                    <Route path="events" element={<Events />} />
+                    <Route path="forums" element={<Forums />} />
                 </Route>
             </Route>
 
