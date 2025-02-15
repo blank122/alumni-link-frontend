@@ -7,12 +7,22 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { login } = useAuth();
+    const [error, setError] = useState("");
+
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        login({ email });
-        navigate("/");
-    };
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError("");
+
+        const result = await login({ email, password });
+
+        if (result.success) {
+            navigate("/");
+        } else {
+            setError(result.message);
+        }
+    }
 
     return (
         <div>
@@ -21,7 +31,8 @@ const Login = () => {
                 <div className="bg-white p-8 rounded-lg shadow-md w-96">
                     {/* add atag logo?? */}
                     <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-                    <form >
+                    {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+                    <form onSubmit={handleLogin}>
                         <div className="mb-4">
                             <label className="block text-gray-700 font-semibold mb-2">Email</label>
                             <input
@@ -46,7 +57,7 @@ const Login = () => {
                         </div>
 
                     </form>
-                    <button onClick={handleLogin} className="bg-blue-500 text-white p-2 w-full">
+                    <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded-md hover:bg-blue-600">
                         Login
                     </button>
                 </div>
