@@ -13,6 +13,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import ProtectedRoute from "./ProtectedRoutes";
 import { NotFound, AccessDenied, ServerError } from "../pages/errors/ErrorPage";
 import Home from "../pages/Home";
+
 import AdminLayout from "../layouts/AdminLayout";
 
 const AppRoutes = () => {
@@ -28,8 +29,8 @@ const AppRoutes = () => {
             {/* Auth Routes */}
             <Route element={<AuthLayout />}>
                 <Route path="/" element={<Home />} />
-                {/* <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} /> */}
+                <Route path="/login" element={<Login />} />
+                {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             </Route>
             {/* User route */}
             {/* <Route element={<ProtectedRoute />}>

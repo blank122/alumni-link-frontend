@@ -7,7 +7,12 @@ const Navbar = () => {
     return (
         <nav className="bg-gray-900 text-white">
             <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4">
-                <h1 className="text-xl font-bold">Flowbite</h1>
+                Logo
+                {/* dapat ma hide ni na div */}
+                <div>
+                    <h1 className="text-xl font-bold">Alumnilink</h1>
+                    Reconnect, Rediscover, Reimagine
+                </div>
 
                 {/* Mobile Toggle Button */}
                 <button
