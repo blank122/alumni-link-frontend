@@ -64,11 +64,12 @@ const DashboardAdmin = () => {
                         <table className="w-full border-collapse bg-white shadow-lg rounded-lg">
                             <thead className="bg-blue-600 text-white">
                                 <tr>
-                                    <th className="px-6 py-3 text-left">First Name</th>
-                                    <th className="px-6 py-3 text-left">Last Name</th>
-                                    <th className="px-6 py-3 text-left">Gender</th>
-                                    <th className="px-6 py-3 text-left">Contact</th>
-                                    <th className="px-6 py-3 text-left">Date Created</th>
+                                    <th className="px-6 py-3 text-left">Registration Date</th>
+                                    <th className="px-6 py-3 text-left">Name</th>
+                                    <th className="px-6 py-3 text-left">Email</th>
+                                    <th className="px-6 py-3 text-left">Status</th>
+                                    <th className="px-6 py-3 text-left">Actions</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,11 +79,24 @@ const DashboardAdmin = () => {
                                             key={item.id}
                                             className={`border-b ${index % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-gray-200 transition`}
                                         >
-                                            <td className="px-6 py-4 text-gray-700">{item.alumni?.alm_first_name || "N/A"}</td>
-                                            <td className="px-6 py-4 text-gray-700">{item.alumni?.alm_last_name || "N/A"}</td>
                                             <td className="px-6 py-4 text-gray-700">{item.alumni?.alm_gender || "N/A"}</td>
-                                            <td className="px-6 py-4 text-gray-700">{item.alumni?.alm_contact_number || "N/A"}</td>
+                                            <td className="px-6 py-4 text-gray-700"> {item.alumni?.alm_first_name || "N/A"} {item.alumni?.alm_last_name || "N/A"} </td>
+                                            <td className="px-6 py-4 text-gray-700">{item.alumni?.alm_gender || "N/A"}</td>
                                             <td className="px-6 py-4 text-gray-700">{item.alumni?.alm_date_created || "N/A"}</td>
+                                            <td className="px-6 py-4 text-center">
+                                                <button
+                                                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                                                // onClick={() => handleStatusUpdate(item.id, "accepted")}
+                                                >
+                                                    Accept
+                                                </button>
+                                                <button
+                                                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition ml-2"
+                                                // onClick={() => handleStatusUpdate(item.id, "rejected")}
+                                                >
+                                                    Reject
+                                                </button>
+                                            </td>
                                         </tr>
                                     ))
                                 ) : (
