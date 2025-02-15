@@ -18,7 +18,7 @@ const Login = () => {
         const result = await login({ email, password });
 
         if (result.success) {
-            navigate("/");
+            navigate("/admin/dashboard");
         } else {
             setError(result.message);
         }
@@ -55,11 +55,11 @@ const Login = () => {
                                 required
                             />
                         </div>
-
+                        <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded-md hover:bg-blue-600">
+                            Login
+                        </button>
                     </form>
-                    <button type="submit" className="bg-blue-500 text-white p-2 w-full rounded-md hover:bg-blue-600">
-                        Login
-                    </button>
+
                 </div>
             </div>
         </div>
