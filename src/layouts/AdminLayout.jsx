@@ -15,6 +15,10 @@ const AdminLayout = ({ children }) => {
                     } sm:translate-x-0`}
             >
                 <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+                    <div>
+                        PICTURE NI USER OG IYANG NAME
+
+                    </div>
                     <ul className="space-y-2 font-medium">
                         <li>
                             <NavLink
@@ -35,7 +39,7 @@ const AdminLayout = ({ children }) => {
                                     }`
                                 }
                             >
-                                🏠 Dashboard
+                                🏠 Jobs
                             </NavLink>
                         </li>
                         {/* <li>
@@ -84,46 +88,102 @@ const AdminLayout = ({ children }) => {
                         </li> */}
                         <li>
                             <NavLink
-                                to="/admin/settings"
+                                to="/admin/announcement"
                                 className={({ isActive }) =>
                                     `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
                                     }`
                                 }
                             >
-                                🏠 Settings
+                                🏠 Announcement
                             </NavLink>
                         </li>
                         <li>
                             <NavLink
-                                to="/admin/profile"
+                                to="/admin/events"
                                 className={({ isActive }) =>
                                     `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
                                     }`
                                 }
                             >
-                                🏠 Profile
+                                🏠 Events
                             </NavLink>
                         </li>
                         <li>
                             <NavLink
-                                to="/admin/products"
+                                to="/admin/forums"
                                 className={({ isActive }) =>
                                     `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
                                     }`
                                 }
                             >
-                                📦  Products
+                                📦  Forums
                             </NavLink>
                         </li>
                         <li>
                             <NavLink
-                                to="/admin/orders"
+                                to="/admin/course-list"
                                 className={({ isActive }) =>
                                     `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
                                     }`
                                 }
                             >
-                                🛒 Orders
+                                🛒 Course List
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="/admin/alumni-list"
+                                className={({ isActive }) =>
+                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    }`
+                                }
+                            >
+                                📦  Alumni List
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="/admin/manage-map"
+                                className={({ isActive }) =>
+                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    }`
+                                }
+                            >
+                                🛒 Manage Map
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="/admin/manage-feedback"
+                                className={({ isActive }) =>
+                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    }`
+                                }
+                            >
+                                📦  Manage Feedback
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="/admin/statistical-reports"
+                                className={({ isActive }) =>
+                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    }`
+                                }
+                            >
+                                🛒 Statistical Report
+                            </NavLink>
+                        </li>
+
+                        <li>
+                            <NavLink
+                                to="/admin/statistical-reports"
+                                className={({ isActive }) =>
+                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                                    }`
+                                }
+                            >
+                                🛒 Logout
                             </NavLink>
                         </li>
                     </ul>
