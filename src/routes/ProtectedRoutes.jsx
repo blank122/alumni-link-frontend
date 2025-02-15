@@ -11,7 +11,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
     const { user } = useAuth();
 
     if (!user) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/" replace />;
     }
 
     if (allowedRoles && !allowedRoles.includes(user.role)) {
