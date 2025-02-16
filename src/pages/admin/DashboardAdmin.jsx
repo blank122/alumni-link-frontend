@@ -6,7 +6,6 @@ import axios from "axios";
 const DashboardAdmin = () => {
     const { user, token } = useAuth(); // Retrieve user and token
     const [account, setAccount] = useState([]);
-
     const [loading, setLoading] = useState(true);
 
     // useEffect(() => {
@@ -67,7 +66,7 @@ const DashboardAdmin = () => {
                 <h2 className="text-xl font-semibold">User Info</h2>
                 {user ? (
                     <div>
-                        <p><strong>First Name:</strong> {user.created_at}</p>
+                        <p><strong>First Name:</strong> {user.status}</p>
                         <p><strong>Email:</strong> {user.email}</p>
                         <p><strong>Role:</strong> {user.account_type}</p>
                     </div>
