@@ -29,6 +29,8 @@ const Navbar = () => {
                     <Link to="/" className="hover:underline">Services</Link>
                     <Link to="/" className="hover:underline">Pricing</Link>
                     <Link to="/login" className="hover:underline">Login</Link>
+                    <Link to="/register" className="hover:underline">Register</Link>
+
                 </div>
             </div>
 
@@ -38,7 +40,8 @@ const Navbar = () => {
                 <Link to="/" className="block py-2">About</Link>
                 <Link to="/" className="block py-2">Services</Link>
                 <Link to="/" className="block py-2">Pricing</Link>
-                <Link to="/" className="block py-2">Login</Link>
+                <Link to="/login" className="block py-2">Login</Link>
+                <Link to="/register" className="block py-2">Register</Link>
             </div>
         </nav>
     );

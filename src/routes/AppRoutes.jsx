@@ -12,6 +12,8 @@ import ManageFeedback from "../pages/admin/ManageFeedback";
 import StatisticalReports from "../pages/admin/StatisticalReports";
 
 import Login from "../pages/Login";
+import Register from "../pages/Register";
+
 // import AdminLayout from "../layouts/AdminLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import ProtectedRoute from "./ProtectedRoutes";
@@ -34,6 +36,8 @@ const AppRoutes = () => {
             <Route element={<AuthLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+
                 {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             </Route>
             {/* User route */}

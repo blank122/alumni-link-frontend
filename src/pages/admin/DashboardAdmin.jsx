@@ -8,29 +8,6 @@ const DashboardAdmin = () => {
     const [account, setAccount] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
-    //     if (token) {
-    //         fetchAlumniData();
-    //     }
-    // }, [token]);
-
-    // const fetchAlumniData = async () => {
-    //     try {
-    //         const response = await axios.get("http://127.0.0.1:8000/api/get-alumni", {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`, // Send the token for authentication
-    //                 Accept: "application/json",
-    //             },
-    //         });
-
-    //         setAlumni(response.data.data);
-    //     } catch (error) {
-    //         console.error("Error fetching alumni data:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
     useEffect(() => {
         const fetchAlumniData = async () => {
             try {
