@@ -1,7 +1,24 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import Navbar from "../components/layouts/Navbar";
+import { motion } from "framer-motion";
 
+// 📌 Progress Bar Component
+const ProgressBar = ({ step }) => {
+    const progress = (step / 3) * 100; // 3 Steps → Convert to %
+    return (
+        <div className="w-96 mx-auto mb-4">
+            <div className="h-2 bg-gray-300 rounded-full">
+                <motion.div
+                    className="h-2 bg-blue-500 rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.5 }}
+                />
+            </div>
+        </div>
+    );
+};
 // 📌 Step 1: Personal Information
 const PersonalInfoStep = ({ userData, handleChange, nextStep }) => (
     <div className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto">
@@ -123,7 +140,8 @@ const MultiStepForm = () => {
     return (
         <div>
             <Navbar />
-            <div className="flex justify-center items-center h-screen bg-gray-100">
+            <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
+                <ProgressBar step={step} />
                 {step === 1 && <PersonalInfoStep userData={userData} handleChange={handleChange} nextStep={nextStep} />}
                 {step === 2 && <AddressInfoStep userData={userData} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} />}
                 {step === 3 && <AccountInfoStep userData={userData} handleChange={handleChange} prevStep={prevStep} handleSubmit={handleSubmit} />}
