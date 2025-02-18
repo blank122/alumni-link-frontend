@@ -35,7 +35,7 @@ const PersonalInfoStep = ({ userData, handleChange, nextStep, errors }) => (
     </motion.div>
 );
 
-const AddressInfoStep = ({ userData, handleChange, nextStep, prevStep, errors }) => (
+const AddressInfoStep = ({ addressData, handleChange, nextStep, prevStep, setAddressErrors }) => (
     <motion.div
         className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
         initial={{ opacity: 0, x: 50 }}
@@ -43,10 +43,12 @@ const AddressInfoStep = ({ userData, handleChange, nextStep, prevStep, errors })
         transition={{ duration: 0.5 }}
     >
         <h2 className="text-xl font-semibold mb-4">Address Information</h2>
-        <input type="text" name="address" placeholder="Street Address" onChange={handleChange} value={userData.address} className="w-full p-2 border rounded mb-1" />
-        {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
-        <input type="text" name="city" placeholder="City" onChange={handleChange} value={userData.city} className="w-full p-2 border rounded mb-1" />
-        {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+        <input type="text" name="address" placeholder="full address" onChange={handleChange} value={addressData.add_full_address} className="w-full p-2 border rounded mb-1" />
+        {setAddressErrors.add_full_address && <p className="text-red-500 text-sm">{setAddressErrors.add_full_address}</p>}
+        <input type="text" name="latitude" placeholder="latitude" onChange={handleChange} value={addressData.add_lat} className="w-full p-2 border rounded mb-1" />
+        {setAddressErrors.city && <p className="text-red-500 text-sm">{setAddressErrors.add_lat}</p>}
+        <input type="text" name="longitude" placeholder="longitude" onChange={handleChange} value={addressData.add_long} className="w-full p-2 border rounded mb-1" />
+        {setAddressErrors.city && <p className="text-red-500 text-sm">{setAddressErrors.add_long}</p>}
         <div className="flex justify-between mt-4">
             <button onClick={prevStep} className="bg-gray-400 text-white px-4 py-2 rounded">Back</button>
             <button onClick={nextStep} className="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
@@ -94,21 +96,33 @@ const ReviewStep = ({ userData, prevStep, handleSubmit }) => (
 
 const MultiStepForm = () => {
     const [step, setStep] = useState(1);
-    const [userData, setUserData] = useState({ name: "", email: "", address: "", city: "", password: "" });
+    const [userData, setUserData] = useState({ alm_first_name: "", alm_last_name: "", alm_gender: "", alm_contact_number: "" });
+    const [addressData, setAddressData] = useState({ add_lat: "", add_long: "", add_full_address: "" });
+    const [educBackgroundData, setEducBrackgroundData] = useState({ bs_deg: "", year_graduated: "", masters_deg: "", masters_deg_school: "" });
+
+
     const [errors, setErrors] = useState({});
+    const [addressErrors, setAddressErrors] = useState({});
+    const [educBackgroundDataErrors, setEducBackgroundDataErrors] = useState({});
 
     const handleChange = (e) => {
         setUserData({ ...userData, [e.target.name]: e.target.value });
         setErrors({ ...errors, [e.target.name]: "" });
+        //address
+        setAddressData({ ...addressData, [e.target.name]: e.target.value });
+        setAddressErrors({ ...addressErrors, [e.target.name]: "" });
+        //educational background
+        setEducBrackgroundData({ ...educBackgroundData, [e.target.name]: e.target.value });
+        setEducBackgroundDataErrors({ ...educBackgroundDataErrors, [e.target.name]: "" });
     };
 
     const validateStep = () => {
         let newErrors = {};
-        if (step === 1 && !userData.name) newErrors.name = "Full Name is required";
-        if (step === 1 && !userData.email) newErrors.email = "Email is required";
-        if (step === 2 && !userData.address) newErrors.address = "Address is required";
-        if (step === 2 && !userData.city) newErrors.city = "City is required";
-        if (step === 3 && !userData.password) newErrors.password = "Password is required";
+        // if (step === 1 && !userData.name) newErrors.name = "Full Name is required";
+        // if (step === 1 && !userData.email) newErrors.email = "Email is required";
+        // if (step === 2 && !userData.address) newErrors.address = "Address is required";
+        // if (step === 2 && !userData.city) newErrors.city = "City is required";
+        // if (step === 3 && !userData.password) newErrors.password = "Password is required";
         return newErrors;
     };
 
