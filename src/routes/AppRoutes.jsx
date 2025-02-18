@@ -12,7 +12,7 @@ import ManageFeedback from "../pages/admin/ManageFeedback";
 import StatisticalReports from "../pages/admin/StatisticalReports";
 
 import Login from "../pages/Login";
-import Register from "../pages/Register";
+import Register from "../pages/Register1";
 
 // import AdminLayout from "../layouts/AdminLayout";
 import AuthLayout from "../layouts/AuthLayout";

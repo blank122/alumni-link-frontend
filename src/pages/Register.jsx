@@ -27,10 +27,15 @@ const PersonalInfoStep = ({ userData, handleChange, nextStep, errors }) => (
         transition={{ duration: 0.5 }}
     >
         <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-        <input type="text" name="name" placeholder="Full Name" onChange={handleChange} value={userData.name} className="w-full p-2 border rounded mb-1" />
+        <input type="text" name="name" placeholder="First Name" onChange={handleChange} value={userData.alm_first_name} className="w-full p-2 border rounded mb-1" />
         {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-        <input type="email" name="email" placeholder="Email Address" onChange={handleChange} value={userData.email} className="w-full p-2 border rounded mb-1" />
+        <input type="email" name="email" placeholder="Last Name" onChange={handleChange} value={userData.alm_last_name} className="w-full p-2 border rounded mb-1" />
         {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+        <input type="text" name="name" placeholder="Gender" onChange={handleChange} value={userData.gender} className="w-full p-2 border rounded mb-1" />
+        {errors.name && <p className="text-red-500 text-sm">{errors.gender}</p>}
+        <input type="number" name="contact_number" placeholder="Contact Number" onChange={handleChange} value={userData.alm_contact_number} className="w-full p-2 border rounded mb-1" />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+
         <button onClick={nextStep} className="w-full py-2 bg-blue-500 text-white rounded mt-4">Next</button>
     </motion.div>
 );
@@ -45,10 +50,40 @@ const AddressInfoStep = ({ addressData, handleChange, nextStep, prevStep, setAdd
         <h2 className="text-xl font-semibold mb-4">Address Information</h2>
         <input type="text" name="address" placeholder="full address" onChange={handleChange} value={addressData.add_full_address} className="w-full p-2 border rounded mb-1" />
         {setAddressErrors.add_full_address && <p className="text-red-500 text-sm">{setAddressErrors.add_full_address}</p>}
+
         <input type="text" name="latitude" placeholder="latitude" onChange={handleChange} value={addressData.add_lat} className="w-full p-2 border rounded mb-1" />
         {setAddressErrors.city && <p className="text-red-500 text-sm">{setAddressErrors.add_lat}</p>}
+
         <input type="text" name="longitude" placeholder="longitude" onChange={handleChange} value={addressData.add_long} className="w-full p-2 border rounded mb-1" />
         {setAddressErrors.city && <p className="text-red-500 text-sm">{setAddressErrors.add_long}</p>}
+
+        <div className="flex justify-between mt-4">
+            <button onClick={prevStep} className="bg-gray-400 text-white px-4 py-2 rounded">Back</button>
+            <button onClick={nextStep} className="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+        </div>
+    </motion.div>
+);
+
+const EducationalBackgroundInfo = ({ educBackgroundData, handleChange, nextStep, prevStep, setEducBrackgroundData }) => (
+    <motion.div
+        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+    >
+        <h2 className="text-xl font-semibold mb-4">Address Information</h2>
+        <input type="text" name="bs_deg" placeholder="Bachelors Degree" onChange={handleChange} value={educBackgroundData.bs_deg} className="w-full p-2 border rounded mb-1" />
+        {setEducBrackgroundData.bs_deg && <p className="text-red-500 text-sm">{setEducBrackgroundData.bs_deg}</p>}
+
+        <input type="date" name="year_graduated" placeholder="Year Graduated" onChange={handleChange} value={educBackgroundData.year_graduated} className="w-full p-2 border rounded mb-1" />
+        {setEducBrackgroundData.year_graduated && <p className="text-red-500 text-sm">{setEducBrackgroundData.year_graduated}</p>}
+
+        <input type="text" name="masters_deg" placeholder="Master Degree" onChange={handleChange} value={educBackgroundData.masters_deg} className="w-full p-2 border rounded mb-1" />
+        {setEducBrackgroundData.masters_deg && <p className="text-red-500 text-sm">{setEducBrackgroundData.masters_deg}</p>}
+
+        <input type="text" name="masters_deg_school" placeholder="Master Degree School" onChange={handleChange} value={educBackgroundData.masters_deg_school} className="w-full p-2 border rounded mb-1" />
+        {setEducBrackgroundData.masters_deg_school && <p className="text-red-500 text-sm">{setEducBrackgroundData.masters_deg_school}</p>}
+
         <div className="flex justify-between mt-4">
             <button onClick={prevStep} className="bg-gray-400 text-white px-4 py-2 rounded">Back</button>
             <button onClick={nextStep} className="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
@@ -118,11 +153,19 @@ const MultiStepForm = () => {
 
     const validateStep = () => {
         let newErrors = {};
-        // if (step === 1 && !userData.name) newErrors.name = "Full Name is required";
+        //personal info
+        if (step === 1 && !userData.alm_first_name) newErrors.alm_first_name = "First Name is required";
+        if (step === 1 && !userData.alm_last_name) newErrors.alm_last_name = "Last Name is required";
+        if (step === 1 && !userData.gender) newErrors.gender = "Gender is required";
+        if (step === 1 && !userData.alm_contact_number) newErrors.alm_contact_number = "Contact number is required";
         // if (step === 1 && !userData.email) newErrors.email = "Email is required";
-        // if (step === 2 && !userData.address) newErrors.address = "Address is required";
-        // if (step === 2 && !userData.city) newErrors.city = "City is required";
-        // if (step === 3 && !userData.password) newErrors.password = "Password is required";
+        //address error
+        if (step === 2 && !addressData.add_lat) newErrors.add_lat = "Address latitude is required";
+        if (step === 2 && !addressData.add_long) newErrors.add_long = "Address longitude is required";
+        if (step === 2 && !addressData.add_full_address) newErrors.add_full_address = "Full address is required";
+
+        //account
+        if (step === 3 && !userData.password) newErrors.password = "Password is required";
         return newErrors;
     };
 
@@ -160,9 +203,11 @@ const MultiStepForm = () => {
             <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
                 <ProgressBar step={step} />
                 {step === 1 && <PersonalInfoStep userData={userData} handleChange={handleChange} nextStep={nextStep} errors={errors} />}
-                {step === 2 && <AddressInfoStep userData={userData} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} errors={errors} />}
-                {step === 3 && <AccountInfoStep userData={userData} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} errors={errors} />}
-                {step === 4 && <ReviewStep userData={userData} prevStep={prevStep} handleSubmit={handleSubmit} />}
+                {step === 2 && <AddressInfoStep addressData={addressData} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} errors={addressErrors} />}
+                {step === 3 && <EducationalBackgroundInfo educBackgroundData={educBackgroundData} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} errors={educBackgroundDataErrors} />}
+
+                {step === 4 && <AccountInfoStep userData={userData} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} errors={errors} />}
+                {step === 5 && <ReviewStep userData={userData} prevStep={prevStep} handleSubmit={handleSubmit} />}
             </div>
         </div>
 
