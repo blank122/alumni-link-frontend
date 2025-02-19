@@ -3,6 +3,8 @@ import { useState } from "react";
 import Navbar from "../components/layouts/Navbar";
 import { motion } from "framer-motion";
 
+import AddressInfoStep from "../components/register/AddressInfoStep";
+
 const ProgressBar = ({ step }) => {
     const progress = (step / 4) * 100;
     return (
@@ -51,7 +53,7 @@ const PersonalInfoStep = ({ userData, handleChange, errors }) => (
 
 );
 
-const AddressInfoStep = ({ userData, handleChange, errors }) => (
+const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => (
     <motion.div
         className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
         initial={{ opacity: 0, x: 50 }}
@@ -59,15 +61,18 @@ const AddressInfoStep = ({ userData, handleChange, errors }) => (
         transition={{ duration: 0.5 }}
     >
         <div>
-            <h2 className="text-xl font-semibold mb-4">Address Information</h2>
-            <input type="text" name="add_full_address" placeholder="Full Address" onChange={handleChange} value={userData.add_full_address} className="w-full p-2 border rounded mb-1" />
-            {errors.add_full_address && <p className="text-red-500 text-sm">{errors.add_full_address}</p>}
+            <h2 className="text-xl font-semibold mb-4">Educational Background</h2>
+            <input type="text" name="educ_highest_level" placeholder="Highest Level of Education" onChange={handleChange} value={userData.educ_highest_level} className="w-full p-2 border rounded mb-1" />
+            {errors.educ_highest_level && <p className="text-red-500 text-sm">{errors.educ_highest_level}</p>}
+
+            <input type="text" name="year_graduated" placeholder="Year Graduated" onChange={handleChange} value={userData.year_graduated} className="w-full p-2 border rounded mb-1" />
+            {errors.year_graduated && <p className="text-red-500 text-sm">{errors.year_graduated}</p>}
         </div>
     </motion.div>
 
 );
 
-const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => (
+const AccountInfoStep = ({ userData, handleChange, errors }) => (
     <motion.div
         className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
         initial={{ opacity: 0, x: 50 }}
@@ -100,6 +105,9 @@ const ReviewStep = ({ userData }) => (
             <p><strong>Gender:</strong> {userData.alm_gender}</p>
             <p><strong>Contact:</strong> {userData.alm_contact_number}</p>
             <p><strong>Address:</strong> {userData.add_full_address}</p>
+            <p><strong>Latitude:</strong> {userData.add_lat}</p>
+            <p><strong>Longitude:</strong> {userData.add_long}</p>
+
             <p><strong>Education:</strong> {userData.educ_highest_level}</p>
         </div>
     </motion.div>
@@ -110,12 +118,16 @@ const MultiStepForm = () => {
     const [userData, setUserData] = useState({
         alm_first_name: "",
         alm_last_name: "",
-        email: "",
         alm_gender: "",
         alm_contact_number: "",
         add_full_address: "",
+        add_long: "",
+        add_lat: "",
         educ_highest_level: "",
         year_graduated: "",
+        email: "",
+        password: "",
+
     });
     const [errors, setErrors] = useState({});
 
@@ -128,7 +140,6 @@ const MultiStepForm = () => {
         if (step === 1) {
             if (!userData.alm_first_name) newErrors.alm_first_name = "First Name is required";
             if (!userData.alm_last_name) newErrors.alm_last_name = "Last Name is required";
-            if (!userData.email) newErrors.email = "Email is required";
             if (!userData.alm_gender) newErrors.alm_gender = "Gender is required";
             if (!userData.alm_contact_number) newErrors.alm_contact_number = "Contact Number is required";
         } else if (step === 2) {
@@ -137,6 +148,9 @@ const MultiStepForm = () => {
             if (!userData.educ_highest_level) newErrors.educ_highest_level = "Education level is required";
             if (!userData.year_graduated) newErrors.year_graduated = "Year Graduated is required";
 
+        } else if (step === 4) {
+            if (!userData.email) newErrors.email = "Email is required";
+            if (!userData.password) newErrors.password = "Password is required";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -159,12 +173,13 @@ const MultiStepForm = () => {
                 {step === 1 && <PersonalInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
                 {step === 2 && <AddressInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
                 {step === 3 && <EducationalBackgroundInfo userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 4 && <ReviewStep userData={userData} />}
+                {step === 4 && <AccountInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
+                {step === 5 && <ReviewStep userData={userData} />}
 
                 <div className="flex justify-between mt-4">
 
                     {step > 1 && <button onClick={prevStep} className="px-4 py-2 bg-gray-400 text-white rounded">Back</button>}
-                    {step < 4 ? (
+                    {step < 5 ? (
                         <button onClick={nextStep} className="px-4 py-2 bg-blue-500 text-white rounded">Next</button>
                     ) : (
                         <button className="px-4 py-2 bg-green-500 text-white rounded">Submit</button>
