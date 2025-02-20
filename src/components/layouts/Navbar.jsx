@@ -5,7 +5,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="bg-gray-900 text-white">
+        <nav className="bg-green-500 text-white">
             <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4">
                 Logo
                 {/* dapat ma hide ni na div */}
