@@ -237,6 +237,49 @@ const MultiStepForm = () => {
         setUserData({ ...userData, [e.target.name]: e.target.value });
     };
 
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/register-alumni-dummy", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+            });
+
+            const data = await response.json();
+            alert("Registration Successful!");
+            console.log("Server Response:", data);
+
+            // Reset form after successful registration
+            setUserData({
+                alm_first_name: "",
+                alm_last_name: "",
+                alm_gender: "",
+                alm_contact_number: "",
+                add_full_address: "",
+                add_long: "",
+                add_lat: "",
+                educ_highest_level: "",
+                year_graduated: "",
+                emp_status: "",
+                company_name: "",
+                job_title: "",
+                start_date: "",
+                emp_full_address: "",
+                emp_long: "",
+                emp_lat: "",
+                email: "",
+                password: "",
+            });
+            setStep(1);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            alert("Something went wrong!");
+        }
+        // console.log('submitted on work');
+        // alert("Submittion on working pa dols");
+
+    };
+
     const validateStep = () => {
         let newErrors = {};
         //registration
@@ -314,7 +357,7 @@ const MultiStepForm = () => {
                     {step < 8 ? (
                         <button onClick={nextStep} className="px-4 py-2 bg-blue-500 text-white rounded">Next</button>
                     ) : (
-                        <button className="px-4 py-2 bg-green-500 text-white rounded">Submit</button>
+                        <button onClick={handleSubmit} className="px-4 py-2 bg-green-500 text-white rounded">Submit</button>
                     )}
                 </div>
             </div>
