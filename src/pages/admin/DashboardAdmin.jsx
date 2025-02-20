@@ -34,7 +34,40 @@ const DashboardAdmin = () => {
         }
     }, [token]); // Only runs when token changes
 
+    //create function for approval of alumnis
+    const handleAction = async (id, actionType) => {
 
+        const confirmation = window.confirm(`Are you sure you want to ${actionType} this account?`);
+        if (!confirmation) return;
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/approval-email/${id}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    status: actionType === "Accept" ? "2" : "0", //2 for approved, 0 for rejected, 1 is for pending
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(`${actionType} action successful!`);
+                console.log(data);
+                // remove the accounts and display only the pending
+                setAccount((prevAccounts) => prevAccounts.filter((item) => item.id !== id));
+            } else {
+                alert(`Failed to ${actionType} the account.`);
+                console.error("Error:", data);
+            }
+        } catch (error) {
+            alert("Something went wrong. Please try again.");
+            console.error("Error:", error);
+        }
+    };
     return (
         <div className="flex flex-col h-screen p-6">
             <h1 className="text-2xl font-bold">Welcome to Admin Panel</h1>
@@ -92,12 +125,19 @@ const DashboardAdmin = () => {
                                                 {item.status === 1 ? "Pending" : "Rejected"}
                                             </td>
                                             <td className="px-6 py-4 text-center">
-                                                <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">
+                                                <button
+                                                    onClick={() => handleAction(item.id, "Accept")}
+                                                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition">
                                                     Accept
                                                 </button>
-                                                <button className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition ml-2">
+                                                {/*
+                                                  <button
+                                                    onClick={() => handleAction(item.id, "Reject")}
+                                                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition ml-2">
                                                     Reject
                                                 </button>
+                                                */}
+
                                             </td>
                                         </tr>
                                     ))
