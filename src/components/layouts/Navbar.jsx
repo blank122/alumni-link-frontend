@@ -42,11 +42,11 @@ const Navbar = () => {
             {/* Black Navbar (Navigation Links) */}
             <div className="bg-black text-white">
                 <div className="max-w-screen-xl mx-auto flex justify-center md:justify-start space-x-6 py-2 text-sm">
-                    <Link to="/" className="hover:text-yellow-400">Home</Link>
-                    <Link to="/about" className="hover:text-yellow-400">About</Link>
-                    <Link to="/programs" className="hover:text-yellow-400">Programs & Events</Link>
-                    <Link to="/careers" className="hover:text-yellow-400">Career Opportunity</Link>
-                    <Link to="/contact" className="hover:text-yellow-400">Contact Us</Link>
+                    <Link to="/" className="hover:text-yellow-400  hidden md:flex">Home</Link>
+                    <Link to="/about" className="hover:text-yellow-400 hidden md:flex">About</Link>
+                    <Link to="/programs" className="hover:text-yellow-400 hidden md:flex">Programs & Events</Link>
+                    <Link to="/careers" className="hover:text-yellow-400 hidden md:flex">Career Opportunity</Link>
+                    <Link to="/contact" className="hover:text-yellow-400 hidden md:flex">Contact Us</Link>
                 </div>
             </div>
 
