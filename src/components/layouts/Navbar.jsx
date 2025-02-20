@@ -5,44 +5,66 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="bg-green-500 text-white">
-            <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4">
-                Logo
-                {/* dapat ma hide ni na div */}
-                <div>
-                    <h1 className="text-xl font-bold">Alumnilink</h1>
-                    Reconnect, Rediscover, Reimagine
-                </div>
+        <nav>
+            {/* Green Navbar (Top Section) */}
+            <div className="bg-green-700 text-white">
+                <div className="max-w-screen-xl mx-auto flex justify-between items-center p-3">
+                    {/* Logo & Title */}
+                    <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-white rounded-full"></div> {/* Placeholder Logo */}
+                        <div className="w-10 h-10 bg-white rounded-full"></div> {/* Placeholder Logo */}
 
-                {/* Mobile Toggle Button */}
-                <button
-                    className="md:hidden focus:outline-none"
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    ☰
-                </button>
+                        <div>
+                            <h1 className="text-lg font-bold">ALUMNILINK</h1>
+                            <p className="text-xs">Reconnect · Rediscover · Reimagine</p>
+                        </div>
+                    </div>
 
-                {/* Desktop Menu */}
-                <div className="hidden md:flex space-x-6">
-                    <Link to="/" className="hover:underline">Home</Link>
-                    <Link to="/" className="hover:underline">About</Link>
-                    <Link to="/" className="hover:underline">Services</Link>
-                    <Link to="/" className="hover:underline">Pricing</Link>
-                    <Link to="/login" className="hover:underline">Login</Link>
-                    <Link to="/register" className="hover:underline">Register</Link>
+                    {/* Search Bar */}
+                    <div className="hidden md:flex items-center bg-white text-black px-3 py-1 rounded-md">
+                        <input type="text" placeholder="Search..." className="outline-none w-40" />
+                        🔍
+                    </div>
 
+                    {/* Login / Register */}
+                    <div className="hidden md:flex space-x-4">
+                        <Link to="/login" className="bg-white text-green-700 px-4 py-1 rounded-md">Login</Link>
+                        <Link to="/register" className="bg-white text-green-700 px-4 py-1 rounded-md">Register</Link>
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
+                        ☰
+                    </button>
                 </div>
             </div>
 
-            {/* Mobile Menu */}
-            <div className={`${isOpen ? "block" : "hidden"} md:hidden bg-gray-800 p-2`}>
-                <Link to="/" className="block py-2">Home</Link>
-                <Link to="/" className="block py-2">About</Link>
-                <Link to="/" className="block py-2">Services</Link>
-                <Link to="/" className="block py-2">Pricing</Link>
-                <Link to="/login" className="block py-2">Login</Link>
-                <Link to="/register" className="block py-2">Register</Link>
+            {/* Black Navbar (Navigation Links) */}
+            <div className="bg-black text-white">
+                <div className="max-w-screen-xl mx-auto flex justify-center md:justify-start space-x-6 py-2 text-sm">
+                    <Link to="/" className="hover:text-yellow-400">Home</Link>
+                    <Link to="/about" className="hover:text-yellow-400">About</Link>
+                    <Link to="/programs" className="hover:text-yellow-400">Programs & Events</Link>
+                    <Link to="/careers" className="hover:text-yellow-400">Career Opportunity</Link>
+                    <Link to="/contact" className="hover:text-yellow-400">Contact Us</Link>
+                </div>
             </div>
+
+            {/* Yellow Bar (Separator) */}
+            <div className="bg-yellow-500 h-2"></div>
+
+            {/* Mobile Dropdown Menu */}
+            {isOpen && (
+                <div className="md:hidden bg-gray-800 text-white p-3">
+                    <Link to="/" className="block py-2">Home</Link>
+                    <Link to="/about" className="block py-2">About</Link>
+                    <Link to="/programs" className="block py-2">Programs & Events</Link>
+                    <Link to="/careers" className="block py-2">Career Opportunity</Link>
+                    <Link to="/contact" className="block py-2">Contact Us</Link>
+                    <Link to="/login" className="block py-2">Login</Link>
+                    <Link to="/register" className="block py-2">Register</Link>
+                </div>
+            )}
         </nav>
     );
 };
