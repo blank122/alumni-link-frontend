@@ -299,7 +299,8 @@ const MultiStepForm = () => {
                 {/* <ProgressBar step={step} /> */}
 
                 {step === 1 && <PersonalInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 2 && <AddressInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
+                {step === 2 && <AddressInfoStep userData={userData} setUserData={setUserData}
+                    handleChange={handleChange} errors={errors} />}
                 {step === 3 && <EducationalBackgroundInfo userData={userData} handleChange={handleChange} errors={errors} />}
                 {step === 4 && <EmploymentStatus userData={userData} handleChange={handleChange} errors={errors} />}
                 {step === 5 && <EmploymentInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
