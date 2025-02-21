@@ -52,7 +52,7 @@ const EmploymentAddressStep = ({ userData, setUserData, handleChange, errors }) 
             {/* Header */}
             <div className="flex items-center gap-3 mb-6">
                 <div className="w-3 h-8 bg-gradient-to-r from-green-500 to-yellow-500 rounded-full"></div>
-                <h2 className="text-2xl font-bold text-gray-800">Address Information</h2>
+                <h2 className="text-2xl font-bold text-gray-800">Employment Address Information</h2>
             </div>
 
             <div className="space-y-5">
