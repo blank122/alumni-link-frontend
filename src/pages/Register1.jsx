@@ -3,6 +3,7 @@ import { useState } from "react";
 import Navbar from "../components/layouts/Navbar";
 import { motion } from "framer-motion";
 import PersonalInfoStep from "./register/PersonalInfoStep";
+import AddressInfoStep from "./register/AddressInfoStep";
 
 
 // const ProgressBar = ({ step }) => {
@@ -21,25 +22,7 @@ import PersonalInfoStep from "./register/PersonalInfoStep";
 //     );
 // };
 
-const AddressInfoStep = ({ userData, handleChange, errors }) => (
-    <motion.div
-        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-    >
-        <h2 className="text-xl font-semibold mb-4">Address Information</h2>
-        <input type="text" name="add_full_address" placeholder="full address" onChange={handleChange} value={userData.add_full_address} className="w-full p-2 border rounded mb-1" />
-        {errors.add_full_address && <p className="text-red-500 text-sm">{errors.add_full_address}</p>}
 
-        <input type="text" name="add_lat" placeholder="latitude" onChange={handleChange} value={userData.add_lat} className="w-full p-2 border rounded mb-1" />
-        {errors.add_lat && <p className="text-red-500 text-sm">{errors.add_lat}</p>}
-
-        <input type="text" name="add_long" placeholder="longitude" onChange={handleChange} value={userData.add_long} className="w-full p-2 border rounded mb-1" />
-        {errors.add_long && <p className="text-red-500 text-sm">{errors.add_long}</p>}
-
-    </motion.div>
-);
 
 const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => (
     <motion.div
