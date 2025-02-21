@@ -4,6 +4,8 @@ import Navbar from "../components/layouts/Navbar";
 import { motion } from "framer-motion";
 import PersonalInfoStep from "./register/PersonalInfoStep";
 import AddressInfoStep from "./register/AddressInfoStep";
+import EducationalBackgroundInfo from "./register/EducationalBackgroundInfo";
+import EmploymentAddressStep from "./register/EmployeeAddressInfoStep";
 
 
 // const ProgressBar = ({ step }) => {
@@ -22,26 +24,6 @@ import AddressInfoStep from "./register/AddressInfoStep";
 //     );
 // };
 
-
-
-const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => (
-    <motion.div
-        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-    >
-        <div>
-            <h2 className="text-xl font-semibold mb-4">Educational Background</h2>
-            <input type="text" name="educ_highest_level" placeholder="Highest Level of Education" onChange={handleChange} value={userData.educ_highest_level} className="w-full p-2 border rounded mb-1" />
-            {errors.educ_highest_level && <p className="text-red-500 text-sm">{errors.educ_highest_level}</p>}
-
-            <input type="text" name="year_graduated" placeholder="Year Graduated" onChange={handleChange} value={userData.year_graduated} className="w-full p-2 border rounded mb-1" />
-            {errors.year_graduated && <p className="text-red-500 text-sm">{errors.year_graduated}</p>}
-        </div>
-    </motion.div>
-
-);
 //checks first if for employment status
 const EmploymentInfoStep = ({ userData, handleChange, errors }) => (
     <motion.div
@@ -87,26 +69,6 @@ const EmploymentStatus = ({ userData, handleChange, errors }) => (
     </motion.div>
 
 );
-//employment address step
-const EmploymentAddressStep = ({ userData, handleChange, errors }) => (
-    <motion.div
-        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-    >
-        <h2 className="text-xl font-semibold mb-4">Employment Address</h2>
-        <input type="text" name="emp_full_address" placeholder="full address" onChange={handleChange} value={userData.emp_full_address} className="w-full p-2 border rounded mb-1" />
-        {errors.emp_full_address && <p className="text-red-500 text-sm">{errors.emp_full_address}</p>}
-
-        <input type="text" name="emp_lat" placeholder="latitude" onChange={handleChange} value={userData.emp_lat} className="w-full p-2 border rounded mb-1" />
-        {errors.emp_lat && <p className="text-red-500 text-sm">{errors.add_lat}</p>}
-
-        <input type="text" name="emp_long" placeholder="longitude" onChange={handleChange} value={userData.emp_long} className="w-full p-2 border rounded mb-1" />
-        {errors.emp_long && <p className="text-red-500 text-sm">{errors.add_long}</p>}
-
-    </motion.div>
-);
 
 const AccountInfoStep = ({ userData, handleChange, errors }) => (
     <motion.div
@@ -145,6 +107,10 @@ const ReviewStep = ({ userData }) => (
             <p><strong>Address Longitude:</strong> {userData.add_long}</p>
             <p><strong>Education:</strong> {userData.educ_highest_level}</p>
             <p><strong>Year Graduated:</strong> {userData.year_graduated}</p>
+
+            <p><strong>Masters Degree:</strong> {userData.masters_type}</p>
+            <p><strong>School Taken:</strong> {userData.masters_institution}</p>
+
             <p><strong>Employment Status:</strong> {userData.emp_status}</p>
             <p><strong>Company Name:</strong> {userData.company_name}</p>
             <p><strong>Job Title:</strong> {userData.job_title}</p>
@@ -172,6 +138,9 @@ const MultiStepForm = () => {
         //education
         educ_highest_level: "",
         year_graduated: "",
+        //is attending masters degree
+        masters_type: "",
+        masters_institution: "",
         //employment status
         emp_status: "",
         //employment details
@@ -216,6 +185,8 @@ const MultiStepForm = () => {
                 add_lat: "",
                 educ_highest_level: "",
                 year_graduated: "",
+                masters_type: "",
+                masters_institution: "",
                 emp_status: "",
                 company_name: "",
                 job_title: "",
@@ -304,7 +275,7 @@ const MultiStepForm = () => {
                 {step === 3 && <EducationalBackgroundInfo userData={userData} handleChange={handleChange} errors={errors} />}
                 {step === 4 && <EmploymentStatus userData={userData} handleChange={handleChange} errors={errors} />}
                 {step === 5 && <EmploymentInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 6 && <EmploymentAddressStep userData={userData} handleChange={handleChange} errors={errors} />}
+                {step === 6 && <EmploymentAddressStep userData={userData} setUserData={setUserData} handleChange={handleChange} errors={errors} />}
                 {step === 7 && <AccountInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
                 {step === 8 && <ReviewStep userData={userData} />}
 

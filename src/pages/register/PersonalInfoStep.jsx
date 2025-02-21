@@ -23,7 +23,7 @@ const PersonalInfoStep = ({ userData, handleChange, errors }) => {
                         placeholder="First Name"
                         onChange={handleChange}
                         value={userData.alm_first_name}
-                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
                     />
                     {errors.alm_first_name && <p className="text-red-500 text-sm mt-1">{errors.alm_first_name}</p>}
                 </div>
@@ -36,7 +36,7 @@ const PersonalInfoStep = ({ userData, handleChange, errors }) => {
                         placeholder="Last Name"
                         onChange={handleChange}
                         value={userData.alm_last_name}
-                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
                     />
                     {errors.alm_last_name && <p className="text-red-500 text-sm mt-1">{errors.alm_last_name}</p>}
                 </div>
@@ -47,7 +47,7 @@ const PersonalInfoStep = ({ userData, handleChange, errors }) => {
                         name="alm_gender"
                         onChange={handleChange}
                         value={userData.alm_gender}
-                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
                     >
                         <option value="">Select Gender</option>
                         <option value="Male">Male</option>
@@ -64,7 +64,7 @@ const PersonalInfoStep = ({ userData, handleChange, errors }) => {
                         placeholder="Contact Number"
                         onChange={handleChange}
                         value={userData.alm_contact_number}
-                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
                     />
                     {errors.alm_contact_number && <p className="text-red-500 text-sm mt-1">{errors.alm_contact_number}</p>}
                 </div>

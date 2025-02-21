@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useGeolocated } from "react-geolocated";
 import { Map, Marker } from "pigeon-maps";
 
-const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
+const EmploymentAddressStep = ({ userData, setUserData, handleChange, errors }) => {
     const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
         positionOptions: { enableHighAccuracy: true },
         userDecisionTimeout: 5000,
@@ -76,7 +76,7 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                     <div>
                         <input
                             type="text"
-                            name="emp_add_lat"
+                            name="emp_lat"
                             placeholder="Latitude"
                             value={userData.emp_lat}
                             readOnly
@@ -129,4 +129,4 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
     );
 };
 
-export default AddressInfoStep;
+export default EmploymentAddressStep;
