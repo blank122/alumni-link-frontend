@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useGeolocated } from "react-geolocated";
+import { Map, Marker } from "pigeon-maps";
 
 const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
     const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
@@ -14,7 +15,7 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
         if (coords) {
             setUserData((prevData) => ({
                 ...prevData,
-                add_lat: coords.latitude.toFixed(6),  // Limit decimal places
+                add_lat: coords.latitude.toFixed(6),
                 add_long: coords.longitude.toFixed(6),
             }));
         }
@@ -51,7 +52,6 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
 
                 {/* Latitude & Longitude */}
                 <div className="grid grid-cols-2 gap-4">
-                    {/* Latitude */}
                     <div>
                         <input
                             type="text"
@@ -66,7 +66,6 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                         )}
                     </div>
 
-                    {/* Longitude */}
                     <div>
                         <input
                             type="text"
@@ -91,6 +90,19 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                     <p className="text-green-500 text-sm">✅ Location detected successfully!</p>
                 ) : (
                     <p className="text-gray-500 text-sm">📍 Fetching your location...</p>
+                )}
+
+                {/* OpenStreetMap with Pigeon Maps */}
+                {coords && (
+                    <div className="rounded-lg overflow-hidden shadow-lg border border-gray-300">
+                        <Map
+                            height={300}
+                            defaultCenter={[coords.latitude, coords.longitude]}
+                            defaultZoom={15}
+                        >
+                            <Marker width={50} anchor={[coords.latitude, coords.longitude]} />
+                        </Map>
+                    </div>
                 )}
             </div>
         </motion.div>
