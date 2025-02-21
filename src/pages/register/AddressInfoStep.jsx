@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useGeolocated } from "react-geolocated";
 import { Map, Marker } from "pigeon-maps";
@@ -10,16 +10,37 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
         userDecisionTimeout: 5000,
     });
 
-    // Update userData state when geolocation is available
+    // Local state for marker position
+    const [markerPosition, setMarkerPosition] = useState([10.3157, 123.8854]); // Default to Cebu City
+
+    // Update marker position when geolocation is available
     useEffect(() => {
         if (coords) {
+            const lat = coords.latitude.toFixed(6);
+            const long = coords.longitude.toFixed(6);
+            setMarkerPosition([parseFloat(lat), parseFloat(long)]);
+
+            // Set initial location in userData
             setUserData((prevData) => ({
                 ...prevData,
-                add_lat: coords.latitude.toFixed(6),
-                add_long: coords.longitude.toFixed(6),
+                add_lat: lat,
+                add_long: long,
             }));
         }
     }, [coords, setUserData]);
+
+    // Handle map click event to move the marker
+    const handleMapClick = ({ latLng }) => {
+        const [lat, long] = latLng;
+        setMarkerPosition([lat, long]);
+
+        // Update userData with new marker position
+        setUserData((prevData) => ({
+            ...prevData,
+            add_lat: lat.toFixed(6),
+            add_long: long.toFixed(6),
+        }));
+    };
 
     return (
         <motion.div
@@ -92,18 +113,17 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                     <p className="text-gray-500 text-sm">📍 Fetching your location...</p>
                 )}
 
-                {/* OpenStreetMap with Pigeon Maps */}
-                {coords && (
-                    <div className="rounded-lg overflow-hidden shadow-lg border border-gray-300">
-                        <Map
-                            height={300}
-                            defaultCenter={[coords.latitude, coords.longitude]}
-                            defaultZoom={15}
-                        >
-                            <Marker width={50} anchor={[coords.latitude, coords.longitude]} />
-                        </Map>
-                    </div>
-                )}
+                {/* OpenStreetMap with Clickable Marker */}
+                <div className="rounded-lg overflow-hidden shadow-lg border border-gray-300">
+                    <Map
+                        height={300}
+                        center={markerPosition}
+                        defaultZoom={15}
+                        onClick={handleMapClick} // Move marker on map click
+                    >
+                        <Marker width={50} anchor={markerPosition} />
+                    </Map>
+                </div>
             </div>
         </motion.div>
     );
