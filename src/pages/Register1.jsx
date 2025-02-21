@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Navbar from "../components/layouts/Navbar";
 import { motion } from "framer-motion";
+import PersonalInfoStep from "./register/PersonalInfoStep";
 
 
 // const ProgressBar = ({ step }) => {
@@ -19,34 +20,6 @@ import { motion } from "framer-motion";
 //         </div>
 //     );
 // };
-
-const PersonalInfoStep = ({ userData, handleChange, errors }) => (
-    <motion.div
-        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-    >
-        <div>
-            <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-            <input type="text" name="alm_first_name" placeholder="First Name" onChange={handleChange} value={userData.alm_first_name} className="w-full p-2 border rounded mb-1" />
-            {errors.alm_first_name && <p className="text-red-500 text-sm">{errors.alm_first_name}</p>}
-
-            <input type="text" name="alm_last_name" placeholder="Last Name" onChange={handleChange} value={userData.alm_last_name} className="w-full p-2 border rounded mb-1" />
-            {errors.alm_last_name && <p className="text-red-500 text-sm">{errors.alm_last_name}</p>}
-            <select name="alm_gender" onChange={handleChange} value={userData.alm_gender} className="w-full p-2 border rounded mb-1">
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
-            {errors.alm_gender && <p className="text-red-500 text-sm">{errors.alm_gender}</p>}
-
-            <input type="text" name="alm_contact_number" placeholder="Contact Number" onChange={handleChange} value={userData.alm_contact_number} className="w-full p-2 border rounded mb-1" />
-            {errors.alm_contact_number && <p className="text-red-500 text-sm">{errors.alm_contact_number}</p>}
-        </div>
-    </motion.div>
-
-);
 
 const AddressInfoStep = ({ userData, handleChange, errors }) => (
     <motion.div
