@@ -223,11 +223,23 @@ const MultiStepForm = () => {
     };
 
     const nextStep = () => {
-        if (validateStep()) setStep(step + 1);
+        if (!validateStep()) return;
+
+        // Skip Steps 5 & 6 if user is Unemployed (0) or Freelance (1)
+        if (step === 4 && (userData.emp_status === "0" || userData.emp_status === "1")) {
+            setStep(7); // Jump directly to AccountInfoStep
+        } else {
+            setStep(step + 1);
+        }
     };
 
+
     const prevStep = () => {
-        setStep(step - 1);
+        if (step === 7 && (userData.emp_status === "0" || userData.emp_status === "1")) {
+            setStep(4); // Jump back to Step 4 if employment was skipped
+        } else {
+            setStep(step - 1);
+        }
     };
 
     return (
