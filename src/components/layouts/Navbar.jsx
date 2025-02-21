@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import UmLogo from '../../assets/pictures/UM-1.png';
+import CCELogo from '../../assets/pictures/CCE.png';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,8 +13,9 @@ const Navbar = () => {
                 <div className="max-w-screen-xl mx-auto flex justify-between items-center p-3">
                     {/* Logo & Title */}
                     <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-white rounded-full"></div> {/* Placeholder Logo */}
-                        <div className="w-10 h-10 bg-white rounded-full"></div> {/* Placeholder Logo */}
+                        {/* UM & CCE Logos */}
+                        <img src={UmLogo} alt="UM Logo" className="w-10 h-10 rounded-full" />
+                        <img src={CCELogo} alt="CCE Logo" className="w-10 h-10 rounded-full" />
 
                         <div>
                             <h1 className="text-lg font-bold">ALUMNILINK</h1>
