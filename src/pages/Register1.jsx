@@ -7,6 +7,7 @@ import AddressInfoStep from "./register/AddressInfoStep";
 import EducationalBackgroundInfo from "./register/EducationalBackgroundInfo";
 import EmploymentAddressStep from "./register/EmployeeAddressInfoStep";
 
+import ReviewStep from "./register/ReviewStep";
 
 // const ProgressBar = ({ step }) => {
 //     const progress = (step / 4) * 100;
@@ -87,40 +88,6 @@ const AccountInfoStep = ({ userData, handleChange, errors }) => (
         </div>
     </motion.div>
 
-);
-
-const ReviewStep = ({ userData }) => (
-    <motion.div
-        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-    >
-        <div>
-            <h2 className="text-xl font-semibold mb-4">Review Your Information</h2>
-            <p><strong>Name:</strong> {userData.alm_first_name} {userData.alm_last_name}</p>
-            <p><strong>Email:</strong> {userData.email}</p>
-            <p><strong>Gender:</strong> {userData.alm_gender}</p>
-            <p><strong>Contact:</strong> {userData.alm_contact_number}</p>
-            <p><strong>Address:</strong> {userData.add_full_address}</p>
-            <p><strong>Address Latitude:</strong> {userData.add_lat}</p>
-            <p><strong>Address Longitude:</strong> {userData.add_long}</p>
-            <p><strong>Education:</strong> {userData.educ_highest_level}</p>
-            <p><strong>Year Graduated:</strong> {userData.year_graduated}</p>
-
-            <p><strong>Masters Degree:</strong> {userData.masters_type}</p>
-            <p><strong>School Taken:</strong> {userData.masters_institution}</p>
-
-            <p><strong>Employment Status:</strong> {userData.emp_status}</p>
-            <p><strong>Company Name:</strong> {userData.company_name}</p>
-            <p><strong>Job Title:</strong> {userData.job_title}</p>
-            <p><strong>Start Date:</strong> {userData.start_date}</p>
-            <p><strong>Company Address:</strong> {userData.emp_full_address}</p>
-            <p><strong>Compay Address Latitude:</strong> {userData.emp_lat}</p>
-            <p><strong>Company Address Longitude:</strong> {userData.emp_long}</p>
-            <p><strong>Password:</strong> **** (hidden for security)</p>
-        </div>
-    </motion.div>
 );
 
 const MultiStepForm = () => {
