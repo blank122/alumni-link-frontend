@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 
-
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
@@ -8,195 +7,61 @@ const AdminLayout = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="flex h-screen">
+        <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
             <aside
-                className={`fixed top-0 left-0 z-40 w-64 h-screen bg-gray-50 dark:bg-gray-800 transform transition-transform ${isOpen ? "translate-x-0" : "-translate-x-full"
+                className={`fixed top-0 left-0 z-40 w-72 h-screen bg-white shadow-lg transform transition-transform ${isOpen ? "translate-x-0" : "-translate-x-full"
                     } sm:translate-x-0`}
             >
-                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-                    <div>
-                        PICTURE NI USER OG IYANG NAME
-
+                <div className="h-full flex flex-col px-4 py-6">
+                    {/* User Profile Section */}
+                    <div className="flex items-center space-x-4 p-4 border-b">
+                        <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+                        <div>
+                            <h2 className="text-lg font-semibold">Admin Name</h2>
+                            <p className="text-sm text-gray-500">Administrator</p>
+                        </div>
                     </div>
-                    <ul className="space-y-2 font-medium">
-                        <li>
-                            <NavLink
-                                to="/admin/dashboard"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🏠 Dashboard
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/jobs"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🏠 Jobs
-                            </NavLink>
-                        </li>
-                        {/* <li>
-                            <button type="button" className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
-                                <svg className="shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                                    <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z" />
-                                </svg>
-                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">E-commerce</span>
-                                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-                                </svg>
-                            </button>
-                            <ul id="dropdown-example" className="hidden py-2 space-y-2">
-                                <li>
-                                    <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Products</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Billing</a>
-                                </li>
-                                <li>
-                                    <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Invoice</a>
-                                </li>
-                            </ul>
-                        </li> */}
-                        {/* <li>
-                            <NavLink
-                                to="/admin/dashboard"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🏠 Dashboard
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/dashboard"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🏠 Dashboard
-                            </NavLink>
-                        </li> */}
-                        <li>
-                            <NavLink
-                                to="/admin/announcement"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🏠 Announcement
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/events"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🏠 Events
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/forums"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                📦  Forums
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/course-list"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🛒 Course List
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/alumni-list"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                📦  Alumni List
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/manage-map"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🛒 Manage Map
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/manage-feedback"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                📦  Manage Feedback
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/admin/statistical-reports"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🛒 Statistical Report
-                            </NavLink>
-                        </li>
 
-                        <li>
-                            <NavLink
-                                to="/admin/statistical-reports"
-                                className={({ isActive }) =>
-                                    `flex items-center p-2 rounded-lg dark:text-white ${isActive ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    }`
-                                }
-                            >
-                                🛒 Logout
-                            </NavLink>
-                        </li>
+                    {/* Navigation Links */}
+                    <ul className="mt-6 space-y-2">
+                        {[
+                            { path: "/admin/dashboard", label: "Dashboard", icon: "🏠" },
+                            { path: "/admin/jobs", label: "Jobs", icon: "📋" },
+                            { path: "/admin/announcement", label: "Announcements", icon: "📢" },
+                            { path: "/admin/events", label: "Events", icon: "📅" },
+                            { path: "/admin/forums", label: "Forums", icon: "💬" },
+                            { path: "/admin/course-list", label: "Course List", icon: "📚" },
+                            { path: "/admin/alumni-list", label: "Alumni List", icon: "🎓" },
+                            { path: "/admin/manage-map", label: "Manage Map", icon: "🗺️" },
+                            { path: "/admin/manage-feedback", label: "Feedback", icon: "📝" },
+                            { path: "/admin/statistical-reports", label: "Reports", icon: "📊" },
+                            { path: "/logout", label: "Logout", icon: "🚪" }
+                        ].map(({ path, label, icon }) => (
+                            <li key={path}>
+                                <NavLink
+                                    to={path}
+                                    className={({ isActive }) =>
+                                        `flex items-center space-x-3 p-3 rounded-lg text-gray-700 font-medium ${isActive ? "bg-green-100 text-green-700" : "hover:bg-gray-200"
+                                        }`
+                                    }
+                                >
+                                    <span>{icon}</span>
+                                    <span>{label}</span>
+                                </NavLink>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </aside>
 
             {/* Main content */}
-            <div className="flex-1 flex flex-col w-full sm:ml-64">
+            <div className="flex-1 flex flex-col w-full sm:ml-72">
                 {/* Navbar */}
-                <header className="bg-white shadow-md p-4 flex items-center justify-between">
+                <header className="bg-green-600 shadow-md p-4 flex items-center justify-between text-white">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="sm:hidden p-2 text-gray-500 rounded-lg hover:bg-gray-100"
+                        className="sm:hidden p-2 rounded-lg focus:outline-none"
                     >
                         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path
@@ -206,15 +71,12 @@ const AdminLayout = ({ children }) => {
                             ></path>
                         </svg>
                     </button>
-                    <span className="text-lg font-semibold">Admin Panel</span>
-                    <div className="flex items-center space-x-4">
-                        <span className="text-gray-700">User</span>
-                    </div>
+                    <span className="text-lg font-semibold">Alumnilink | Admin Panel</span>
                 </header>
 
                 {/* Page content */}
                 <main className="flex-1 p-6 bg-gray-100 overflow-auto">{children}
-                    <Outlet /> {/* Renders the selected page */}
+                    <Outlet />
                 </main>
             </div>
 
