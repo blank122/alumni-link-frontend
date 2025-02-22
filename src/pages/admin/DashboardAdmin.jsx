@@ -76,7 +76,7 @@ const DashboardAdmin = () => {
                 <h2 className="text-xl font-semibold">User Info</h2>
                 {user ? (
                     <div>
-                        <p><strong>First Name:</strong> {user.status}</p>
+                        <p><strong>Account ID:</strong> {user.id}</p>
                         <p><strong>Email:</strong> {user.email}</p>
                         <p><strong>Role:</strong> {user.account_type}</p>
                     </div>
