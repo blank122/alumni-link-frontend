@@ -46,20 +46,25 @@ const Jobs = () => {
         if (jobImage) formData.append("job_image", jobImage);
 
         try {
-            await axios.post("http://127.0.0.1:8000/api/jobs", formData, {
+            const response = await axios.post("http://127.0.0.1:8000/api/jobs", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
                 },
             });
 
-            alert("Job created successfully!");
-            setShowModal(false);
-            window.location.reload(); // Refresh the page to show new jobs
+            if (response.status === 201) {
+                alert("Job created successfully!");
+                setShowModal(false);
+                setJobTitle("");
+                setJobDetails("");
+                setJobImage(null);
+            }
         } catch (error) {
             console.error("Error creating job:", error);
         }
     };
+
 
     return (
         <div className={`flex flex-col h-screen p-6 ${showModal ? "backdrop-blur-md" : ""}`}>
