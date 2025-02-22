@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const AdminLayout = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
-
+    const { user } = useAuth(); // Retrieve user and token
+    console.log('admin dashboard');
+    console.log(user);
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
@@ -17,10 +20,13 @@ const AdminLayout = ({ children }) => {
                     {/* User Profile Section */}
                     <div className="flex items-center space-x-4 p-4 border-b">
                         <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-                        <div>
-                            <h2 className="text-lg font-semibold">Admin Name</h2>
-                            <p className="text-sm text-gray-500">Administrator</p>
-                        </div>
+                        {user ? (
+                            <div>
+                                <p><strong>{user.email} </strong></p>
+                            </div>
+                        ) : (
+                            <p>Loading user data...</p>
+                        )}
                     </div>
 
                     {/* Navigation Links */}
