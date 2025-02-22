@@ -58,21 +58,26 @@ const AdminLayout = ({ children }) => {
             {/* Main content */}
             <div className="flex-1 flex flex-col w-full sm:ml-72">
                 {/* Navbar */}
-                <header className="bg-green-600 shadow-md p-4 flex items-center justify-between text-white">
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="sm:hidden p-2 rounded-lg focus:outline-none"
-                    >
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                clipRule="evenodd"
-                                fillRule="evenodd"
-                                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <span className="text-lg font-semibold">Alumnilink | Admin Panel</span>
+                <header className="bg-green-600 shadow-md p-4 flex flex-col text-white">
+                    <div className="flex items-center justify-between">
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="sm:hidden p-2 rounded-lg focus:outline-none"
+                        >
+                            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    clipRule="evenodd"
+                                    fillRule="evenodd"
+                                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+                                ></path>
+                            </svg>
+                        </button>
+                        <span className="text-lg font-semibold">Alumnilink | Admin Panel</span>
+                    </div>
+                    {/* Yellow divider line */}
                 </header>
+                <div className="h-1 bg-yellow-500 "></div>
+
 
                 {/* Page content */}
                 <main className="flex-1 p-6 bg-gray-100 overflow-auto">{children}
