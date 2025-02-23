@@ -69,7 +69,7 @@ const Announcements = () => {
     return (
         <div className={`flex flex-col h-screen p-6 ${showModal ? "backdrop-blur-md" : ""}`}>
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Job Posts</h1>
+                <h1 className="text-2xl font-bold">Announcements Posts</h1>
                 <button
                     onClick={() => setShowModal(true)}
                     className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700"
@@ -103,7 +103,7 @@ const Announcements = () => {
                                             <td className="px-6 py-4 text-gray-700">{item.ann_title || "N/A"}</td>
                                             <td className="px-6 py-4 text-gray-700">{item.ann_details || "N/A"}</td>
                                             <td className="px-6 py-4">
-                                                {item.job_image ? (
+                                                {item.ann_image ? (
                                                     <img
                                                         src={`http://127.0.0.1:8000/storage/announcements/${item.ann_image}`}
                                                         alt="Announcement Post"
@@ -136,7 +136,7 @@ const Announcements = () => {
                 <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-25 backdrop-blur-md">
 
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96 border border-gray-300">
-                        <h2 className="text-lg font-semibold mb-4">Create Job</h2>
+                        <h2 className="text-lg font-semibold mb-4">Create Announcement  </h2>
                         <form onSubmit={handleCreatePost} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Announcement Title</label>

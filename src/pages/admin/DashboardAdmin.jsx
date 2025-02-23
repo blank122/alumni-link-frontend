@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
+import { FaUserCheck, FaUserClock, FaCheckCircle, FaGlobe, FaBriefcase, FaUserTie, FaUsers, FaUserTimes } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const DashboardAdmin = () => {
     const { user, token } = useAuth(); // Retrieve user and token
@@ -68,6 +70,19 @@ const DashboardAdmin = () => {
             console.error("Error:", error);
         }
     };
+
+    // Dummy data for statistics
+    const stats = [
+        { title: "Registered", value: 48, icon: <FaUserCheck />, color: "bg-red-200" },
+        { title: "Pending", value: 14, icon: <FaUserClock />, color: "bg-purple-200" },
+        { title: "Approved", value: 6, icon: <FaCheckCircle />, color: "bg-blue-200" },
+        { title: "Online", value: 30, icon: <FaGlobe />, color: "bg-green-200" },
+        { title: "Job Seeker", value: 10, icon: <FaUsers />, color: "bg-yellow-200" },
+        { title: "Employed", value: 29, icon: <FaBriefcase />, color: "bg-orange-200" },
+        { title: "Self-Employed", value: 6, icon: <FaUserTie />, color: "bg-amber-300" },
+        { title: "Unemployed", value: 7, icon: <FaUserTimes />, color: "bg-gray-300" },
+    ];
+
     return (
         <div className="flex flex-col h-screen p-6">
             <h1 className="text-2xl font-bold">Welcome to Admin Panel</h1>
@@ -84,6 +99,31 @@ const DashboardAdmin = () => {
                     <p>Loading user data...</p>
                 )}
             </div>
+
+            {/* Statistics Cards */}
+            <motion.div
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
+                {stats.map((stat, index) => (
+                    <motion.div
+                        key={index}
+                        className={`flex items-center p-4 rounded-lg shadow-md ${stat.color} cursor-pointer`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                    >
+                        <div className="text-4xl text-gray-700">{stat.icon}</div>
+                        <div className="ml-4">
+                            <p className="text-sm font-semibold text-gray-600">{stat.title}</p>
+                            <p className="text-xl font-bold">{stat.value}</p>
+                        </div>
+                    </motion.div>
+                ))}
+            </motion.div>
+
 
             <div className="mt-4 p-4 bg-gray-100 rounded-lg">
                 <h2 className="text-xl font-semibold">Auth Token</h2>
