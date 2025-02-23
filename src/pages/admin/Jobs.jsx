@@ -7,6 +7,7 @@ const Jobs = () => {
     const [jobsPosts, setJobPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [postLoading, setPostLoading] = useState(false);
 
     // Form State
     const [jobTitle, setJobTitle] = useState("");
@@ -38,6 +39,7 @@ const Jobs = () => {
     // Handle Form Submission
     const handleCreateJob = async (e) => {
         e.preventDefault();
+        setPostLoading(true);
 
         const formData = new FormData();
         formData.append("job_title", jobTitle);
@@ -60,6 +62,8 @@ const Jobs = () => {
                 setJobDetails("");
                 setJobImage(null);
             }
+            setPostLoading(false);
+
         } catch (error) {
             console.error("Error creating job:", error);
         }
@@ -146,6 +150,8 @@ const Jobs = () => {
                                     onChange={(e) => setJobTitle(e.target.value)}
                                     required
                                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
+                                    disabled={postLoading}
+
                                 />
                             </div>
                             <div>
@@ -155,6 +161,8 @@ const Jobs = () => {
                                     onChange={(e) => setJobDetails(e.target.value)}
                                     required
                                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
+                                    disabled={postLoading}
+
                                 ></textarea>
                             </div>
                             <div>
@@ -163,6 +171,8 @@ const Jobs = () => {
                                     type="file"
                                     onChange={(e) => setJobImage(e.target.files[0])}
                                     className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
+                                    disabled={postLoading}
+
                                 />
                             </div>
                             <div className="flex justify-end space-x-2">
@@ -170,14 +180,24 @@ const Jobs = () => {
                                     type="button"
                                     onClick={() => setShowModal(false)}
                                     className="px-4 py-2 bg-gray-300 rounded-lg"
+                                    disabled={postLoading}
+
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                    className="bg-green-600 text-white p-2 w-full rounded-md hover:bg-blue-600 flex justify-center items-center"
+                                    disabled={postLoading}
                                 >
-                                    Create
+                                    {postLoading ? (
+                                        <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                        </svg>
+                                    ) : (
+                                        "Sign in"
+                                    )}
                                 </button>
                             </div>
                         </form>
