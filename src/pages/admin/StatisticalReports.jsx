@@ -24,6 +24,9 @@ const StatisticalReports = () => {
     const [TotalAccountsCount, setTotalAccountsCount] = useState([]);
     const [LoadingTotal, setLoadingTotal] = useState(true);
 
+    const [UserRegDemograph, setUserRegDemograph] = useState([]);
+    const [LoadingDemograph, setLoadingDemograph] = useState(true);
+
     useEffect(() => {
         const fetchUnemployedData = async () => {
             try {
@@ -156,6 +159,30 @@ const StatisticalReports = () => {
             fetchTotalAccounts();
         }
     }, [token]);
+
+
+    useEffect(() => {
+        const fetchUserRegDemograph = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/registration-data", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setUserRegDemograph(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingDemograph(false);
+            }
+        };
+
+        if (token) {
+            fetchUserRegDemograph();
+        }
+    }, [token]);
+
 
 
 
@@ -358,9 +385,6 @@ const StatisticalReports = () => {
 
             </div>
 
-
-
-
             {/* Analytics Charts */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 {/* Employment Distribution */}
@@ -381,14 +405,18 @@ const StatisticalReports = () => {
                 {/* Alumni Registration Over Time */}
                 <div className="bg-white p-6 shadow-lg rounded-lg">
                     <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Registration Over Time</h2>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={registrationData}>
-                            <XAxis dataKey="month" />
-                            <YAxis />
-                            <Tooltip />
-                            <Bar dataKey="count" fill="#3b82f6" />
-                        </BarChart>
-                    </ResponsiveContainer>
+                    {LoadingDemograph ? (
+                        <p>Loading...</p>
+                    ) : (
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={UserRegDemograph}>
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="count" fill="#3b82f6" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    )}
                 </div>
             </div>
 
