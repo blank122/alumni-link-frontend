@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-
-
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
@@ -8,10 +6,12 @@ const AuthContext = createContext();
 const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(
+        JSON.parse(localStorage.getItem("authUser")) || null
+    );
     const [token, setToken] = useState(localStorage.getItem("authToken") || "");
 
-    //this ensures that the token persist if you refresh the page
+    // Ensure token persists after refresh
     useEffect(() => {
         if (token) {
             axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -20,16 +20,19 @@ export const AuthProvider = ({ children }) => {
 
     const login = async ({ email, password }) => {
         try {
-            const response = await axios.post(`${API_BASE_URL}/login`, {
-                email,
-                password,
-            });
+            const response = await axios.post(`${API_BASE_URL}/login`, { email, password });
 
             if (response.data.success) {
                 localStorage.setItem("authToken", response.data.token);
+                localStorage.setItem("authUser", JSON.stringify(response.data.user));
                 setUser(response.data.user);
                 setToken(response.data.token);
-                return { success: true };
+                // Redirect based on account_type
+                if (response.data.user.account_type === 1) {
+                    return { success: true, redirect: "/admin/dashboard" };
+                } else {
+                    return { success: true, redirect: "/user/dashboard" };
+                }
             } else {
                 return { success: false, message: response.data.message };
             }
@@ -43,6 +46,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem("authToken");
+        localStorage.removeItem("authUser");
         setUser(null);
         setToken("");
     };

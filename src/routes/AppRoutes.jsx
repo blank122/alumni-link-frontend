@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Dashboard from "../pages/admin/DashboardAdmin";
 import Jobs from "../pages/admin/Jobs";
 import Announcement from "../pages/admin/Announcement";
@@ -13,46 +12,30 @@ import StatisticalReports from "../pages/admin/StatisticalReports";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register1";
-
-// import AdminLayout from "../layouts/AdminLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import ProtectedRoute from "./ProtectedRoutes";
-import { NotFound, AccessDenied, ServerError } from "../pages/errors/ErrorPage";
 import Home from "../pages/Home";
 
 import AdminLayout from "../layouts/AdminLayout";
+import UserLayout from "../layouts/UserLayout";
+import UserDashboard from "../pages/admin/DashboardAdmin";
+import UserJobs from "../pages/admin/Jobs";
+import UserAnnouncement from "../pages/admin/Announcement";
+import UserEvents from "../pages/admin/Events";
+import UserForums from "../pages/admin/Forums";
 
 const AppRoutes = () => {
-
-    const user = {
-        isAuthenticated: true, // Change this based on auth logic
-        role: "user", // Example: "admin", "user"
-    };
-
     return (
-        // <Router>
         <Routes>
             {/* Auth Routes */}
             <Route element={<AuthLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-
-                {/* <Route path="/dashboard" element={<Dashboard />} /> */}
             </Route>
-            {/* User route */}
-            {/* <Route element={<ProtectedRoute />}>
-                <Route path="/user" element={<UserLayout />}>
-                    <Route path="dashboard" element={<DashboardUser />} />
-                    <Route path="products" element={<ProductsUser />} />
-                    <Route path="orders" element={<OrdersUser />} />
-                    <Route path="profile" element={<ProfileUser />} />
-                    <Route path="settings" element={<SettingsUser />} />
-                </Route>
-            </Route> */}
 
             {/* Admin Route */}
-            <Route element={<ProtectedRoute />}>
+            <Route element={<ProtectedRoute allowedTypes={[1]} />}>
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="jobs" element={<Jobs />} />
@@ -67,8 +50,22 @@ const AppRoutes = () => {
                 </Route>
             </Route>
 
+            {/* User Route */}
+            <Route element={<ProtectedRoute allowedTypes={[0]} />}>
+                <Route path="/user" element={<UserLayout />}>
+                    <Route path="dashboard" element={<UserDashboard />} />
+                    <Route path="jobs" element={<UserJobs />} />
+                    <Route path="announcement" element={<UserAnnouncement />} />
+                    <Route path="events" element={<UserEvents />} />
+                    <Route path="forums" element={<UserForums />} />
+                    <Route path="cce-admins" element={<CourseList />} />
+                    <Route path="maps" element={<ManageMap />} />
+                    <Route path="profile" element={<ManageFeedback />} />
+                    <Route path="help" element={<StatisticalReports />} />
+                </Route>
+            </Route>
+
         </Routes>
-        // </Router>
     );
 };
 
