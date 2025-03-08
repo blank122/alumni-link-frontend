@@ -16,6 +16,8 @@ const StatisticalReports = () => {
     const [LoadingEmployed, setLoadingEmployed] = useState(true);
     const [LoadingFreelance, setLoadingFreelance] = useState(true);
 
+
+
     useEffect(() => {
         const fetchUnemployedData = async () => {
             try {
@@ -37,7 +39,6 @@ const StatisticalReports = () => {
             fetchUnemployedData();
         }
     }, [token]);
-
 
     useEffect(() => {
         const fetchEmployedData = async () => {
