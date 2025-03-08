@@ -1,19 +1,87 @@
+/* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 import { FaUserCheck, FaUserClock, FaCheckCircle, FaGlobe, FaBriefcase, FaUserTie, FaUsers, FaUserTimes } from "react-icons/fa";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
-const StatisticalReports = () => {
 
-    // Stats Data
-    const stats = [
-        { title: "Registered", value: 48, icon: <FaUserCheck />, color: "bg-red-200" },
-        { title: "Pending", value: 14, icon: <FaUserClock />, color: "bg-purple-200" },
-        { title: "Approved", value: 6, icon: <FaCheckCircle />, color: "bg-blue-200" },
-        { title: "Online", value: 30, icon: <FaGlobe />, color: "bg-green-200" },
-        { title: "Job Seeker", value: 10, icon: <FaUsers />, color: "bg-yellow-200" },
-        { title: "Employed", value: 29, icon: <FaBriefcase />, color: "bg-orange-200" },
-        { title: "Self-Employed", value: 6, icon: <FaUserTie />, color: "bg-amber-300" },
-        { title: "Unemployed", value: 7, icon: <FaUserTimes />, color: "bg-gray-300" },
-    ];
+import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+const StatisticalReports = () => {
+    const { token } = useAuth();
+    const [UnemployedCount, setUnemployedCount] = useState([]);
+    const [EmployedCount, setEmployedCount] = useState([]);
+    const [FreelanceCount, setFreelance] = useState([]);
+    const [LoadingUnemployed, setLoadingUnemployed] = useState(true);
+    const [LoadingEmployed, setLoadingEmployed] = useState(true);
+    const [LoadingFreelance, setLoadingFreelance] = useState(true);
+
+    useEffect(() => {
+        const fetchUnemployedData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/unemployed-alumni", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setUnemployedCount(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingUnemployed(false);
+            }
+        };
+
+        if (token) {
+            fetchUnemployedData();
+        }
+    }, [token]);
+
+
+    useEffect(() => {
+        const fetchEmployedData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/employed-alumni", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setEmployedCount(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingEmployed(false);
+            }
+        };
+
+        if (token) {
+            fetchEmployedData();
+        }
+    }, [token]);
+
+    useEffect(() => {
+        const fetchFreelance = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/freelance-alumni", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setFreelance(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingFreelance(false);
+            }
+        };
+
+        if (token) {
+            fetchFreelance();
+        }
+    }, [token]);
 
     // Static Data for Charts
     const employmentData = [
@@ -42,31 +110,65 @@ const StatisticalReports = () => {
 
     return (
         <div className="flex flex-col h-screen p-6">
-            <h1 className="text-2xl font-bold">Statistical Reports</h1>
+            <h1 className="text-2xl font-bold">Dashboard</h1>
 
-            {/* Statistics Cards */}
+            {/* Unemployment Card */}
             <motion.div
                 className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                {stats.map((stat, index) => (
-                    <motion.div
-                        key={index}
-                        className={`flex items-center p-4 rounded-lg shadow-md ${stat.color} cursor-pointer`}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                    >
-                        <div className="text-4xl text-gray-700">{stat.icon}</div>
-                        <div className="ml-4">
-                            <p className="text-sm font-semibold text-gray-600">{stat.title}</p>
-                            <p className="text-xl font-bold">{stat.value}</p>
-                        </div>
-                    </motion.div>
-                ))}
+
             </motion.div>
+            {/* Unemployed alumni card */}
+            <motion.div
+                className="mt-6 p-6 bg-white shadow-md rounded-lg flex flex-col items-center"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <h2 className="text-2xl font-semibold text-gray-700 mb-2">Total Unemployed Alumni</h2>
+                {LoadingUnemployed ? (
+                    <p className="text-gray-500">Loading...</p>
+                ) : (
+                    <p className="text-4xl font-bold text-blue-600">{UnemployedCount ?? 0}</p>
+                )}
+            </motion.div>
+
+
+            {/* Employed alumni card */}
+            <motion.div
+                className="mt-6 p-6 bg-white shadow-md rounded-lg flex flex-col items-center"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <h2 className="text-2xl font-semibold text-gray-700 mb-2">Total Employed Alumni</h2>
+                {LoadingEmployed ? (
+                    <p className="text-gray-500">Loading...</p>
+                ) : (
+                    <p className="text-4xl font-bold text-blue-600">{EmployedCount ?? 0}</p>
+                )}
+            </motion.div>
+
+
+            {/* Freelancing alumni card */}
+            <motion.div
+                className="mt-6 p-6 bg-white shadow-md rounded-lg flex flex-col items-center"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <h2 className="text-2xl font-semibold text-gray-700 mb-2">Total Freelancing Alumni</h2>
+                {LoadingFreelance ? (
+                    <p className="text-gray-500">Loading...</p>
+                ) : (
+                    <p className="text-4xl font-bold text-blue-600">{FreelanceCount ?? 0}</p>
+                )}
+            </motion.div>
+
+
 
             {/* Analytics Charts */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
