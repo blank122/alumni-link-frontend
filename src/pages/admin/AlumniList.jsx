@@ -12,6 +12,7 @@ const AlumniList = () => {
     const [ApprovedCount, setApprovedAccountsCount] = useState([]);
     const [LoadingPending, setLoadingPending] = useState(true);
     const [LoadingApproved, setLoadingApproved] = useState(true);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
         const fetchAlumniData = async () => {
@@ -38,7 +39,7 @@ const AlumniList = () => {
     useEffect(() => {
         const fetchPendingData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/pending-accounts", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/pending-accounts", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -60,15 +61,18 @@ const AlumniList = () => {
     useEffect(() => {
         const fetchApprovedData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/approved-accounts", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
-                });
+                const response = await axios.get(
+                    `${API_BASE_URL}/admin/approved-accounts`, // Using API_BASE_URL from .env
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    }
+                );
                 setApprovedAccountsCount(response.data.data);
             } catch (error) {
-                console.error("Error fetching alumni data:", error);
+                console.error("Error fetching approved accounts data:", error);
             } finally {
                 setLoadingApproved(false);
             }
@@ -77,7 +81,7 @@ const AlumniList = () => {
         if (token) {
             fetchApprovedData();
         }
-    }, [token]);
+    }, [token, API_BASE_URL]);
 
     return (
         <div className={`flex flex-col h-screen p-6`}>
