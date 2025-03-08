@@ -47,7 +47,7 @@ const AdminLayout = ({ children }) => {
                             { path: "/admin/alumni-list", label: "Alumni List", icon: "🎓" },
                             { path: "/admin/manage-map", label: "Manage Map", icon: "🗺️" },
                             { path: "/admin/manage-feedback", label: "Feedback", icon: "📝" },
-                            { path: "/admin/statistical-reports", label: "Reports", icon: "📊" }
+                            { path: "/admin/statistical-reports", label: "Statistical Reports", icon: "📊" }
                         ].map(({ path, label, icon }) => (
                             <li key={path}>
                                 <NavLink

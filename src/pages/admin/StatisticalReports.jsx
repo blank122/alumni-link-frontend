@@ -27,6 +27,9 @@ const StatisticalReports = () => {
     const [UserRegDemograph, setUserRegDemograph] = useState([]);
     const [LoadingDemograph, setLoadingDemograph] = useState(true);
 
+    const [AlumniUnemploymentDemograph, setAlumniUnemploymentDemograph] = useState([]);
+    const [LoadingUnemploymentDemograph, setLoadingUnemploymentDemograph] = useState(true);
+
     useEffect(() => {
         const fetchUnemployedData = async () => {
             try {
@@ -184,6 +187,29 @@ const StatisticalReports = () => {
     }, [token]);
 
 
+    useEffect(() => {
+        const fetchUnemploymentDemograph = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/unemployment", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setAlumniUnemploymentDemograph(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingUnemploymentDemograph(false);
+            }
+        };
+
+        if (token) {
+            fetchUnemploymentDemograph();
+        }
+    }, [token]);
+
+
 
 
     // Static Data for Charts
@@ -191,15 +217,6 @@ const StatisticalReports = () => {
         { name: "Employed", value: EmployedCount ?? 0, color: "#f97316" },
         { name: "Freelancing", value: FreelanceCount ?? 0, color: "#fbbf24" },
         { name: "Unemployed", value: UnemployedCount ?? 0, color: "#6b7280" },
-    ];
-
-    const registrationData = [
-        { month: "Jan", count: 5 },
-        { month: "Feb", count: 8 },
-        { month: "Mar", count: 12 },
-        { month: "Apr", count: 7 },
-        { month: "May", count: 15 },
-        { month: "Jun", count: 20 },
     ];
 
     const jobSeekerData = [
@@ -422,13 +439,13 @@ const StatisticalReports = () => {
 
             {/* Job Seeker Status Over Time */}
             <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">Job Seekers Over Time</h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">Unemployed Overtime</h2>
                 <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={jobSeekerData}>
+                    <LineChart data={AlumniUnemploymentDemograph}>
                         <XAxis dataKey="month" />
                         <YAxis />
                         <Tooltip />
-                        <Line type="monotone" dataKey="seekers" stroke="#10b981" strokeWidth={3} />
+                        <Line type="monotone" dataKey="count" stroke="#10b981" strokeWidth={3} />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
