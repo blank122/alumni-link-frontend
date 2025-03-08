@@ -28,11 +28,7 @@ export const AuthProvider = ({ children }) => {
                 setUser(response.data.user);
                 setToken(response.data.token);
                 // Redirect based on account_type
-                if (response.data.user.account_type === 1) {
-                    return { success: true, redirect: "/admin/dashboard" };
-                } else {
-                    return { success: true, redirect: "/user/dashboard" };
-                }
+                return response.data;
             } else {
                 return { success: false, message: response.data.message };
             }

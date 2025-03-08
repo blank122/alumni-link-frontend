@@ -14,6 +14,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register1";
 import AuthLayout from "../layouts/AuthLayout";
 import ProtectedRoute from "./ProtectedRoutes";
+import AdminRoute from "./AdminRoutes";
+
 import Home from "../pages/Home";
 
 import AdminLayout from "../layouts/AdminLayout";
@@ -23,6 +25,8 @@ import UserJobs from "../pages/admin/Jobs";
 import UserAnnouncement from "../pages/admin/Announcement";
 import UserEvents from "../pages/admin/Events";
 import UserForums from "../pages/admin/Forums";
+
+import Unauthorized from "../pages/errors/Unauthorized";
 
 const AppRoutes = () => {
     return (
@@ -35,7 +39,7 @@ const AppRoutes = () => {
             </Route>
 
             {/* Admin Route */}
-            <Route element={<ProtectedRoute allowedTypes={[1]} />}>
+            <Route element={<AdminRoute />}>
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="jobs" element={<Jobs />} />
@@ -65,6 +69,7 @@ const AppRoutes = () => {
                 </Route>
             </Route>
 
+            <Route path="/unauthorized" element={<Unauthorized />} />
         </Routes>
     );
 };

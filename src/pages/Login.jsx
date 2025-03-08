@@ -18,15 +18,28 @@ const Login = () => {
         setError("");
         setLoading(true);
 
-        const result = await login({ email, password });
+        try {
+            // Pass email and password as an object
+            const data = await login({ email, password });
 
-        if (result.success) {
-            navigate("/admin/dashboard");
-        } else {
-            setError(result.message);
+            console.log("Login Response:", data); // Debugging step
+
+            if (!data.success || !data.user) {
+                throw new Error(data.message || "Invalid response from server");
+            }
+
+            if (data.user.account_type === 1) {
+                navigate("/admin/dashboard");
+            } else {
+                navigate("/user/dashboard");
+            }
+        } catch (err) {
+            setError(err.message || "Invalid credentials");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
+
 
     return (
         <div>
