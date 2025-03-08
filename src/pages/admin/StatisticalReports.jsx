@@ -16,7 +16,13 @@ const StatisticalReports = () => {
     const [LoadingEmployed, setLoadingEmployed] = useState(true);
     const [LoadingFreelance, setLoadingFreelance] = useState(true);
 
+    const [PendingCount, setPendingAccountsCount] = useState([]);
+    const [ApprovedCount, setApprovedAccountsCount] = useState([]);
+    const [LoadingPending, setLoadingPending] = useState(true);
+    const [LoadingApproved, setLoadingApproved] = useState(true);
 
+    const [TotalAccountsCount, setTotalAccountsCount] = useState([]);
+    const [LoadingTotal, setLoadingTotal] = useState(true);
 
     useEffect(() => {
         const fetchUnemployedData = async () => {
@@ -83,6 +89,75 @@ const StatisticalReports = () => {
             fetchFreelance();
         }
     }, [token]);
+
+
+    useEffect(() => {
+        const fetchPendingData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/pending-accounts", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setPendingAccountsCount(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingPending(false);
+            }
+        };
+
+        if (token) {
+            fetchPendingData();
+        }
+    }, [token]);
+
+    useEffect(() => {
+        const fetchApprovedData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/approved-accounts", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setApprovedAccountsCount(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingApproved(false);
+            }
+        };
+
+        if (token) {
+            fetchApprovedData();
+        }
+    }, [token]);
+
+    useEffect(() => {
+        const fetchTotalAccounts = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/total-accounts", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setTotalAccountsCount(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingTotal(false);
+            }
+        };
+
+        if (token) {
+            fetchTotalAccounts();
+        }
+    }, [token]);
+
+
 
     // Static Data for Charts
     const employmentData = [
@@ -201,6 +276,86 @@ const StatisticalReports = () => {
                         </div>
                     </div>
                 </motion.div>
+
+
+                <motion.div
+                    className="p-8 bg-purple-200 shadow-lg rounded-xl flex flex-col items-center w-full max-w-md"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="flex items-center space-x-4">
+                        {/* Icon */}
+                        <div className="text-4xl text-gray-700">
+                            <FaUserClock />
+                        </div>
+
+
+                        {/* Text Content */}
+                        <div>
+                            <p className="text-gray-800 text-lg">Pending Accounts</p>
+                            {LoadingPending ? (
+                                <p className="text-gray-500">Loading...</p>
+                            ) : (
+                                <p className="text-3xl font-extrabold text-gray-900">{PendingCount ?? 0}</p>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Approved Accounts Alumni Card */}
+                <motion.div
+                    className="p-4 bg-blue-200 shadow-lg rounded-xl flex items-center w-full max-w-md"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="flex items-center space-x-4">
+                        {/* Icon */}
+                        <div className="text-4xl text-gray-700">
+                            <FaCheckCircle />
+                        </div>
+
+
+                        {/* Text Content */}
+                        <div>
+                            <p className="text-gray-800 text-lg">Approved Accounts</p>
+                            {LoadingApproved ? (
+                                <p className="text-gray-500">Loading...</p>
+                            ) : (
+                                <p className="text-3xl font-extrabold text-gray-900">{ApprovedCount ?? 0}</p>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Employed Alumni Card */}
+                <motion.div
+                    className="p-4 bg-red-200 shadow-lg rounded-xl flex items-center w-full max-w-md"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="flex items-center space-x-4">
+                        {/* Icon */}
+                        <div className="text-4xl text-gray-700">
+                            <FaUserCheck />
+                        </div>
+
+
+                        {/* Text Content */}
+                        <div>
+                            <p className="text-gray-800 text-lg">Registered Accounts</p>
+                            {LoadingTotal ? (
+                                <p className="text-gray-500">Loading...</p>
+                            ) : (
+                                <p className="text-3xl font-extrabold text-gray-900">{TotalAccountsCount ?? 0}</p>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+
+
             </div>
 
 
