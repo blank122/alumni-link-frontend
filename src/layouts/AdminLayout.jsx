@@ -1,14 +1,20 @@
 /* eslint-disable react/prop-types */
 
 import { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const AdminLayout = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const { user } = useAuth(); // Retrieve user and token
-    console.log('admin dashboard');
-    console.log(user);
+    const { user, logout } = useAuth(); // Retrieve user and logout function
+    const navigate = useNavigate();
+
+    const handleLogout = (e) => {
+        e.preventDefault(); // Prevent default link navigation
+        logout(); // Clear user authentication
+        navigate("/login"); // Redirect to login page
+    };
+
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
@@ -41,8 +47,7 @@ const AdminLayout = ({ children }) => {
                             { path: "/admin/alumni-list", label: "Alumni List", icon: "🎓" },
                             { path: "/admin/manage-map", label: "Manage Map", icon: "🗺️" },
                             { path: "/admin/manage-feedback", label: "Feedback", icon: "📝" },
-                            { path: "/admin/statistical-reports", label: "Reports", icon: "📊" },
-                            { path: "/logout", label: "Logout", icon: "🚪" }
+                            { path: "/admin/statistical-reports", label: "Reports", icon: "📊" }
                         ].map(({ path, label, icon }) => (
                             <li key={path}>
                                 <NavLink
@@ -57,6 +62,17 @@ const AdminLayout = ({ children }) => {
                                 </NavLink>
                             </li>
                         ))}
+
+                        {/* Logout Button */}
+                        <li>
+                            <button
+                                onClick={handleLogout}
+                                className="flex w-full items-center space-x-3 p-3 rounded-lg text-gray-700 font-medium hover:bg-gray-200"
+                            >
+                                <span>🚪</span>
+                                <span>Logout</span>
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </aside>
@@ -80,10 +96,8 @@ const AdminLayout = ({ children }) => {
                         </button>
                         <span className="text-lg font-semibold">Alumnilink | Admin Panel</span>
                     </div>
-                    {/* Yellow divider line */}
                 </header>
                 <div className="h-1 bg-yellow-500 "></div>
-
 
                 {/* Page content */}
                 <main className="flex-1 p-6 bg-gray-100 overflow-auto">{children}

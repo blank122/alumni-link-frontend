@@ -9,23 +9,6 @@ import EmploymentAddressStep from "./register/EmployeeAddressInfoStep";
 
 import ReviewStep from "./register/ReviewStep";
 
-// const ProgressBar = ({ step }) => {
-//     const progress = (step / 4) * 100;
-//     return (
-//         <div className="w-96 mx-auto mb-4">
-//             <div className="h-2 bg-gray-300 rounded-full">
-//                 <motion.div
-//                     className="h-2 bg-blue-500 rounded-full"
-//                     initial={{ width: 0 }}
-//                     animate={{ width: `${progress}%` }}
-//                     transition={{ duration: 0.5 }}
-//                 />
-//             </div>
-//         </div>
-//     );
-// };
-
-//checks first if for employment status
 const EmploymentInfoStep = ({ userData, handleChange, errors }) => (
     <motion.div
         className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
@@ -137,42 +120,24 @@ const MultiStepForm = () => {
                 body: JSON.stringify(userData),
             });
 
-            const data = await response.json();
-            alert("Registration Successful!");
-            console.log("Server Response:", data);
+            const text = await response.text(); // Read response as text first
 
-            // Reset form after successful registration
-            setUserData({
-                alm_first_name: "",
-                alm_last_name: "",
-                alm_gender: "",
-                alm_contact_number: "",
-                add_full_address: "",
-                add_long: "",
-                add_lat: "",
-                educ_highest_level: "",
-                year_graduated: "",
-                masters_type: "",
-                masters_institution: "",
-                emp_status: "",
-                company_name: "",
-                job_title: "",
-                start_date: "",
-                emp_full_address: "",
-                emp_long: "",
-                emp_lat: "",
-                email: "",
-                password: "",
-            });
-            setStep(1);
+            try {
+                const data = JSON.parse(text); // Attempt to parse JSON
+                console.log("Server Response:", data);
+                alert("Registration Successful!");
+            } catch (err) {
+                console.error("Unexpected response format:", text);
+                console.error("Unexpected response format:", err);
+
+                alert("Unexpected response from server.");
+            }
         } catch (error) {
             console.error("Error submitting form:", error);
             alert("Something went wrong!");
         }
-        // console.log('submitted on work');
-        // alert("Submittion on working pa dols");
-
     };
+
 
     const validateStep = () => {
         let newErrors = {};
