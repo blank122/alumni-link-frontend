@@ -85,9 +85,9 @@ const StatisticalReports = () => {
 
     // Static Data for Charts
     const employmentData = [
-        { name: "Employed", value: 29, color: "#f97316" },
-        { name: "Self-Employed", value: 6, color: "#fbbf24" },
-        { name: "Unemployed", value: 7, color: "#6b7280" },
+        { name: "Employed", value: EmployedCount ?? 0, color: "#f97316" },
+        { name: "Freelancing", value: FreelanceCount ?? 0, color: "#fbbf24" },
+        { name: "Unemployed", value: UnemployedCount ?? 0, color: "#6b7280" },
     ];
 
     const registrationData = [
@@ -110,7 +110,7 @@ const StatisticalReports = () => {
 
     return (
         <div className="flex flex-col h-screen p-6">
-            <h1 className="text-2xl font-bold">Dashboard</h1>
+            <h1 className="text-2xl font-bold">Statistical Reports</h1>
 
             {/* Unemployment Card */}
             <motion.div
@@ -121,52 +121,87 @@ const StatisticalReports = () => {
             >
 
             </motion.div>
-            {/* Unemployed alumni card */}
-            <motion.div
-                className="mt-6 p-6 bg-white shadow-md rounded-lg flex flex-col items-center"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-            >
-                <h2 className="text-2xl font-semibold text-gray-700 mb-2">Total Unemployed Alumni</h2>
-                {LoadingUnemployed ? (
-                    <p className="text-gray-500">Loading...</p>
-                ) : (
-                    <p className="text-4xl font-bold text-blue-600">{UnemployedCount ?? 0}</p>
-                )}
-            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                {/* Unemployed Alumni Card */}
+                <motion.div
+                    className="p-8 bg-gray-300 shadow-lg rounded-xl flex flex-col items-center w-full max-w-md"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="flex items-center space-x-4">
+                        {/* Icon */}
+                        <div className="text-4xl text-gray-700">
+                            <FaUserTimes />
+                        </div>
 
 
-            {/* Employed alumni card */}
-            <motion.div
-                className="mt-6 p-6 bg-white shadow-md rounded-lg flex flex-col items-center"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-            >
-                <h2 className="text-2xl font-semibold text-gray-700 mb-2">Total Employed Alumni</h2>
-                {LoadingEmployed ? (
-                    <p className="text-gray-500">Loading...</p>
-                ) : (
-                    <p className="text-4xl font-bold text-blue-600">{EmployedCount ?? 0}</p>
-                )}
-            </motion.div>
+                        {/* Text Content */}
+                        <div>
+                            <p className="text-gray-800 text-lg">Unemployed Alumni</p>
+                            {LoadingUnemployed ? (
+                                <p className="text-gray-500">Loading...</p>
+                            ) : (
+                                <p className="text-3xl font-extrabold text-gray-900">{UnemployedCount ?? 0}</p>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Employed Alumni Card */}
+                <motion.div
+                    className="p-4 bg-orange-200 shadow-lg rounded-xl flex items-center w-full max-w-md"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="flex items-center space-x-4">
+                        {/* Icon */}
+                        <div className="text-4xl text-gray-700">
+                            <FaBriefcase />
+                        </div>
 
 
-            {/* Freelancing alumni card */}
-            <motion.div
-                className="mt-6 p-6 bg-white shadow-md rounded-lg flex flex-col items-center"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-            >
-                <h2 className="text-2xl font-semibold text-gray-700 mb-2">Total Freelancing Alumni</h2>
-                {LoadingFreelance ? (
-                    <p className="text-gray-500">Loading...</p>
-                ) : (
-                    <p className="text-4xl font-bold text-blue-600">{FreelanceCount ?? 0}</p>
-                )}
-            </motion.div>
+                        {/* Text Content */}
+                        <div>
+                            <p className="text-gray-800 text-lg">Employed Alumni</p>
+                            {LoadingEmployed ? (
+                                <p className="text-gray-500">Loading...</p>
+                            ) : (
+                                <p className="text-3xl font-extrabold text-gray-900">{EmployedCount ?? 0}</p>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Freelancing Alumni Card */}
+                <motion.div
+                    className="p-4 bg-amber-300 shadow-lg rounded-xl flex items-center w-full max-w-md"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="flex items-center space-x-4">
+                        {/* Icon */}
+                        <div className="bg-yellow-500 p-2 rounded-full">
+                            <svg className="w-8 h-8 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                            </svg>
+                        </div>
+
+                        {/* Text Content */}
+                        <div>
+                            <p className="text-gray-800 text-lg">Freelance Alumni</p>
+                            {LoadingFreelance ? (
+                                <p className="text-gray-500">Loading...</p>
+                            ) : (
+                                <p className="text-3xl font-extrabold text-gray-900">{FreelanceCount ?? 0}</p>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+
 
 
 
