@@ -20,11 +20,11 @@ import Home from "../pages/Home";
 
 import AdminLayout from "../layouts/AdminLayout";
 import UserLayout from "../layouts/UserLayout";
-import UserDashboard from "../pages/admin/DashboardAdmin";
-import UserJobs from "../pages/admin/Jobs";
-import UserAnnouncement from "../pages/admin/Announcement";
-import UserEvents from "../pages/admin/Events";
-import UserForums from "../pages/admin/Forums";
+import UserDashboard from "../pages/user/DashboardUser";
+import UserJobs from "../pages/user/Jobs";
+import UserAnnouncement from "../pages/user/Announcement";
+import UserEvents from "../pages/user/Events";
+import UserForums from "../pages/user/Forums";
 
 import Unauthorized from "../pages/errors/Unauthorized";
 

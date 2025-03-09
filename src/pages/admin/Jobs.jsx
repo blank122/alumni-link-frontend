@@ -48,7 +48,7 @@ const Jobs = () => {
         if (jobImage) formData.append("job_image", jobImage);
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/jobs", formData, {
+            const response = await axios.post("http://127.0.0.1:8000/api/admin/jobs", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
