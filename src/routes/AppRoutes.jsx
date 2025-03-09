@@ -25,6 +25,7 @@ import UserJobs from "../pages/user/Jobs";
 import UserAnnouncement from "../pages/user/Announcement";
 import UserEvents from "../pages/user/Events";
 import UserForums from "../pages/user/Forums";
+import UserMaps from "../pages/user/Maps";
 
 import Unauthorized from "../pages/errors/Unauthorized";
 
@@ -63,7 +64,7 @@ const AppRoutes = () => {
                     <Route path="events" element={<UserEvents />} />
                     <Route path="forums" element={<UserForums />} />
                     <Route path="cce-admins" element={<CourseList />} />
-                    <Route path="maps" element={<ManageMap />} />
+                    <Route path="maps" element={<UserMaps />} />
                     <Route path="profile" element={<ManageFeedback />} />
                     <Route path="help" element={<StatisticalReports />} />
                 </Route>
