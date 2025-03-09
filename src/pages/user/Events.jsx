@@ -1,5 +1,75 @@
+import { useEffect, useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
+
+
 const Events = () => {
-    return <h1 className="text-3xl">Welcome to Announcements Page</h1>;
+
+    const { token } = useAuth();
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/user-events", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setPosts(response.data.data);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error("Error fetching announcements:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (token) {
+            fetchData();
+        }
+    }, [token]);
+    return (
+        <div className={`flex flex-col h-screen p-6 `}>
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold">💼 Events Posts</h1>
+            </div>
+            {loading ? (
+                <p>Loading Events Posts...</p>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {posts.map((post) => (
+                        <div key={post.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+                            <img className="w-full h-60 object-cover" src={`http://127.0.0.1:8000/storage/event_images/${post.event_image}`} alt="Job Post" />
+
+                            <div className="p-6">
+                                <h5 className="text-xl font-semibold text-gray-900 dark:text-white">{post.event_title}</h5>
+
+                                <p className="mt-2 text-sm text-gray-700 dark:text-gray-400 line-clamp-3">
+                                    {post.event_details}
+                                </p>
+
+                                <div className="mt-4 flex justify-between items-center">
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                        {new Date(post.event_date).toLocaleDateString()}
+                                    </span>
+
+                                    <a href="#" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                                        View Event
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+            )}
+        </div>
+
+
+    );
 };
 
 export default Events;
