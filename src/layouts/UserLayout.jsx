@@ -44,7 +44,7 @@ const UserLayout = ({ children }) => {
                             { path: "/user/events", label: "Events", icon: "📅" },
                             { path: "/user/forums", label: "Forums", icon: "💬" },
                             // { path: "/user/cce-admins", label: "CCE ADMINS", icon: "📚" },
-                            { path: "/user/map", label: "Map", icon: "🗺️" },
+                            { path: "/user/maps", label: "Map", icon: "🗺️" },
                             { path: "/user/profile", label: "Profile", icon: "👨🏼‍💻" },
                             { path: "/user/help", label: "Help", icon: "❓" }
                         ].map(({ path, label, icon }) => (
