@@ -100,7 +100,7 @@ const UserLayout = ({ children }) => {
                 <div className="h-1 bg-yellow-500 "></div>
 
                 {/* Page content */}
-                <main className="flex-1 p-6 bg-gray-100 overflow-auto">{children}
+                <main className="flex-1  bg-gray-100 overflow-auto">{children}
                     <Outlet />
                 </main>
             </div>

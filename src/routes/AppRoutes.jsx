@@ -28,6 +28,7 @@ import UserForums from "../pages/user/Forums";
 import UserMaps from "../pages/user/Maps";
 import UserProfile from "../pages/user/Profile";
 import UserFeedback from "../pages/user/Feedback";
+import UserHelp from "../pages/user/Help";
 
 import Unauthorized from "../pages/errors/Unauthorized";
 
@@ -70,7 +71,7 @@ const AppRoutes = () => {
                     <Route path="profile" element={<UserProfile />} />
                     <Route path="survey" element={<UserFeedback />} />
 
-                    <Route path="help" element={<StatisticalReports />} />
+                    <Route path="help" element={<UserHelp />} />
                 </Route>
             </Route>
 
