@@ -46,6 +46,7 @@ const UserLayout = ({ children }) => {
                             // { path: "/user/cce-admins", label: "CCE ADMINS", icon: "📚" },
                             { path: "/user/maps", label: "Map", icon: "🗺️" },
                             { path: "/user/profile", label: "Profile", icon: "👨🏼‍💻" },
+                            { path: "/user/survey", label: "Feedback", icon: "📝" },
                             { path: "/user/help", label: "Help", icon: "❓" }
                         ].map(({ path, label, icon }) => (
                             <li key={path}>

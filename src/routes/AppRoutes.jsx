@@ -26,6 +26,8 @@ import UserAnnouncement from "../pages/user/Announcement";
 import UserEvents from "../pages/user/Events";
 import UserForums from "../pages/user/Forums";
 import UserMaps from "../pages/user/Maps";
+import UserProfile from "../pages/user/Profile";
+import UserFeedback from "../pages/user/Feedback";
 
 import Unauthorized from "../pages/errors/Unauthorized";
 
@@ -65,7 +67,9 @@ const AppRoutes = () => {
                     <Route path="forums" element={<UserForums />} />
                     <Route path="cce-admins" element={<CourseList />} />
                     <Route path="maps" element={<UserMaps />} />
-                    <Route path="profile" element={<ManageFeedback />} />
+                    <Route path="profile" element={<UserProfile />} />
+                    <Route path="survey" element={<UserFeedback />} />
+
                     <Route path="help" element={<StatisticalReports />} />
                 </Route>
             </Route>
