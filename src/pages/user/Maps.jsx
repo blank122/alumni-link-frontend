@@ -47,25 +47,29 @@ const Maps = () => {
     }, [user, token, markerPosition]);
 
     return (
-        <div className="flex flex-col h-screen p-6">
+        <div className="flex flex-col h-screen p-6 bg-gray-100">
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">🗺️ Maps</h1>
+                <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
+                    🗺️ Maps
+                </h1>
             </div>
 
             {loading ? (
-                <p>Loading Map...</p>
+                <p className="text-center text-gray-600">Loading Map...</p>
             ) : maps.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {maps.map((map, index) => (
-                        <div key={map.id} className="p-4 border rounded-lg shadow-lg">
-                            <h2 className="text-lg font-semibold">📍 Alumni Location {index + 1}</h2>
-                            <p><strong>Full Address:</strong> {map.full_address}</p>
-                            <p><strong>Latitude:</strong> {map.add_lat}</p>
-                            <p><strong>Longitude:</strong> {map.add_long}</p>
+                <div className="w-full h-full flex flex-col">
+                    {maps.map((map) => (
+                        <div key={map.id} className="flex flex-col w-full h-full min-h-screen bg-white p-5 rounded-none shadow-md">
+                            <h2 className="text-xl font-semibold text-gray-900">
+                                📍 Your Location
+                            </h2>
+                            <p className="text-gray-700"><strong>Full Address:</strong> {map.full_address}</p>
+                            <p className="text-gray-700"><strong>Latitude:</strong> {map.add_lat}</p>
+                            <p className="text-gray-700"><strong>Longitude:</strong> {map.add_long}</p>
 
-                            {/* Map Display */}
-                            <div className="rounded-lg overflow-hidden shadow-lg border border-gray-300 mt-4">
-                                <Map height={300} center={[parseFloat(map.add_lat), parseFloat(map.add_long)]} defaultZoom={15}>
+                            {/* Full-Screen Map */}
+                            <div className="flex-grow w-full h-full mt-4 border border-gray-300 rounded-lg overflow-hidden shadow-lg">
+                                <Map height={"100%"} width={"100%"} center={[parseFloat(map.add_lat), parseFloat(map.add_long)]} defaultZoom={15}>
                                     <Marker width={50} anchor={[parseFloat(map.add_lat), parseFloat(map.add_long)]} />
                                 </Map>
                             </div>
@@ -73,9 +77,11 @@ const Maps = () => {
                     ))}
                 </div>
             ) : (
-                <p>No map data available.</p>
+                <p className="text-center text-gray-600">No map data available.</p>
             )}
         </div>
+
+
     );
 };
 
