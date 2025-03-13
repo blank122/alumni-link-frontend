@@ -17,7 +17,7 @@ const AlumniList = () => {
     useEffect(() => {
         const fetchAlumniData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/get-alumni", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/get-alumni", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
