@@ -88,7 +88,7 @@ const Forums = () => {
             {loading ? (
                 <p>Loading Forums...</p>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="min-w-6xl max-w-full mx-auto p-4 space-y-6">
                     {data && data.length > 0 ? (
                         data.map((forum) => {
                             const firstName = forum.account?.alumni?.alm_first_name || "Unknown";
@@ -100,35 +100,42 @@ const Forums = () => {
                             return (
                                 <div
                                     key={forum.id}
-                                    className="bg-white border border-gray-200 rounded-2xl shadow-lg p-6 dark:bg-gray-900 dark:border-gray-800 transition-all duration-300 hover:shadow-2xl hover:scale-105"
+                                    className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm p-4 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                                 >
-                                    {/* Profile Picture with Initials and Name */}
-                                    <div className="flex items-center gap-4 mb-4">
+                                    {/* Header: Profile Picture & Name */}
+                                    <div className="flex items-center space-x-3">
                                         <div className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white font-bold rounded-full text-lg">
                                             {initials}
                                         </div>
                                         <div>
-                                            <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                                                {fullName}
+                                            <p className="text-sm font-semibold text-gray-900 dark:text-white">{fullName}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                {new Date(forum.created_at).toLocaleDateString()}
                                             </p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Published by</p>
                                         </div>
                                     </div>
 
-                                    {/* Forum Title */}
-                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white capitalize">
-                                        {forum.frm_title}
-                                    </h3>
+                                    {/* Content */}
+                                    <div className="mt-3">
+                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">{forum.frm_title}</h3>
+                                        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{forum.frm_description}</p>
+                                    </div>
 
-                                    {/* Forum Description */}
-                                    <p className="mt-3 text-sm text-gray-700 dark:text-gray-300 line-clamp-3">
-                                        {forum.frm_description}
-                                    </p>
-
-                                    {/* Created Date */}
-                                    <span className="text-xs text-gray-500 dark:text-gray-400 block mt-2">
-                                        {new Date(forum.created_at).toLocaleDateString()}
-                                    </span>
+                                    {/* Actions */}
+                                    <div className="flex items-center justify-between mt-4 text-gray-500 dark:text-gray-400 text-sm">
+                                        {/* <button className="flex items-center space-x-1 hover:text-blue-500">
+                                            <i className="fas fa-heart"></i>
+                                            <span>Like</span>
+                                        </button> */}
+                                        <button className="flex items-center space-x-1 hover:text-blue-500">
+                                            <i className="fas fa-comment"></i>
+                                            <span>Create Discussion</span>
+                                        </button>
+                                        {/* <button className="flex items-center space-x-1 hover:text-blue-500">
+                                            <i className="fas fa-share"></i>
+                                            <span>Share</span>
+                                        </button> */}
+                                    </div>
                                 </div>
                             );
                         })
