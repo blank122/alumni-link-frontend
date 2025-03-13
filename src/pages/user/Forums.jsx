@@ -41,39 +41,6 @@ const Forums = () => {
         }
     }, [token]);
 
-    // const handleCreateFeedback = async (e) => {
-    //     e.preventDefault();
-    //     setPostLoading(true);
-
-    //     const formData = new FormData();
-    //     formData.append("frm_title", forumTitle);
-    //     formData.append("frm_description", forumDescription);
-    //     formData.append("account_id", user.id);
-
-    //     try {
-    //         const response = await axios.post("http://127.0.0.1:8000/api/forums", formData, {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //                 "Content-Type": "multipart/form-data",
-    //             },
-    //         });
-
-    //         if (response.status === 201) {
-    //             alert("Forum created successfully!");
-    //             setShowModal(false);
-    //             setForumTitle("");
-    //             setForumDescription("");
-
-    //         }
-    //         setPostLoading(false);
-
-    //     } catch (error) {
-    //         console.error("Error creating Forum:", error);
-    //     }
-    // };
-
-
-
     return (
         <div className={`flex flex-col h-screen p-6 `}>
             <div className="flex justify-between items-center mb-4">
