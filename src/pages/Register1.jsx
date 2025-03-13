@@ -86,7 +86,7 @@ const MultiStepForm = () => {
         add_long: "",
         add_lat: "",
         //education
-        educ_highest_level: "",
+        course_id: "",
         year_graduated: "",
         //is attending masters degree
         masters_type: "",
@@ -157,7 +157,7 @@ const MultiStepForm = () => {
         }
         //education
         else if (step === 3) {
-            if (!userData.educ_highest_level) newErrors.educ_highest_level = "Education level is required";
+            if (!userData.course_id) newErrors.course_id = "Program is Needed";
             if (!userData.year_graduated) newErrors.year_graduated = "Year Graduated is required";
 
         }
