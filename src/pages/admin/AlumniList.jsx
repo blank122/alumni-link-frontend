@@ -13,6 +13,8 @@ const AlumniList = () => {
     const [LoadingPending, setLoadingPending] = useState(true);
     const [LoadingApproved, setLoadingApproved] = useState(true);
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const [loadingAction, setLoadingAction] = useState(null); // Track the loading state for each action
+
 
     useEffect(() => {
         const fetchAlumniData = async () => {
@@ -82,6 +84,48 @@ const AlumniList = () => {
             fetchApprovedData();
         }
     }, [token, API_BASE_URL]);
+
+
+
+
+    const handleAction = async (id, actionType) => {
+        const confirmation = window.confirm(`Are you sure you want to ${actionType} this account?`);
+        if (!confirmation) return;
+
+        setLoadingAction(id); // Set loading state to the clicked item's ID
+
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/admin/approval-email/${id}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    status: actionType === "Accept" ? "2" : "0", // 2 for approved, 0 for rejected, 1 is pending
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(`${actionType} action successful!`);
+                console.log(data);
+                // Remove the processed account from the list
+                window.location.reload(); // Reload the page after successful action
+                setAccount((prevAccounts) => prevAccounts.filter((item) => item.id !== id));
+            } else {
+                alert(`Failed to ${actionType} the account.`);
+                console.error("Error:", data);
+            }
+        } catch (error) {
+            alert("Something went wrong. Please try again.");
+            console.error("Error:", error);
+        } finally {
+            setLoadingAction(null); // Reset loading state
+        }
+    };
 
     return (
         <div className={`flex flex-col h-screen p-6`}>
@@ -161,16 +205,15 @@ const AlumniList = () => {
                                     <th className="px-6 py-3 text-left">Name</th>
                                     <th className="px-6 py-3 text-left">Email</th>
                                     <th className="px-6 py-3 text-left">Status</th>
+                                    <th className="px-6 py-3 text-left">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {account.length > 0 ? (
                                     account.map((item, index) => (
-                                        <motion.tr
+                                        <tr
                                             key={item.id}
                                             className={`border-b ${index % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-gray-200 transition`}
-                                            whileHover={{ scale: 1.02 }}
-                                            transition={{ duration: 0.2 }}
                                         >
                                             <td className="px-6 py-4 text-gray-700">
                                                 {new Date(item.created_at).toLocaleDateString()}
@@ -182,11 +225,30 @@ const AlumniList = () => {
                                             <td className="px-6 py-4 text-gray-700">
                                                 {item.status === 1 ? "Pending" : "Rejected"}
                                             </td>
-                                        </motion.tr>
+                                            <td className="px-6 py-4 text-center">
+                                                <button
+                                                    onClick={() => handleAction(item.id, "Accept")}
+                                                    className={`px-4 py-2 text-white rounded-md transition ${loadingAction === item.id ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
+                                                        }`}
+                                                    disabled={loadingAction === item.id}
+                                                >
+                                                    {loadingAction === item.id ? "Processing..." : "Accept"}
+                                                </button>
+
+                                                <button
+                                                    onClick={() => handleAction(item.id, "Reject")}
+                                                    className={`px-4 py-2 text-white rounded-md transition ml-2 ${loadingAction === item.id ? "bg-gray-400 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"
+                                                        }`}
+                                                    disabled={loadingAction === item.id}
+                                                >
+                                                    {loadingAction === item.id ? "Processing..." : "Reject"}
+                                                </button>
+                                            </td>
+                                        </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="4" className="text-center p-4 text-gray-500">No Account data found</td>
+                                        <td colSpan="5" className="text-center p-4 text-gray-500">No Account data found</td>
                                     </tr>
                                 )}
                             </tbody>
@@ -194,6 +256,7 @@ const AlumniList = () => {
                     </div>
                 )}
             </motion.div>
+
 
         </div>
     );
