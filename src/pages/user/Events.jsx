@@ -8,6 +8,7 @@ const Events = () => {
     const { token } = useAuth();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,15 +57,44 @@ const Events = () => {
                                         {new Date(post.event_date).toLocaleDateString()}
                                     </span>
 
-                                    <a href="#" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                                    <button
+                                        onClick={() => setSelectedEvent(post)} // Set the clicked event as selected
+                                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                                         View Event
-                                    </a>
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
 
+
+
+            )}
+
+            {/* Modal */}
+            {selectedEvent && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-lg w-full relative">
+                        <button
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                            onClick={() => setSelectedEvent(null)}>
+                            ✖
+                        </button>
+                        <img className="w-full h-60 object-cover rounded-md" src={`http://127.0.0.1:8000/storage/event_images/${selectedEvent.event_image}`} alt={selectedEvent.event_title} />
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">{selectedEvent.event_title}</h2>
+                        <p className="mt-2 text-gray-700 dark:text-gray-400">{selectedEvent.event_details}</p>
+                        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                            Event Date: {new Date(selectedEvent.event_date).toLocaleDateString()}
+                        </p>
+                        <button
+                            className="mt-4 w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+                            onClick={() => setSelectedEvent(null)}>
+                            Close
+                        </button>
+                    </div>
+                </div>
             )}
         </div>
 
