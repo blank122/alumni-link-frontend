@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import Navbar from "../components/layouts/Navbar";
@@ -8,6 +9,7 @@ import EducationalBackgroundInfo from "./register/EducationalBackgroundInfo";
 import EmploymentAddressStep from "./register/EmployeeAddressInfoStep";
 
 import ReviewStep from "./register/ReviewStep";
+import { useNavigate } from "react-router-dom";
 
 const EmploymentInfoStep = ({ userData, handleChange, errors }) => (
     <motion.div
@@ -107,12 +109,15 @@ const MultiStepForm = () => {
 
     });
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate(); // Hook for redirection
 
     const handleChange = (e) => {
         setUserData({ ...userData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async () => {
+        setLoading(true); // Show loading indicator
         try {
             const response = await fetch("http://127.0.0.1:8000/api/register-alumni-dummy", {
                 method: "POST",
@@ -126,15 +131,17 @@ const MultiStepForm = () => {
                 const data = JSON.parse(text); // Attempt to parse JSON
                 console.log("Server Response:", data);
                 alert("Registration Successful!");
+
+                navigate("/"); // Redirect after success
             } catch (err) {
                 console.error("Unexpected response format:", text);
-                console.error("Unexpected response format:", err);
-
                 alert("Unexpected response from server.");
             }
         } catch (error) {
             console.error("Error submitting form:", error);
             alert("Something went wrong!");
+        } finally {
+            setLoading(false); // Hide loading indicator
         }
     };
 
@@ -224,12 +231,25 @@ const MultiStepForm = () => {
                 {step === 8 && <ReviewStep userData={userData} />}
 
                 <div className="flex justify-between mt-4">
+                    {step > 1 && (
+                        <button onClick={prevStep} className="px-4 py-2 bg-gray-400 text-white rounded">
+                            Back
+                        </button>
+                    )}
 
-                    {step > 1 && <button onClick={prevStep} className="px-4 py-2 bg-gray-400 text-white rounded">Back</button>}
                     {step < 8 ? (
-                        <button onClick={nextStep} className="px-4 py-2 bg-blue-500 text-white rounded">Next</button>
+                        <button onClick={nextStep} className="px-4 py-2 bg-blue-500 text-white rounded">
+                            Next
+                        </button>
                     ) : (
-                        <button onClick={handleSubmit} className="px-4 py-2 bg-green-500 text-white rounded">Submit</button>
+                        <button
+                            onClick={handleSubmit}
+                            className="px-4 py-2 bg-green-500 text-white rounded flex items-center"
+                            disabled={loading}
+                        >
+                            {loading && <span className="loader mr-2"></span>}
+                            {loading ? "Submitting..." : "Submit"}
+                        </button>
                     )}
                 </div>
             </div>
