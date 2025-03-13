@@ -33,7 +33,7 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchUnemployedData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/unemployed-alumni", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/unemployed-alumni", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -55,7 +55,7 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchEmployedData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/employed-alumni", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/employed-alumni", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -77,7 +77,7 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchFreelance = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/freelance-alumni", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/freelance-alumni", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -100,7 +100,7 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchPendingData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/pending-accounts", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/pending-accounts", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -122,7 +122,7 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchApprovedData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/approved-accounts", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/approved-accounts", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -144,7 +144,7 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchTotalAccounts = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/total-accounts", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/total-accounts", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -167,7 +167,7 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchUserRegDemograph = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/registration-data", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/registration-data", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -190,7 +190,7 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchUnemploymentDemograph = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/unemployment", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/unemployment", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
