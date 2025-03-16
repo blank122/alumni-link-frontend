@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
-import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
+import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLock } from "react-icons/fa";
 
 const Profile = () => {
     const { user, token } = useAuth();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [changePassword, setChangePassword] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,7 +41,14 @@ const Profile = () => {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
             {/* Profile Card */}
             <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-8xl">
+
                 <div className="flex items-center space-x-4">
+                    <h2 className="text-xl font-semibold flex items-center space-x-4">
+                        ℹ️ <span>General Information</span>
+                    </h2>
+                </div>
+
+                <div className="flex items-center justify-center space-x-4">
                     <div className="w-20 h-20 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl font-bold">
                         {alumni.alm_first_name[0]}{alumni.alm_last_name[0]}
                     </div>
@@ -63,6 +71,11 @@ const Profile = () => {
                     <div className="bg-gray-50 p-4 rounded-lg flex items-center space-x-3">
                         <FaEnvelope className="text-blue-500 text-xl" />
                         <p className="text-gray-700"><strong>Email:</strong> {data.email}</p>
+                    </div>
+                    {/* Change Password Button */}
+                    <div className="bg-gray-50 p-4 rounded-lg flex items-center space-x-3 cursor-pointer hover:bg-gray-100" onClick={() => setChangePassword(true)}>
+                        <FaLock className="text-blue-500 text-xl" />
+                        <p className="text-gray-700"><strong>Change Password</strong></p>
                     </div>
                 </div>
             </div>
@@ -110,6 +123,21 @@ const Profile = () => {
                                 <p className="text-gray-500 text-sm"><strong>Work Location:</strong> {job.address_employment?.full_address || "N/A"}</p>
                             </div>
                         ))}
+                    </div>
+                </div>
+            )}
+
+            {/* change password modal */}
+            {/* Modal */}
+            {changePassword && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+                        <p className="text-gray-600 mb-4">This is just a placeholder modal.</p>
+                        <div className="flex justify-end space-x-2">
+                            <button className="px-4 py-2 bg-gray-300 rounded-md" onClick={() => setChangePassword(false)}>Close</button>
+                            <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
+                        </div>
                     </div>
                 </div>
             )}
