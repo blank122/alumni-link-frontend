@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 const Forums = () => {
@@ -8,6 +9,7 @@ const Forums = () => {
     const { user, token } = useAuth();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -67,7 +69,8 @@ const Forums = () => {
                             return (
                                 <div
                                     key={forum.id}
-                                    className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm p-4 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                                    onClick={() => navigate(`/user/forums/${forum.id}`)} // Navigate to details page
+                                    className="cursor-pointer bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm p-4 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                                 >
                                     {/* Header: Profile Picture & Name */}
                                     <div className="flex items-center space-x-3">
