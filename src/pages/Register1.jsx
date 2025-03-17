@@ -10,6 +10,7 @@ import EmploymentAddressStep from "./register/EmployeeAddressInfoStep";
 
 import ReviewStep from "./register/ReviewStep";
 import { useNavigate } from "react-router-dom";
+import SkillsAndCertifications from "./register/SkillsAndCertifications";
 
 const EmploymentInfoStep = ({ userData, handleChange, errors }) => (
     <motion.div
@@ -93,6 +94,11 @@ const MultiStepForm = () => {
         //is attending masters degree
         masters_type: "",
         masters_institution: "",
+        //certifications
+        cert_serial_no: "",
+        cert_name: "",
+        cert_awarded: "",
+        cert_file: "",
         //employment status
         emp_status: "",
         //employment details
@@ -166,27 +172,33 @@ const MultiStepForm = () => {
         else if (step === 3) {
             if (!userData.course_id) newErrors.course_id = "Program is Needed";
             if (!userData.year_graduated) newErrors.year_graduated = "Year Graduated is required";
-
+        }
+        //certifications
+        else if (step === 4) {
+            if (!userData.cert_serial_no) newErrors.cert_serial_no = "Certifcation Serial No is required";
+            if (!userData.cert_name) newErrors.cert_name = "Certification Name is required";
+            if (!userData.cert_awarded) newErrors.cert_awarded = "Certifcation Awarded Date is required";
+            if (!userData.cert_file) newErrors.cert_file = "Certification File is required";
         }
         //employment status
-        else if (step === 4) {
+        else if (step === 5) {
             if (!userData.emp_status) newErrors.emp_status = "Employment status is required";
         }
-        else if (step === 5) {
+        else if (step === 6) {
             if (!userData.company_name) newErrors.company_name = "Company Name is required";
             if (!userData.job_title) newErrors.job_title = "Job title is required";
             if (!userData.start_date) newErrors.start_date = "Year Started is required";
         }
 
         //address info
-        else if (step === 6) {
+        else if (step === 7) {
             if (!userData.emp_full_address) newErrors.emp_full_address = "Full Address is required";
             if (!userData.emp_lat) newErrors.emp_lat = "Latitude is required";
             if (!userData.emp_long) newErrors.emp_long = "Longitude is required";
 
         }
         //account info
-        else if (step === 7) {
+        else if (step === 8) {
             if (!userData.email) newErrors.email = "Email is required";
             if (!userData.password) newErrors.password = "Password is required";
         }
@@ -198,8 +210,8 @@ const MultiStepForm = () => {
         if (!validateStep()) return;
 
         // Skip Steps 5 & 6 if user is Unemployed (0) or Freelance (1)
-        if (step === 4 && (userData.emp_status === "0" || userData.emp_status === "1")) {
-            setStep(7); // Jump directly to AccountInfoStep
+        if (step === 5 && (userData.emp_status === "0" || userData.emp_status === "1")) {
+            setStep(8); // Jump directly to AccountInfoStep
         } else {
             setStep(step + 1);
         }
@@ -207,8 +219,8 @@ const MultiStepForm = () => {
 
 
     const prevStep = () => {
-        if (step === 7 && (userData.emp_status === "0" || userData.emp_status === "1")) {
-            setStep(4); // Jump back to Step 4 if employment was skipped
+        if (step === 8 && (userData.emp_status === "0" || userData.emp_status === "1")) {
+            setStep(5); // Jump back to Step 4 if employment was skipped
         } else {
             setStep(step - 1);
         }
@@ -224,11 +236,13 @@ const MultiStepForm = () => {
                 {step === 2 && <AddressInfoStep userData={userData} setUserData={setUserData}
                     handleChange={handleChange} errors={errors} />}
                 {step === 3 && <EducationalBackgroundInfo userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 4 && <EmploymentStatus userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 5 && <EmploymentInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 6 && <EmploymentAddressStep userData={userData} setUserData={setUserData} handleChange={handleChange} errors={errors} />}
-                {step === 7 && <AccountInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 8 && <ReviewStep userData={userData} />}
+                {step === 4 && <SkillsAndCertifications userData={userData} handleChange={handleChange} errors={errors} />}
+
+                {step === 5 && <EmploymentStatus userData={userData} handleChange={handleChange} errors={errors} />}
+                {step === 6 && <EmploymentInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
+                {step === 7 && <EmploymentAddressStep userData={userData} setUserData={setUserData} handleChange={handleChange} errors={errors} />}
+                {step === 8 && <AccountInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
+                {step === 9 && <ReviewStep userData={userData} />}
 
                 <div className="flex justify-between mt-4">
                     {step > 1 && (
@@ -237,7 +251,7 @@ const MultiStepForm = () => {
                         </button>
                     )}
 
-                    {step < 8 ? (
+                    {step < 9 ? (
                         <button onClick={nextStep} className="px-4 py-2 bg-blue-500 text-white rounded">
                             Next
                         </button>
