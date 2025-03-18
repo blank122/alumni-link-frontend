@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from "../components/layouts/Navbar";
 import { motion } from "framer-motion";
 import PersonalInfoStep from "./register/PersonalInfoStep";
@@ -77,6 +78,85 @@ const AccountInfoStep = ({ userData, handleChange, errors }) => (
 );
 
 const MultiStepForm = () => {
+
+    const addTechnicalSkill = (skill) => {
+        if (skill && !userData.technical_skills_logs.includes(skill)) {
+            setUserData({
+                ...userData,
+                technical_skills_logs: [...userData.technical_skills_logs, skill],
+            });
+        }
+    };
+
+    const removeTechnicalSkill = (skill) => {
+        setUserData({
+            ...userData,
+            technical_skills_logs: userData.technical_skills_logs.filter(s => s !== skill),
+        });
+    };
+
+    const addSoftSkill = (skill) => {
+        if (skill && !userData.soft_skills_logs.includes(skill)) {
+            setUserData({
+                ...userData,
+                soft_skills_logs: [...userData.soft_skills_logs, skill],
+            });
+        }
+    };
+
+    const removeSoftSkill = (skill) => {
+        setUserData({
+            ...userData,
+            soft_skills_logs: userData.soft_skills_logs.filter(s => s !== skill),
+        });
+    };
+
+
+    const [softSkills, setSoftSkills] = useState([]);
+    const [loadingSoft, setLoadingSoftSkills] = useState(true);
+    const [techSkills, setTechSkills] = useState([]);
+    const [loadingTech, setLoadingTechSkills] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/soft-skills", {
+                    headers: {
+                        Accept: "application/json",
+                    },
+                });
+                setSoftSkills(response.data.data);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoadingSoftSkills(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/technical-skills", {
+                    headers: {
+                        Accept: "application/json",
+                    },
+                });
+                setTechSkills(response.data.data);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoadingTechSkills(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+
     const [step, setStep] = useState(1);
     const [userData, setUserData] = useState({
         //personal info
@@ -99,6 +179,10 @@ const MultiStepForm = () => {
         cert_name: "",
         cert_awarded: "",
         cert_file: "",
+        //technical skills logs
+        technical_skills_logs: [], // Store selected skills
+        soft_skills_logs: [], // Store selected skills
+
         //employment status
         emp_status: "",
         //employment details
@@ -160,7 +244,6 @@ const MultiStepForm = () => {
             setLoading(false);
         }
     };
-
 
 
     const validateStep = () => {
@@ -247,7 +330,18 @@ const MultiStepForm = () => {
                 {step === 2 && <AddressInfoStep userData={userData} setUserData={setUserData}
                     handleChange={handleChange} errors={errors} />}
                 {step === 3 && <EducationalBackgroundInfo userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 4 && <SkillsAndCertifications userData={userData} handleChange={handleChange} errors={errors} />}
+                {step === 4 && <SkillsAndCertifications userData={userData}
+                    handleChange={handleChange}
+                    techSkills={techSkills}
+                    addTechnicalSkill={addTechnicalSkill}
+                    removeTechnicalSkill={removeTechnicalSkill}
+                    loadingTech={loadingTech}
+
+                    softSkills={softSkills}
+                    addSoftSkill={addSoftSkill}
+                    removeSoftSkill={removeSoftSkill}
+                    loadingSoft={loadingSoft}
+                    errors={errors} />}
 
                 {step === 5 && <EmploymentStatus userData={userData} handleChange={handleChange} errors={errors} />}
                 {step === 6 && <EmploymentInfoStep userData={userData} handleChange={handleChange} errors={errors} />}

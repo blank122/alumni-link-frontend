@@ -4,7 +4,18 @@ import { motion } from "framer-motion";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const SkillsAndCertifications = ({ userData, handleChange, errors }) => {
+
+const SkillsAndCertifications = ({ userData,
+    handleChange,
+    techSkills,
+    addTechnicalSkill,
+    removeTechnicalSkill,
+    loadingTech,
+    softSkills,
+    addSoftSkill,
+    removeSoftSkill,
+    loadingSoft,
+    errors }) => {
 
 
     return (
@@ -89,10 +100,82 @@ const SkillsAndCertifications = ({ userData, handleChange, errors }) => {
                     </div>
 
                 </div>
+                {/* Technical Skills Selection */}
+                <div className="mt-4">
+                    <h3 className="text-lg font-semibold">Technical Skills</h3>
 
-                {/* Master's Degree Checkbox */}
+                    {/* Loading State */}
+                    {loadingTech ? (
+                        <p>Loading skills...</p>
+                    ) : (
+                        <>
+                            <select
+                                onChange={(e) => addTechnicalSkill(e.target.value)}
+                                className="w-full p-2 border rounded-md mt-2"
+                            >
+                                <option value="">Select a skill</option>
+                                {techSkills.map((skill) => (
+                                    <option key={skill.id} value={skill.tch_skill_name}>
+                                        {skill.tch_skill_name}
+                                    </option>
+                                ))}
+                            </select>
 
+                            {/* Display Selected Skills */}
+                            {userData.technical_skills_logs.map((skill, index) => (
+                                <div key={index} className="flex items-center gap-2 mt-2">
+                                    <span className="p-2 bg-gray-200 rounded-md">{skill}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => removeTechnicalSkill(skill)}
+                                        className="px-3 py-2 bg-red-500 text-white rounded"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
+                        </>
+                    )}
+                </div>
 
+                {/* soft skills */}
+                {/* Technical Skills Selection */}
+                <div className="mt-4">
+                    <h3 className="text-lg font-semibold">Soft Skills</h3>
+
+                    {/* Loading State */}
+                    {loadingSoft ? (
+                        <p>Loading skills...</p>
+                    ) : (
+                        <>
+                            <select
+                                onChange={(e) => addSoftSkill(e.target.value)}
+                                className="w-full p-2 border rounded-md mt-2"
+                            >
+                                <option value="">Select a skill</option>
+                                {softSkills.map((skill) => (
+                                    <option key={skill.id} value={skill.sft_skill_name}>
+                                        {skill.sft_skill_name}
+                                    </option>
+                                ))}
+                            </select>
+
+                            {/* Display Selected Skills */}
+                            {userData.technical_skills_logs.map((skill, index) => (
+                                <div key={index} className="flex items-center gap-2 mt-2">
+                                    <span className="p-2 bg-gray-200 rounded-md">{skill}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => removeSoftSkill(skill)}
+                                        className="px-3 py-2 bg-red-500 text-white rounded"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
+                        </>
+                    )}
+                </div>
             </div>
         </motion.div>
     );
