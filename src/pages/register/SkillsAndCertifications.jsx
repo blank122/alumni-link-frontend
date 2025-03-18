@@ -17,32 +17,6 @@ const SkillsAndCertifications = ({ userData, handleChange, errors }) => {
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Skills and Certifications</h2>
 
             <div className="space-y-4">
-                {/* Course Selection */}
-                {/* <div>
-                    <label htmlFor="course_id" className="block text-sm font-medium text-gray-700">
-                        Select Course
-                    </label>
-                    <select
-                        id="course_id"
-                        name="course_id"
-                        onChange={handleChange}
-                        value={userData.course_id || ""}
-                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300"
-                    >
-                        <option value="">-- Select Course --</option>
-                        {loading ? (
-                            <option disabled>Loading...</option>
-                        ) : (
-                            courses.map((course) => (
-                                <option key={course.id} value={course.id}>
-                                    {course.course_name} ({course.course_acronym})
-                                </option>
-                            ))
-                        )}
-                    </select>
-                    {errors.course_id && <p className="text-red-500 text-xs mt-1">{errors.course_id}</p>}
-                </div> */}
-
                 <div>
                     <div>
                         <label htmlFor="cert_serial_no" className="block text-sm font-medium text-gray-700">
@@ -78,18 +52,20 @@ const SkillsAndCertifications = ({ userData, handleChange, errors }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Upload Image</label>
+                        <label htmlFor="cert_file" className="block text-sm font-medium text-gray-700">
+                            Upload Certificate (PDF or Image)
+                        </label>
                         <input
                             type="file"
-                            onChange={(e) => handleChange({
-                                target: {
-                                    name: "cert_file",
-                                    value: e.target.files[0]
-                                }
-                            })} className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
-
+                            id="cert_file"
+                            name="cert_file"
+                            accept=".pdf,.jpg,.png"
+                            onChange={handleChange}
+                            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300"
                         />
+                        {errors.cert_file && <p className="text-red-500 text-xs mt-1">{errors.cert_file}</p>}
                     </div>
+
 
                     <div>
                         <label htmlFor="cert_awarded" className="block text-sm font-medium text-gray-700">

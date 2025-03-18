@@ -119,25 +119,35 @@ const MultiStepForm = () => {
     const navigate = useNavigate(); // Hook for redirection
 
     const handleChange = (e) => {
-        setUserData({ ...userData, [e.target.name]: e.target.value });
+        const { name, type } = e.target;
+
+        if (type === "file") {
+            setUserData({ ...userData, [name]: e.target.files[0] });
+        } else {
+            setUserData({ ...userData, [name]: e.target.value });
+        }
     };
+
 
     const handleSubmit = async () => {
         setLoading(true); // Show loading indicator
+
         try {
+            const formData = new FormData();
+            Object.entries(userData).forEach(([key, value]) => {
+                formData.append(key, value);
+            });
+
             const response = await fetch("http://127.0.0.1:8000/api/register-alumni-dummy", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(userData),
+                body: formData, // Send FormData
             });
 
             const text = await response.text(); // Read response as text first
-
             try {
-                const data = JSON.parse(text); // Attempt to parse JSON
+                const data = JSON.parse(text);
                 console.log("Server Response:", data);
                 alert("Registration Successful!");
-
                 navigate("/"); // Redirect after success
             } catch (err) {
                 console.error("Unexpected response format:", text);
@@ -147,9 +157,10 @@ const MultiStepForm = () => {
             console.error("Error submitting form:", error);
             alert("Something went wrong!");
         } finally {
-            setLoading(false); // Hide loading indicator
+            setLoading(false);
         }
     };
+
 
 
     const validateStep = () => {
