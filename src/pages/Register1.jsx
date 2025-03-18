@@ -218,9 +218,31 @@ const MultiStepForm = () => {
 
         try {
             const formData = new FormData();
+
             Object.entries(userData).forEach(([key, value]) => {
-                formData.append(key, value);
+                // Ensure technical_skills_logs and soft_skills_logs are arrays
+                if (key === "technical_skills_logs" || key === "soft_skills_logs") {
+                    if (Array.isArray(value)) {
+                        value.forEach((item) => formData.append(`${key}[]`, item)); // Append each value in the array
+                    } else if (typeof value === "string") {
+                        value.split(",").forEach((item) => formData.append(`${key}[]`, item.trim()));
+                    }
+                } else {
+                    formData.append(key, value);
+                }
             });
+
+            // Log properly formatted data
+            const jsonObject = {};
+            formData.forEach((value, key) => {
+                if (jsonObject[key]) {
+                    jsonObject[key] = [].concat(jsonObject[key], value); // Convert to an array
+                } else {
+                    jsonObject[key] = value;
+                }
+            });
+
+            console.log("Data to be sent to the server:", JSON.stringify(jsonObject, null, 2));
 
             const response = await fetch("http://127.0.0.1:8000/api/register-alumni-dummy", {
                 method: "POST",
@@ -232,7 +254,7 @@ const MultiStepForm = () => {
                 const data = JSON.parse(text);
                 console.log("Server Response:", data);
                 alert("Registration Successful!");
-                navigate("/"); // Redirect after success
+                // navigate("/"); // Redirect after success
             } catch (err) {
                 console.error("Unexpected response format:", text);
                 alert("Unexpected response from server.");
@@ -244,6 +266,8 @@ const MultiStepForm = () => {
             setLoading(false);
         }
     };
+
+
 
 
     const validateStep = () => {

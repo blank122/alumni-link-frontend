@@ -110,30 +110,38 @@ const SkillsAndCertifications = ({ userData,
                     ) : (
                         <>
                             <select
-                                onChange={(e) => addTechnicalSkill(e.target.value)}
+                                onChange={(e) => addTechnicalSkill(Number(e.target.value))} // Store ID, not name
                                 className="w-full p-2 border rounded-md mt-2"
                             >
                                 <option value="">Select a skill</option>
                                 {techSkills.map((skill) => (
-                                    <option key={skill.id} value={skill.tch_skill_name}>
+                                    <option key={skill.id} value={skill.id}> {/* Store ID here */}
                                         {skill.tch_skill_name}
                                     </option>
                                 ))}
                             </select>
 
+
                             {/* Display Selected Skills */}
-                            {userData.technical_skills_logs.map((skill, index) => (
-                                <div key={index} className="flex items-center gap-2 mt-2">
-                                    <span className="p-2 bg-gray-200 rounded-md">{skill}</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => removeTechnicalSkill(skill)}
-                                        className="px-3 py-2 bg-red-500 text-white rounded"
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                            ))}
+                            {userData.technical_skills_logs.map((skillId, index) => {
+                                // Convert IDs to the same type to avoid mismatches
+                                const skill = techSkills.find(s => Number(s.id) === Number(skillId));
+
+                                return (
+                                    <div key={index} className="flex items-center gap-2 mt-2">
+                                        <span className="p-2 bg-gray-200 rounded-md">{skill ? skill.tch_skill_name : "Unknown Skill"}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => removeTechnicalSkill(skillId)}
+                                            className="px-3 py-2 bg-red-500 text-white rounded"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                );
+                            })}
+
+
                         </>
                     )}
                 </div>
@@ -149,30 +157,35 @@ const SkillsAndCertifications = ({ userData,
                     ) : (
                         <>
                             <select
-                                onChange={(e) => addSoftSkill(e.target.value)}
+                                onChange={(e) => addSoftSkill(Number(e.target.value))} // Store ID, not name
                                 className="w-full p-2 border rounded-md mt-2"
                             >
                                 <option value="">Select a skill</option>
                                 {softSkills.map((skill) => (
-                                    <option key={skill.id} value={skill.sft_skill_name}>
+                                    <option key={skill.id} value={skill.id}>
                                         {skill.sft_skill_name}
                                     </option>
                                 ))}
                             </select>
 
                             {/* Display Selected Skills */}
-                            {userData.technical_skills_logs.map((skill, index) => (
-                                <div key={index} className="flex items-center gap-2 mt-2">
-                                    <span className="p-2 bg-gray-200 rounded-md">{skill}</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => removeSoftSkill(skill)}
-                                        className="px-3 py-2 bg-red-500 text-white rounded"
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                            ))}
+                            {userData.soft_skills_logs.map((skillId, index) => {
+                                // Convert IDs to the same type to avoid mismatches
+                                const skill = softSkills.find(s => Number(s.id) === Number(skillId));
+
+                                return (
+                                    <div key={index} className="flex items-center gap-2 mt-2">
+                                        <span className="p-2 bg-gray-200 rounded-md">{skill ? skill.sft_skill_name : "Unknown Skill"}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => removeSoftSkill(skillId)}
+                                            className="px-3 py-2 bg-red-500 text-white rounded"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                );
+                            })}
                         </>
                     )}
                 </div>
