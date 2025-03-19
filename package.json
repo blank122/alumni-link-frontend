@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.0.2",
     "axios": "^1.7.9",
     "framer-motion": "^12.4.3",
+    "lucide-react": "^0.483.0",
     "ol": "^10.4.0",
     "pigeon-maps": "^0.22.1",
     "prop-types": "^15.8.1",
