@@ -10,6 +10,8 @@ const ManageMap = () => {
     const [loading, setLoading] = useState(true);
     const [selectedEmployees, setSelectedEmployees] = useState([]); // Store multiple employees
     const [showSortDropdown, setShowSortDropdown] = useState(false);
+    const [showSortDropdownSoftSkills, setShowSortDropdownSoftSkills] = useState(false);
+
     const [showProgramDropdown, setShowProgramDropdown] = useState(false);
     const sortRef = useRef(null);
     const programRef = useRef(null);
@@ -114,13 +116,16 @@ const ManageMap = () => {
                             {/* SORT DROPDOWN */}
                             <div className="relative mb-2">
                                 <button
-                                    onClick={() => setShowSortDropdown(!showSortDropdown)}
+                                    onClick={() => {
+                                        setShowSortDropdown(!showSortDropdown);
+                                        setShowProgramDropdown(false); // Close Program dropdown when opening Sort
+                                    }}
                                     className="w-full p-2 border rounded-lg bg-white text-left"
                                 >
                                     Sort: Technical Skills
                                 </button>
                                 {showSortDropdown && (
-                                    <div className="absolute w-full bg-white border rounded-lg shadow-lg mt-1">
+                                    <div className="absolute w-full bg-white border rounded-lg shadow-lg mt-1 z-20">
                                         <button className="block w-full px-4 py-2 hover:bg-gray-100">Programming</button>
                                         <button className="block w-full px-4 py-2 hover:bg-gray-100">Data Analysis</button>
                                         <button className="block w-full px-4 py-2 hover:bg-gray-100">Web Development</button>
@@ -130,16 +135,41 @@ const ManageMap = () => {
                                 )}
                             </div>
 
-                            {/* PROGRAM DROPDOWN */}
-                            <div className="relative">
+                            {/* SORT DROPDOWN */}
+                            <div className="relative mb-2">
                                 <button
-                                    onClick={() => setShowProgramDropdown(!showProgramDropdown)}
+                                    onClick={() => {
+                                        setShowSortDropdownSoftSkills(!showSortDropdown);
+                                        setShowProgramDropdown(false); // Close Program dropdown when opening Sort
+                                    }}
+                                    className="w-full p-2 border rounded-lg bg-white text-left"
+                                >
+                                    Sort: Soft Skills
+                                </button>
+                                {showSortDropdownSoftSkills && (
+                                    <div className="absolute w-full bg-white border rounded-lg shadow-lg mt-1 z-20">
+                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Leadership</button>
+                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Teamwork</button>
+                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Problem-Solving</button>
+                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Time Management</button>
+                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Adaptability</button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* PROGRAM DROPDOWN */}
+                            <div className="relative mt-2">
+                                <button
+                                    onClick={() => {
+                                        setShowProgramDropdown(!showProgramDropdown);
+                                        setShowSortDropdown(false); // Close Sort dropdown when opening Program
+                                    }}
                                     className="w-full p-2 border rounded-lg bg-white text-left"
                                 >
                                     Program
                                 </button>
                                 {showProgramDropdown && (
-                                    <div className="absolute w-full bg-white border rounded-lg shadow-lg mt-1 max-h-32 overflow-y-auto">
+                                    <div className="absolute w-full bg-white border rounded-lg shadow-lg mt-1 z-20">
                                         <button className="block w-full px-4 py-2 hover:bg-gray-100">BSIT</button>
                                         <button className="block w-full px-4 py-2 hover:bg-gray-100">BCS</button>
                                         <button className="block w-full px-4 py-2 hover:bg-gray-100">BIS</button>
@@ -147,6 +177,7 @@ const ManageMap = () => {
                                     </div>
                                 )}
                             </div>
+
                         </div>
                     </div>
 
