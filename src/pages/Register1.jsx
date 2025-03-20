@@ -143,6 +143,7 @@ const MultiStepForm = () => {
                 const response = await axios.get("http://127.0.0.1:8000/api/technical-skills", {
                     headers: {
                         Accept: "application/json",
+                        
                     },
                 });
                 setTechSkills(response.data.data);
@@ -246,6 +247,9 @@ const MultiStepForm = () => {
 
             const response = await fetch("http://127.0.0.1:8000/api/register-alumni-dummy", {
                 method: "POST",
+                headers: {
+                    "Accept": "application/json", // Ensure Laravel accepts JSON responses
+                },
                 body: formData, // Send FormData
             });
 
