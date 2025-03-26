@@ -60,7 +60,7 @@ const Feedback = () => {
             });
 
             if (response.status === 201) {
-                alert("Job created successfully!");
+                alert("Feedback created successfully!");
                 setShowModal(false);
                 setFeedbackType("");
                 setFeedbackDescription("");

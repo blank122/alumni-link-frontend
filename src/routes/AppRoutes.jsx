@@ -3,12 +3,13 @@ import Dashboard from "../pages/admin/DashboardAdmin";
 import Jobs from "../pages/admin/Jobs";
 import Announcement from "../pages/admin/Announcement";
 import Events from "../pages/admin/Events";
-import Forums from "../pages/admin/Forums";
 import AlumniList from "../pages/admin/AlumniList";
 import CourseList from "../pages/admin/CourseList";
 import ManageMap from "../pages/admin/ManageMap";
 import ManageFeedback from "../pages/admin/ManageFeedback";
 import StatisticalReports from "../pages/admin/StatisticalReports";
+import AdminForums from "../pages/admin/Forum/Forums";
+import AdminForumDetails from "../pages/admin/Forum/ForumDetails";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register1";
@@ -51,7 +52,8 @@ const AppRoutes = () => {
                     <Route path="jobs" element={<Jobs />} />
                     <Route path="announcement" element={<Announcement />} />
                     <Route path="events" element={<Events />} />
-                    <Route path="forums" element={<Forums />} />
+                    <Route path="forums" element={<AdminForums />} />
+                    <Route path="forums/:id" element={<AdminForumDetails />} />                    
                     <Route path="course-list" element={<CourseList />} />
                     <Route path="alumni-list" element={<AlumniList />} />
                     <Route path="manage-map" element={<ManageMap />} />

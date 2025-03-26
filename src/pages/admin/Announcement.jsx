@@ -46,7 +46,7 @@ const Announcements = () => {
         if (annImage) formData.append("ann_image", annImage);
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/announcements", formData, {
+            const response = await axios.post("http://127.0.0.1:8000/api/admin/announcements", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
@@ -54,6 +54,7 @@ const Announcements = () => {
             });
 
             if (response.status === 201) {
+                window.location.reload(); // Reload the page after successful action
                 alert("Announcements created successfully!");
                 setShowModal(false);
                 setAnnTitle("");

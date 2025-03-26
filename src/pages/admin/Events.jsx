@@ -18,7 +18,7 @@ const Events = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/events", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/events", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -51,7 +51,7 @@ const Events = () => {
         if (eventImage) formData.append("event_image", eventImage);
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/events", formData, {
+            const response = await axios.post("http://127.0.0.1:8000/api/admin/events", formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
@@ -59,6 +59,7 @@ const Events = () => {
             });
 
             if (response.status === 201) {
+                window.location.reload(); // Reload the page after successful action
                 alert("Events created successfully!");
                 setShowModal(false);
                 setEventTitle("");

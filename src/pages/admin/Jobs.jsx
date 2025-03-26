@@ -17,7 +17,7 @@ const Jobs = () => {
     useEffect(() => {
         const fetchJobPost = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/jobs", {
+                const response = await axios.get("http://127.0.0.1:8000/api/admin/jobs", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -56,6 +56,7 @@ const Jobs = () => {
             });
 
             if (response.status === 201) {
+                window.location.reload(); // Reload the page after successful action
                 alert("Job created successfully!");
                 setShowModal(false);
                 setJobTitle("");
@@ -196,7 +197,7 @@ const Jobs = () => {
                                             <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8H4z"></path>
                                         </svg>
                                     ) : (
-                                        "Sign in"
+                                        "Create Job"
                                     )}
                                 </button>
                             </div>
