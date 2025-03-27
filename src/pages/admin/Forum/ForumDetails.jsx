@@ -40,7 +40,7 @@ const ForumDetails = () => {
             <p>{forum.frm_description}</p>
 
             {/* Threads */}
-            <h2 className="text-xl font-semibold mt-4">Threads</h2>
+            <h2 className="text-xl font-semibold mt-4">Discussion</h2>
             {forum.threads.length > 0 ? (
                 forum.threads.map((thread) => (
                     <div key={thread.id} className="border p-2 my-2">

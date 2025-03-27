@@ -6,6 +6,8 @@ import Events from "../pages/admin/Events";
 import AlumniList from "../pages/admin/AlumniList";
 import CourseList from "../pages/admin/CourseList";
 import ManageMap from "../pages/admin/ManageMap";
+import AlumniGISMap from "../pages/admin/AlumniGISMap";
+
 import ManageFeedback from "../pages/admin/ManageFeedback";
 import StatisticalReports from "../pages/admin/StatisticalReports";
 import AdminForums from "../pages/admin/Forum/Forums";
@@ -57,6 +59,8 @@ const AppRoutes = () => {
                     <Route path="course-list" element={<CourseList />} />
                     <Route path="alumni-list" element={<AlumniList />} />
                     <Route path="manage-map" element={<ManageMap />} />
+                    <Route path="alumni-map" element={<AlumniGISMap />} />
+
                     <Route path="manage-feedback" element={<ManageFeedback />} />
                     <Route path="statistical-reports" element={<StatisticalReports />} />
                 </Route>

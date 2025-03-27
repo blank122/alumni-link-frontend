@@ -46,6 +46,7 @@ const AdminLayout = ({ children }) => {
                             { path: "/admin/course-list", label: "Course List", icon: "📚" },
                             { path: "/admin/alumni-list", label: "Alumni List", icon: "🎓" },
                             { path: "/admin/manage-map", label: "Manage Map", icon: "🗺️" },
+                            { path: "/admin/alumni-map", label: "GIS Map", icon: "🗺️" },
                             { path: "/admin/manage-feedback", label: "Feedback", icon: "📝" },
                             { path: "/admin/statistical-reports", label: "Statistical Reports", icon: "📊" }
                         ].map(({ path, label, icon }) => (

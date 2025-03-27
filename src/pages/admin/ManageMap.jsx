@@ -8,17 +8,13 @@ const ManageMap = () => {
     const { token } = useAuth();
     const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedEmployees, setSelectedEmployees] = useState([]); // Store multiple employees
-    const [showSortDropdown, setShowSortDropdown] = useState(false);
-    const [showSortDropdownSoftSkills, setShowSortDropdownSoftSkills] = useState(false);
+    const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [selectedPosition, setSelectedPosition] = useState(null); // Store marker position
 
-    const [showProgramDropdown, setShowProgramDropdown] = useState(false);
-    const sortRef = useRef(null);
-    const programRef = useRef(null);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/clustering-data ", {
+                const response = await axios.get("http://127.0.0.1:8000/api/clustering-data", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -38,35 +34,21 @@ const ManageMap = () => {
         }
     }, [token]);
 
-    const handleMarkerClick = (companyName) => {
-        // Find all employees working at this company
+    const handleMarkerClick = (employment, lat, lng) => {
         const employees = accounts.flatMap(account =>
             account.alumni.employment_infos
-                .filter(employment => employment.company_name === companyName)
-                .map(employment => ({
+                .filter(emp => emp.company_name === employment.company_name)
+                .map(emp => ({
                     name: `${account.alumni.alm_first_name} ${account.alumni.alm_last_name}`,
-                    profession: employment.emp_info_profession,
-                    company: employment.company_name,
-                    address: employment.address_employment.emp_add_location,
+                    profession: emp.emp_info_profession,
+                    company: emp.company_name,
+                    address: emp.address_employment.emp_add_location,
                 }))
         );
 
         setSelectedEmployees(employees);
+        setSelectedPosition([lat, lng]); // Store marker position
     };
-
-    // Close dropdowns when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (sortRef.current && !sortRef.current.contains(event.target)) {
-                setShowSortDropdown(false);
-            }
-            if (programRef.current && !programRef.current.contains(event.target)) {
-                setShowProgramDropdown(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     return (
         <div className="flex flex-col h-screen p-6 bg-gray-100">
@@ -78,134 +60,71 @@ const ManageMap = () => {
 
             {loading ? (
                 <p className="text-center text-gray-600">Loading map...</p>
-            ) : accounts.length > 0 ? (
-                <div className="flex flex-col w-full h-full p-4">
-                    {/* MAP SECTION */}
-                    <div className="relative flex w-full">
-                        <div className="flex-grow border border-gray-300 rounded-lg shadow-lg overflow-hidden">
-                            <Map height={"60vh"} width={"100%"} defaultCenter={[10.3157, 123.8854]} defaultZoom={13}>
-                                {accounts.map((account) =>
-                                    account.alumni.employment_infos.map((employment) =>
-                                        employment.address_employment.emp_add_lat &&
-                                            employment.address_employment.emp_add_long ? (
-                                            <Marker
-                                                key={employment.id}
-                                                width={50}
-                                                anchor={[
-                                                    parseFloat(employment.address_employment.emp_add_lat),
-                                                    parseFloat(employment.address_employment.emp_add_long),
-                                                ]}
-                                                onClick={() => handleMarkerClick(employment.company_name)}
-                                            />
-                                        ) : null
-                                    )
-                                )}
-                            </Map>
-                        </div>
-
-                        {/* FILTERS & SEARCH PANEL */}
-                        <div className="absolute top-4 left-4 w-80 p-4 bg-white shadow-lg rounded-lg z-10">
-                            <div className="relative mb-4">
-                                <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
-                                <input
-                                    placeholder="Search..."
-                                    className="pl-10 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-                            </div>
-
-                            {/* SORT DROPDOWN */}
-                            <div className="relative mb-2">
-                                <button
-                                    onClick={() => {
-                                        setShowSortDropdown(!showSortDropdown);
-                                        setShowProgramDropdown(false); // Close Program dropdown when opening Sort
-                                    }}
-                                    className="w-full p-2 border rounded-lg bg-white text-left"
-                                >
-                                    Sort: Technical Skills
-                                </button>
-                                {showSortDropdown && (
-                                    <div className="absolute w-full bg-white border rounded-lg shadow-lg mt-1 z-20">
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Programming</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Data Analysis</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Web Development</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Cloud Computing</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Networking</button>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* SORT DROPDOWN */}
-                            <div className="relative mb-2">
-                                <button
-                                    onClick={() => {
-                                        setShowSortDropdownSoftSkills(!showSortDropdown);
-                                        setShowProgramDropdown(false); // Close Program dropdown when opening Sort
-                                    }}
-                                    className="w-full p-2 border rounded-lg bg-white text-left"
-                                >
-                                    Sort: Soft Skills
-                                </button>
-                                {showSortDropdownSoftSkills && (
-                                    <div className="absolute w-full bg-white border rounded-lg shadow-lg mt-1 z-20">
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Leadership</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Teamwork</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Problem-Solving</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Time Management</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">Adaptability</button>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* PROGRAM DROPDOWN */}
-                            <div className="relative mt-2">
-                                <button
-                                    onClick={() => {
-                                        setShowProgramDropdown(!showProgramDropdown);
-                                        setShowSortDropdown(false); // Close Sort dropdown when opening Program
-                                    }}
-                                    className="w-full p-2 border rounded-lg bg-white text-left"
-                                >
-                                    Program
-                                </button>
-                                {showProgramDropdown && (
-                                    <div className="absolute w-full bg-white border rounded-lg shadow-lg mt-1 z-20">
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">BSIT</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">BCS</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">BIS</button>
-                                        <button className="block w-full px-4 py-2 hover:bg-gray-100">BSIS</button>
-                                    </div>
-                                )}
-                            </div>
-
-                        </div>
-                    </div>
-
-                    {/* EMPLOYEE DETAILS */}
-                    {selectedEmployees.length > 0 && (
-                        <div className="mt-6 bg-white p-4 rounded-lg shadow-md">
-                            <h2 className="text-xl font-semibold text-gray-900">
-                                📋 Employees at {selectedEmployees[0].company}
-                            </h2>
-                            <p className="text-gray-700 text-sm">📍 {selectedEmployees[0].address}</p>
-                            <p className="text-gray-700 text-sm mt-1">👥 Total Employees: {selectedEmployees.length}</p>
-                            <ul className="mt-2">
-                                {selectedEmployees.map((employee, index) => (
-                                    <li key={index} className="mt-2 p-3 border-b">
-                                        <p className="text-gray-800 font-medium">👤 {employee.name}</p>
-                                        <p className="text-gray-700 text-sm">💼 {employee.profession}</p>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                </div>
-
             ) : (
-                <p className="text-center text-gray-600">No employment data available.</p>
-            )
-            }
-        </div >
+                <div className="relative flex w-full h-full p-4">
+                    {/* MAP SECTION */}
+                    <div className="relative flex-grow border border-gray-300 rounded-lg shadow-lg overflow-hidden">
+                        <Map height={"60vh"} width={"100%"} defaultCenter={[10.3157, 123.8854]} defaultZoom={13}>
+                            {accounts.map(account =>
+                                account.alumni.employment_infos.map(employment =>
+                                    employment.address_employment.emp_add_lat &&
+                                    employment.address_employment.emp_add_long ? (
+                                        <Marker
+                                            key={employment.id}
+                                            width={50}
+                                            anchor={[
+                                                parseFloat(employment.address_employment.emp_add_lat),
+                                                parseFloat(employment.address_employment.emp_add_long),
+                                            ]}
+                                            onClick={() =>
+                                                handleMarkerClick(
+                                                    employment,
+                                                    parseFloat(employment.address_employment.emp_add_lat),
+                                                    parseFloat(employment.address_employment.emp_add_long)
+                                                )
+                                            }
+                                        />
+                                    ) : null
+                                )
+                            )}
+                        </Map>
+
+                        {/* Floating Info Box */}
+                        {selectedPosition && selectedEmployees.length > 0 && (
+                            <div
+                                className="absolute bg-white shadow-lg rounded-lg p-4 w-64"
+                                style={{
+                                    left: "50%",
+                                    top: "30%",
+                                    transform: "translate(-50%, -50%)",
+                                    zIndex: 1000,
+                                }}
+                            >
+                                <h2 className="text-lg font-semibold text-gray-900">
+                                    📋 {selectedEmployees[0].company}
+                                </h2>
+                                <p className="text-gray-700 text-sm">📍 {selectedEmployees[0].address}</p>
+                                <p className="text-gray-700 text-sm mt-1">👥 Total Employees: {selectedEmployees.length}</p>
+                                <ul className="mt-2 max-h-32 overflow-y-auto">
+                                    {selectedEmployees.map((employee, index) => (
+                                        <li key={index} className="p-2 border-b">
+                                            <p className="text-gray-800 font-medium">👤 {employee.name}</p>
+                                            <p className="text-gray-700 text-sm">💼 {employee.profession}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button
+                                    onClick={() => setSelectedPosition(null)}
+                                    className="mt-2 w-full bg-red-500 text-white p-1 rounded-lg text-sm"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 
