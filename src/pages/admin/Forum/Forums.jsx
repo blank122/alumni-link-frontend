@@ -100,7 +100,7 @@ const Forums = () => {
                             return (
                                 <div
                                     key={forum.id}
-                                    onClick={() => navigate(`/user/forums/${forum.id}`)} // Navigate to details page
+                                    onClick={() => navigate(`/admin/forums/${forum.id}`)} // Navigate to details page
                                     className="cursor-pointer bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm p-4 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                                 >
                                     {/* Header: Profile Picture & Name */}
@@ -116,7 +116,7 @@ const Forums = () => {
                                         </div>
                                     </div>
 
-                                    {/* Content */}
+                                    {/* Content */} 
                                     <div className="mt-3">
                                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">{forum.frm_title}</h3>
                                         <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{forum.frm_description}</p>
