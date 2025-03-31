@@ -35,7 +35,7 @@ const ReviewStep = ({ userData }) => (
             {/* Left Column */}
             <div className="space-y-6">
                 {/* Personal Details */}
-                <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
+                <div className="p-5 rounded-xl">
                     <div className="flex items-center mb-3">
                         <div className="bg-blue-100 p-2 rounded-lg mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -67,7 +67,7 @@ const ReviewStep = ({ userData }) => (
                 </div>
 
                 {/* Address */}
-                <div className="bg-green-50 p-5 rounded-xl border border-green-100">
+                <div className="p-5 rounded-xl">
                     <div className="flex items-center mb-3">
                         <div className="bg-green-100 p-2 rounded-lg mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,7 +93,7 @@ const ReviewStep = ({ userData }) => (
             {/* Right Column */}
             <div className="space-y-6">
                 {/* Education */}
-                <div className="bg-purple-50 p-5 rounded-xl border border-purple-100">
+                <div className="p-5 rounded-xl">
                     <div className="flex items-center mb-3">
                         <div className="bg-purple-100 p-2 rounded-lg mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -127,7 +127,7 @@ const ReviewStep = ({ userData }) => (
                 </div>
 
                 {/* Employment */}
-                <div className="bg-amber-50 p-5 rounded-xl border border-amber-100">
+                <div className="p-5 rounded-xl">
                     <div className="flex items-center mb-3">
                         <div className="bg-amber-100 p-2 rounded-lg mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
