@@ -63,17 +63,43 @@ const SkillsAndCertifications = ({ userData,
                     </div>
 
                     <div>
-                        <label htmlFor="cert_file" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="cert_file" className="block text-sm font-medium text-gray-700 mb-1">
                             Upload Certificate (PDF or Image)
                         </label>
-                        <input
-                            type="file"
-                            id="cert_file"
-                            name="cert_file"
-                            accept=".pdf,.jpg,.png"
-                            onChange={handleChange}
-                            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300"
-                        />
+                        <div className="relative">
+                            <label
+                                htmlFor="cert_file"
+                                className={`flex items-center justify-between w-full p-3 border ${errors.cert_file ? 'border-red-500' : 'border-gray-300'} rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-green-400 focus-within:outline-none transition-all duration-300 hover:border-gray-400 cursor-pointer`}
+                            >
+                                <div className="flex items-center">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-5 w-5 text-gray-500 mr-2"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                                        />
+                                    </svg>
+                                    <span className="text-sm text-gray-600 truncate max-w-[180px]">
+                                        {userData.cert_file ? userData.cert_file.name : "No File Selected"}
+                                    </span>
+                                </div>  
+                            </label>
+                            <input
+                                type="file"
+                                id="cert_file"
+                                name="cert_file"
+                                accept=".pdf,.jpg,.png"
+                                onChange={handleChange}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+                        </div>
                         {errors.cert_file && <p className="text-red-500 text-xs mt-1">{errors.cert_file}</p>}
                     </div>
 
