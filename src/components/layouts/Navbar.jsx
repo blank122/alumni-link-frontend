@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import UmLogo from '../../assets/pictures/UM-1.png';
 import CCELogo from '../../assets/pictures/CCE.png';
+import ALUMNILINK from '../../assets/pictures/Alumnilink.png';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -14,11 +15,17 @@ const Navbar = () => {
                     {/* Logo & Title */}
                     <div className="flex items-center space-x-3">
                         {/* UM & CCE Logos */}
-                        <img src={UmLogo} alt="UM Logo" className="w-10 h-10 rounded-full" />
-                        <img src={CCELogo} alt="CCE Logo" className="w-10 h-10 rounded-full" />
+                        <Link to="/">
+                            <img src={UmLogo} alt="UM Logo" className="w-20 h-10 rounded-full" />
+                        </Link>
+                        <Link to="/">
+                            <img src={CCELogo} alt="CCE Logo" className="w-10 h-10 rounded-full" />
+                        </Link>
 
                         <div>
-                            <h1 className="text-lg font-bold">ALUMNILINK</h1>
+                            <Link to="/">
+                                <img src={ALUMNILINK} alt="LOGO" className="w-50 h-10 rounded-full" />
+                            </Link>
                             <p className="text-xs">Reconnect · Rediscover · Reimagine</p>
                         </div>
                     </div>

@@ -20,7 +20,7 @@ const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => {
                 });
                 setCourses(response.data.data);
             } catch (error) {
-                console.error("Error fetching data:", error);
+                console.error("Error fetching um courses:", error);
             } finally {
                 setLoading(false);
             }
