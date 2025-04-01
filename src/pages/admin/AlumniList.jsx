@@ -103,7 +103,7 @@ const AlumniList = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    status: actionType === "Accept" ? "2" : "0", // 2 for approved, 0 for rejected, 1 is pending
+                    status: actionType === "Approve" ? "2" : "0", // 2 for approved, 0 for rejected, 1 is pending
                 }),
             });
 
@@ -227,12 +227,12 @@ const AlumniList = () => {
                                             </td>
                                             <td className="px-6 py-4 text-center">
                                                 <button
-                                                    onClick={() => handleAction(item.id, "Accept")}
+                                                    onClick={() => handleAction(item.id, "Approve")}
                                                     className={`px-4 py-2 text-white rounded-md transition ${loadingAction === item.id ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
                                                         }`}
                                                     disabled={loadingAction === item.id}
                                                 >
-                                                    {loadingAction === item.id ? "Processing..." : "Accept"}
+                                                    {loadingAction === item.id ? "Processing..." : "Approve"}
                                                 </button>
 
                                                 <button
