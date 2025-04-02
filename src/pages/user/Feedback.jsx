@@ -70,7 +70,7 @@ const Feedback = () => {
             setPostLoading(false);
 
         } catch (error) {
-            console.error("Error creating job:", error);
+            console.error("Error creating feedbacks:", error);
         }
     };
 

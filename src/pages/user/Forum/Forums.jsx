@@ -48,7 +48,7 @@ const Forums = () => {
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">📝 Forums</h1>
                 <button
-                    // onClick={() => setShowModal(true)}
+                    onClick={() => setShowModal(true)}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700"
                 >
                     + Create Forums
