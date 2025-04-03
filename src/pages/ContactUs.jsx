@@ -48,14 +48,14 @@ const ContactUs = () => {
                 </form>
             </div>
 
-            <div className="text-center">
+            {/* <div className="text-center">
                 <h3 className="text-xl font-semibold mb-3">Follow Us</h3>
                 <div className="flex justify-center space-x-4">
                     <a href="#" className="text-blue-600 hover:underline">Facebook</a>
                     <a href="#" className="text-blue-600 hover:underline">Twitter</a>
                     <a href="#" className="text-blue-600 hover:underline">LinkedIn</a>
                 </div>
-            </div>
+            </div> */}
         </div>
 
     );
