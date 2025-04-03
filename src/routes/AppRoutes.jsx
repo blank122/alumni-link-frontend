@@ -18,6 +18,7 @@ import Register from "../pages/Register1";
 import ProgramEvents from "../pages/ProgramsEvents";
 import Careers from "../pages/Careers";
 import ContactUs from "../pages/ContactUs";
+import About from "../pages/AboutUs";
 
 import AuthLayout from "../layouts/AuthLayout";
 import ProtectedRoute from "./ProtectedRoutes";
@@ -52,6 +53,7 @@ const AppRoutes = () => {
                 <Route path="/programs-events" element={<ProgramEvents />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/contact" element={<ContactUs />} />
+                <Route path="/about" element={<About />} />
 
             </Route>
 
