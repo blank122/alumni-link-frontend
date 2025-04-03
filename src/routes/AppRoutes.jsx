@@ -15,6 +15,9 @@ import AdminForumDetails from "../pages/admin/Forum/ForumDetails";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register1";
+import ProgramEvents from "../pages/ProgramsEvents";
+import Careers from "../pages/Careers";
+
 import AuthLayout from "../layouts/AuthLayout";
 import ProtectedRoute from "./ProtectedRoutes";
 import AdminRoute from "./AdminRoutes";
@@ -45,6 +48,9 @@ const AppRoutes = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/programs-events" element={<ProgramEvents />} />
+                <Route path="/careers" element={<Careers />} />
+
             </Route>
 
             {/* Admin Route */}

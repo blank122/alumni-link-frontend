@@ -54,7 +54,7 @@ const Navbar = () => {
                 <div className="max-w-screen-xl mx-auto flex justify-center md:justify-end space-x-6 py-2 text-sm">
                     <Link to="/" className="hover:text-yellow-400  hidden md:flex">Home</Link>
                     <Link to="/about" className="hover:text-yellow-400 hidden md:flex">About</Link>
-                    <Link to="/programs" className="hover:text-yellow-400 hidden md:flex">Programs & Events</Link>
+                    <Link to="/programs-events" className="hover:text-yellow-400 hidden md:flex">Programs & Events</Link>
                     <Link to="/careers" className="hover:text-yellow-400 hidden md:flex">Career Opportunity</Link>
                     <Link to="/contact" className="hover:text-yellow-400 hidden md:flex">Contact Us</Link>
                 </div>
