@@ -25,10 +25,12 @@ const AdminLayout = ({ children }) => {
                 <div className="h-full flex flex-col px-4 py-6">
                     {/* User Profile Section */}
                     <div className="flex items-center space-x-4 p-4 border-b">
-                        <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-1xl font-bold">
+                            {user.alumni.alm_first_name[0]}{user.alumni.alm_last_name[0]}
+                        </div>                        
                         {user ? (
                             <div>
-                                <p><strong>{user.email} </strong></p>
+                                <p>{user.alumni.alm_first_name} {user.alumni.alm_last_name}</p>
                             </div>
                         ) : (
                             <p>Loading user data...</p>

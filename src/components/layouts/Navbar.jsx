@@ -13,7 +13,7 @@ const Navbar = () => {
             <div className="bg-green-700 text-white">
                 <div className="max-w-screen-xl mx-auto flex justify-between items-center p-3">
                     {/* Logo & Title */}
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-0">
                         {/* UM & CCE Logos */}
                         <Link to="/">
                             <img src={UmLogo} alt="UM Logo" className="w-20 h-10 rounded-full" />
@@ -25,8 +25,8 @@ const Navbar = () => {
                         <div>
                             <Link to="/">
                                 <img src={ALUMNILINK} alt="LOGO" className="w-50 h-10 rounded-full" />
+                                <p className="text-xs">Reconnect · Rediscover · Reimagine</p>
                             </Link>
-                            <p className="text-xs">Reconnect · Rediscover · Reimagine</p>
                         </div>
                     </div>
 

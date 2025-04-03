@@ -172,7 +172,7 @@ const DashboardAdmin = () => {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
                     },
-                });
+                }); 
                 setUserRegDemograph(response.data.data);
             } catch (error) {
                 console.error("Error fetching alumni data:", error);
@@ -210,8 +210,6 @@ const DashboardAdmin = () => {
     }, [token]);
 
 
-
-
     // Static Data for Charts
     const employmentData = [
         { name: "Employed", value: EmployedCount ?? 0, color: "#f97316" },
@@ -219,18 +217,9 @@ const DashboardAdmin = () => {
         { name: "Unemployed", value: UnemployedCount ?? 0, color: "#6b7280" },
     ];
 
-    const jobSeekerData = [
-        { month: "Jan", seekers: 3 },
-        { month: "Feb", seekers: 5 },
-        { month: "Mar", seekers: 6 },
-        { month: "Apr", seekers: 4 },
-        { month: "May", seekers: 8 },
-        { month: "Jun", seekers: 10 },
-    ];
-
     return (
         <div className="flex flex-col h-screen p-6">
-            <h1 className="text-2xl font-bold">Statistical Reports</h1>
+            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
 
             {/* Unemployment Card */}
             <motion.div
