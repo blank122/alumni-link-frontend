@@ -17,6 +17,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register1";
 import ProgramEvents from "../pages/ProgramsEvents";
 import Careers from "../pages/Careers";
+import ContactUs from "../pages/ContactUs";
 
 import AuthLayout from "../layouts/AuthLayout";
 import ProtectedRoute from "./ProtectedRoutes";
@@ -50,6 +51,7 @@ const AppRoutes = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/programs-events" element={<ProgramEvents />} />
                 <Route path="/careers" element={<Careers />} />
+                <Route path="/contact" element={<ContactUs />} />
 
             </Route>
 

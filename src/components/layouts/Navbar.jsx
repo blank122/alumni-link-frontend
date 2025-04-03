@@ -68,7 +68,7 @@ const Navbar = () => {
                 <div className="md:hidden bg-gray-800 text-white p-3">
                     <Link to="/" className="block py-2">Home</Link>
                     <Link to="/about" className="block py-2">About</Link>
-                    <Link to="/programs" className="block py-2">Programs & Events</Link>
+                    <Link to="/programs-events" className="block py-2">Programs & Events</Link>
                     <Link to="/careers" className="block py-2">Career Opportunity</Link>
                     <Link to="/contact" className="block py-2">Contact Us</Link>
                     <Link to="/login" className="block py-2">Login</Link>

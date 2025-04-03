@@ -1,116 +1,65 @@
 /* eslint-disable no-constant-binary-expression */
 import Navbar from "../components/layouts/Navbar";
-import bgImage from '../assets/pictures/um-maa-gate.jpg'; // Adjust path accordingly
-import UmLogo from '../assets/pictures/UM-1.png';
-import { useEffect, useState } from "react";
-import axios from "axios";
+const ContactUs = () => {
 
 
-const Home = () => {
-
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get("http://127.0.0.1:8000/api/home-events", {
-                    headers: {
-                        Accept: "application/json",
-                    },
-                });
-                setPosts(response.data.data);
-                console.log(response.data.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    },[]);
 
     return (
         <div className="flex flex-col w-full min-h-screen">
             <Navbar />
-            {/* Hero Section */}
-            <section className="relative w-full h-[70vh] flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${bgImage})` }}>
-                {/* Background Blur Overlay */}
-                {/* <div classNameName="absolute inset-0 bg-black bg-opacity-40 backdrop-blur-md"></div> */}
 
-                {/* Content Box */}
-                <div className="relative max-w-7xl bg-gray-100  p-6 md:p-10 rounded-lg text-center shadow-lg">
-                    <h1 className="text-2xl md:text-4xl font-bold text-gray-900 text-start mt-5">Welcome to AlumniLink!</h1>
-                    {/* Gradient Divider */}
-                    <div className="mt-2 h-[4px] max-w-[100px] bg-gradient-to-r from-green-500 to-yellow-500  rounded-full"></div>
-                    <p className="text-gray-800 mt-4 text-justify leading-relaxed">
-                        Welcome back to your academic home! At AlumniLink, we’re not just tracking your professional journey—we’re celebrating it.
-                        Stay connected with your peers, access exclusive job opportunities, and be the first to know about upcoming events and seminars tailored just for you.
-                        Your journey continues here, where every step forward is a step together.
-                    </p>
-                    <div className="flex justify-start mt-2">
-                        <a href="#about" className="px-6 py-3 bg-yellow-500 text-white font-semibold rounded-md shadow-md hover:bg-yellow-600">
-                            See More
-                        </a>
-                    </div>
+            <h2 className="text-3xl font-bold text-center mb-6">Contact Us</h2>
 
+            <div className="bg-gray-100 p-6 rounded-lg shadow-md mb-6">
+                <h3 className="text-xl font-semibold mb-3">Get in Touch</h3>
+                <p><strong>Address:</strong> CCE Alumni Office, University Campus</p>
+                <p><strong>Email:</strong> contact@alumnilink.com</p>
+                <p><strong>Phone:</strong> +123 456 7890</p>
+            </div>
 
+            <div className="bg-blue-50 p-6 rounded-lg shadow-md mb-6">
+                <h3 className="text-xl font-semibold mb-3">Send Us a Message</h3>
+                <form className="space-y-4">
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Your Name"
+                        required
+                        className="w-full p-3 border border-gray-300 rounded-lg"
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Your Email"
+                        required
+                        className="w-full p-3 border border-gray-300 rounded-lg"
+                    />
+                    <textarea
+                        name="message"
+                        rows="5"
+                        placeholder="Your Message"
+                        required
+                        className="w-full p-3 border border-gray-300 rounded-lg"
+                    ></textarea>
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                    >Submit</button>
+                </form>
+            </div>
+
+            <div className="text-center">
+                <h3 className="text-xl font-semibold mb-3">Follow Us</h3>
+                <div className="flex justify-center space-x-4">
+                    <a href="#" className="text-blue-600 hover:underline">Facebook</a>
+                    <a href="#" className="text-blue-600 hover:underline">Twitter</a>
+                    <a href="#" className="text-blue-600 hover:underline">LinkedIn</a>
                 </div>
-
-                {/* Navigation Arrows */}
-                <button className="absolute left-4 md:left-10 text-white text-3xl">&lt;</button>
-                <button className="absolute right-4 md:right-10 text-white text-3xl">&gt;</button>
-            </section>
-
-
-
-            {/* red section */}
-            <section className="h-1/3 flex flex-col justify-center items-center bg-red-500 text-white text-center px-4">
-                <p className="text-lg md:text-xl m-6">Join <span>AlumniLink</span> and be a part of a community that values your growth and success</p>
-            </section>
-            {/* Event Section */}
-            <section className="min-h-[50vh] py-16 bg-gray-100 text-center">
-                <h2 className="text-3xl font-bold text-gray-800">Upcoming Events</h2>
-
-                {loading ? (
-                    <p className="text-gray-600 mt-4">Loading events...</p>
-                ) : posts.length === 0 ? (
-                    <p className="text-gray-600 mt-4">No upcoming events available.</p>
-                ) : (
-                    <div className="mt-8 flex justify-center gap-8 flex-wrap">
-                        {posts.map((event, index) => {
-                            const eventDate = new Date(event.created_at);
-                            const day = eventDate.getDate();
-                            const month = eventDate.toLocaleString("en-US", { month: "short" }).toUpperCase();
-                            const year = eventDate.getFullYear();
-
-                            return (
-                                <div key={index} className="relative w-xl bg-white shadow-lg rounded-lg overflow-hidden">
-                                    <img src={`http://127.0.0.1:8000/storage/event_images/${event.event_image}` || UmLogo} alt={event.event_title} className="w-full h-48 object-cover" />
-                                    <div className="absolute top-3 left-3 bg-yellow-400 text-black p-2 text-sm font-bold rounded">
-                                        <span className="block text-xl">{day}</span>
-                                        <span className="block">{month}</span>
-                                        <span className="block">{year}</span>
-                                    </div>
-                                    <div className="p-4 text-gray-800 font-semibold text-2xl">{event.event_title}</div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </section>
-
-
-
-            {/* Footer */}
-            <footer className="bg-gray-900 text-white py-6 text-center">
-                <p>&copy; {new Date().getFullYear()} Alumnilink. All rights reserved.</p>
-            </footer>
+            </div>
         </div>
 
     );
 
 };
 
-export default Home;
+export default ContactUs;
