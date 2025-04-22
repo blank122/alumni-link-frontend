@@ -44,18 +44,18 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
 
     return (
         <motion.div
-            className="p-8 bg-white rounded-2xl shadow-2xl w-[420px] mx-auto border border-gray-300"
+            className="p-10 bg-white rounded-3xl shadow-2xl w-[500px] mx-auto border border-gray-300"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
             {/* Header */}
-            <div className="flex items-center gap-3 mb-6">
-                <div className="w-3 h-8 bg-gradient-to-r from-green-500 to-yellow-500 rounded-full"></div>
-                <h2 className="text-2xl font-bold text-gray-800">Address Information</h2>
+            <div className="flex items-center gap-3 mb-8">
+                <div className="w-3 h-9 bg-gradient-to-r from-green-500 to-yellow-500 rounded-full"></div>
+                <h2 className="text-3xl font-extrabold text-gray-800">Address Information</h2>
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-6">
                 {/* Full Address */}
                 <div>
                     <input
@@ -64,7 +64,7 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                         placeholder="Full Address"
                         onChange={handleChange}
                         value={userData.add_full_address}
-                        className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
+                        className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02] text-[16px]"
                     />
                     {errors.add_full_address && (
                         <p className="text-red-500 text-sm mt-1">{errors.add_full_address}</p>
@@ -72,7 +72,7 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                 </div>
 
                 {/* Latitude & Longitude */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-5">
                     <div>
                         <input
                             type="text"
@@ -80,7 +80,7 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                             placeholder="Latitude"
                             value={userData.add_lat}
                             readOnly
-                            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
+                            className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02] text-[16px]"
                         />
                         {errors.add_lat && (
                             <p className="text-red-500 text-sm mt-1">{errors.add_lat}</p>
@@ -94,7 +94,7 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                             placeholder="Longitude"
                             value={userData.add_long}
                             readOnly
-                            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
+                            className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02] text-[16px]"
                         />
                         {errors.add_long && (
                             <p className="text-red-500 text-sm mt-1">{errors.add_long}</p>
@@ -114,18 +114,19 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors }) => {
                 )}
 
                 {/* OpenStreetMap with Clickable Marker */}
-                <div className="rounded-lg overflow-hidden shadow-lg border border-gray-300">
+                <div className="rounded-xl overflow-hidden shadow-lg border border-gray-300">
                     <Map
-                        height={300}
+                        height={400}
                         center={markerPosition}
                         defaultZoom={15}
-                        onClick={handleMapClick} // Move marker on map click
+                        onClick={handleMapClick}
                     >
                         <Marker width={50} anchor={markerPosition} />
                     </Map>
                 </div>
             </div>
         </motion.div>
+
     );
 };
 

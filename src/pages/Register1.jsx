@@ -3,79 +3,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/layouts/Navbar";
-import { motion } from "framer-motion";
 import PersonalInfoStep from "./register/PersonalInfoStep";
 import AddressInfoStep from "./register/AddressInfoStep";
 import EducationalBackgroundInfo from "./register/EducationalBackgroundInfo";
 import EmploymentAddressStep from "./register/EmployeeAddressInfoStep";
+import EmploymentStatus from "./register/EmployeementStatus";
+import EmploymentInfoStep from "./register/EmploymentInfoStep";
 
 import ReviewStep from "./register/ReviewStep";
 import { useNavigate } from "react-router-dom";
 import SkillsAndCertifications from "./register/SkillsAndCertifications";
-
-const EmploymentInfoStep = ({ userData, handleChange, errors }) => (
-    <motion.div
-        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-    >
-        <div>
-            <h2 className="text-xl font-semibold mb-4">Employment Information</h2>
-            <input type="text" name="company_name" placeholder="Company Name" onChange={handleChange} value={userData.company_name} className="w-full p-2 border rounded mb-1" />
-            {errors.company_name && <p className="text-red-500 text-sm">{errors.company_name}</p>}
-
-            <input type="text" name="job_title" placeholder="Job Title" onChange={handleChange} value={userData.job_title} className="w-full p-2 border rounded mb-1" />
-            {errors.job_title && <p className="text-red-500 text-sm">{errors.job_title}</p>}
-
-
-            <input type="date" name="start_date" placeholder="Start Date" onChange={handleChange} value={userData.start_date} className="w-full p-2 border rounded mb-1" />
-            {errors.start_date && <p className="text-red-500 text-sm">{errors.start_date}</p>}
-        </div>
-    </motion.div>
-
-);
-const EmploymentStatus = ({ userData, handleChange, errors }) => (
-    <motion.div
-        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-    >
-        <div>
-            <h2 className="text-xl font-semibold mb-4">Employment Status</h2>
-
-            {/* might add a function that detects the value of the employment status if it is less than 2 (which is employed the user will go to the review phase to check his form submittions) */}
-            <select name="emp_status" onChange={handleChange} value={userData.emp_status} className="w-full p-2 border rounded mb-1">
-                <option value="">Employment Status</option>
-                <option value="0">Unemployed</option>
-                <option value="1">Freelance</option>
-                <option value="2">Employed</option>
-            </select>
-            {errors.emp_status && <p className="text-red-500 text-sm">{errors.emp_status}</p>}
-        </div>
-    </motion.div>
-
-);
-
-const AccountInfoStep = ({ userData, handleChange, errors }) => (
-    <motion.div
-        className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-    >
-        <div>
-            <h2 className="text-xl font-semibold mb-4">Account Information</h2>
-            <input type="text" name="email" placeholder="Email" onChange={handleChange} value={userData.email} className="w-full p-2 border rounded mb-1" />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-
-            <input type="password" name="password" placeholder="Create Password" onChange={handleChange} value={userData.password} className="w-full p-2 border rounded mb-1" />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-        </div>
-    </motion.div>
-
-);
 
 const MultiStepForm = () => {
 
@@ -143,7 +80,7 @@ const MultiStepForm = () => {
                 const response = await axios.get("http://127.0.0.1:8000/api/technical-skills", {
                     headers: {
                         Accept: "application/json",
-                        
+
                     },
                 });
                 setTechSkills(response.data.data);
@@ -276,12 +213,17 @@ const MultiStepForm = () => {
 
     const validateStep = () => {
         let newErrors = {};
+        const phoneRegex = /^(09|\+639)\d{9}$/;
+
         //registration
         if (step === 1) {
             if (!userData.alm_first_name) newErrors.alm_first_name = "First Name is required";
             if (!userData.alm_last_name) newErrors.alm_last_name = "Last Name is required";
             if (!userData.alm_gender) newErrors.alm_gender = "Gender is required";
             if (!userData.alm_contact_number) newErrors.alm_contact_number = "Contact Number is required";
+            if (!phoneRegex.test(userData.alm_contact_number)) {
+                newErrors.alm_contact_number = "Contact Number is not a valid Philippines mobile number format";
+            }
         }
         //address info
         else if (step === 2) {

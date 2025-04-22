@@ -67,7 +67,7 @@ const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => {
                 {/* Year Graduated (Date Picker) */}
                 <div>
                     <label htmlFor="year_graduated" className="block text-sm font-medium text-gray-700">
-                        Year Graduated
+                        School Year Graduated
                     </label>
                     <DatePicker
                         id="year_graduated"
