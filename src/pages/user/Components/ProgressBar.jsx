@@ -4,7 +4,7 @@ const ProgressBar = ({ currentStepIndex, totalSteps }) => {
     return (
         <div className="w-full bg-gray-300 h-4 rounded-md mb-6">
             <div
-                className="bg-blue-500 h-4 rounded-md transition-all duration-300"
+                className="bg-green-50 h-4 rounded-md transition-all duration-300"
                 style={{ width: `${progressPercentage}%` }}
             ></div>
         </div>
