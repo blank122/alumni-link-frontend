@@ -18,6 +18,43 @@ const employmentData = {
     2: "Employed",
 };
 
+
+const technicalSkills =
+{
+    1: "Programming & Software Development",
+    2: "Database Management & Information Systems",
+    3: "Web & Mobile Development ",
+    4: "Networking & Cybersecurity",
+    5: "Cloud Computing & DevOps",
+    6: "Data Science & AI",
+    7: "Software Engineering & SDLC",
+    8: "Game Development & Animation",
+    9: "Multimedia & Digital Content Creation",
+    10: "Human-Computer Interaction (HCI) & UI/UX",
+    11: "E-Learning & EdTech",
+    12: "Information Retrieval & Digital Libraries",
+    13: "Business & Enterprise Computing",
+    14: "Game AI & Physics Simulation",
+    15: "Augmented & Virtual Reality (AR/VR)",
+}
+
+const softSkills =
+{
+    1: "Problem-Solving",
+    2: "Critical Thinking",
+    3: "Communication Skills ",
+    4: "Collaboration & Teamwork",
+    5: "Adaptability & Flexibility",
+    6: "Time Management",
+    7: "Creativity & Innovation",
+    8: "Attention to Detail",
+    9: "Emotional Intelligence (EQ)",
+    10: "Ethical & Professional Responsibility",
+   
+}
+
+
+
 const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
     <motion.div
         className="p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-100 max-h-[80vh] overflow-y-auto"
@@ -97,18 +134,20 @@ const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
                 <div className="p-5 rounded-xl">
                     <div className="flex items-center mb-3">
                         <div className="bg-green-100 p-2 rounded-lg mr-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 18l6-6-6-6M8 6l-6 6 6 6" />
                             </svg>
+
                         </div>
-                        <p className="text-lg font-semibold text-gray-700">Technical Skills</p>
+                        <p className="text-sm text-gray-500 font-medium">Technical Skills</p>
                     </div>
                     <div className="space-y-3">
                         {userData.technical_skills_logs.length > 0 ? (
                             <ul className="list-disc list-inside text-gray-800">
                                 {userData.technical_skills_logs.map((skill, index) => (
-                                    <li key={index}>{skill}</li>
+                                    <li key={index}>
+                                        {technicalSkills[skill] || "Unknown Skill"}
+                                    </li>
                                 ))}
                             </ul>
                         ) : <p className="text-gray-800 font-medium">N/A</p>}
@@ -116,20 +155,21 @@ const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
                     <div className="flex items-center mb-3">
                         <div className="bg-green-100 p-2 rounded-lg mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a4 4 0 00-5-4m-6 6v-2a4 4 0 00-5-4H2v2a4 4 0 004 4h6zM9 10a4 4 0 110-8 4 4 0 010 8zm6 4a4 4 0 100-8 4 4 0 000 8z" />
                             </svg>
                         </div>
                         <p className="text-sm text-gray-500 font-medium">Soft Skills</p>
                     </div>
                     <div className="space-y-3">
-                        {userData.technical_skills_logs.length > 0 ? (
+                        {userData.soft_skills_logs.length > 0 ? (
                             <ul className="list-disc list-inside text-gray-800">
-                                {userData.technical_skills_logs.map((skill, index) => (
-                                    <li key={index}>{skill}</li>
+                                {userData.soft_skills_logs.map((skill, index) => (
+                                    <li key={index}>
+                                        {softSkills[skill] || "Unknown Skill"}
+                                    </li>
                                 ))}
                             </ul>
-                        ) : <p className="text-gray-800 font-medium">N/A</p>}
+                        ) : <p className="text-sm text-gray-500 font-medium">N/A</p>}
                     </div>
                 </div>
 

@@ -5,7 +5,7 @@ import { useGeolocated } from "react-geolocated";
 import { Map, Marker } from "pigeon-maps";
 import ProgressBar from "../user/Components/ProgressBar";
 
-const AddressInfoStep = ({ userData, setUserData, handleChange, errors, currentStepIndex, totalSteps}) => {
+const AddressInfoStep = ({ userData, setUserData, handleChange, errors, currentStepIndex, totalSteps }) => {
     const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
         positionOptions: { enableHighAccuracy: true },
         userDecisionTimeout: 5000,
@@ -45,7 +45,7 @@ const AddressInfoStep = ({ userData, setUserData, handleChange, errors, currentS
 
     return (
         <motion.div
-            className="p-10 bg-white rounded-3xl shadow-2xl w-[500px] mx-auto border border-gray-300"
+            className="p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-100 max-h-[80vh] overflow-y-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
