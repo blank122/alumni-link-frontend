@@ -1,5 +1,6 @@
 /* eslint-disable no-constant-binary-expression */
 import Navbar from "../components/layouts/Navbar";
+import Footer from "../components/layouts/Footer";
 
 const ContactUs = () => {
     return (
@@ -71,6 +72,8 @@ const ContactUs = () => {
           </div>
         </div> */}
             </div>
+            <Footer />
+
         </div>
     );
 };

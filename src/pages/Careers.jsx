@@ -4,6 +4,7 @@ import bgImage from '../assets/pictures/um-maa-gate.jpg'; // Adjust path accordi
 import UmLogo from '../assets/pictures/UM-1.png';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Footer from "../components/layouts/Footer";
 
 
 const Careers = () => {
@@ -78,6 +79,7 @@ const Careers = () => {
             </section>
 
 
+            <Footer />
 
           
         </div>

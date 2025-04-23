@@ -4,6 +4,7 @@ import bgImage from '../assets/pictures/um-maa-gate.jpg'; // Adjust path accordi
 import UmLogo from '../assets/pictures/UM-1.png';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Footer from "../components/layouts/Footer";
 
 
 const Home = () => {
@@ -29,7 +30,7 @@ const Home = () => {
             }
         };
         fetchData();
-    },[]);
+    }, []);
 
     return (
         <div className="flex flex-col w-full min-h-screen">
@@ -103,10 +104,7 @@ const Home = () => {
 
 
 
-            {/* Footer */}
-            <footer className="bg-gray-900 text-white py-6 text-center">
-                <p>&copy; {new Date().getFullYear()} Alumnilink. All rights reserved.</p>
-            </footer>
+            <Footer />
         </div>
 
     );
