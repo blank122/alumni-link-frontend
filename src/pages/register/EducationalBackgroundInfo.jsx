@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ProgressBar from "../user/Components/ProgressBar";
 
 const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => {
     const [isAttendingMasters, setIsAttendingMasters] = useState(false);
@@ -35,6 +36,9 @@ const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
         >
+            <div className="w-full max-w-3xl">
+                <ProgressBar currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
+            </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Educational Background</h2>
 
             <div className="space-y-4">

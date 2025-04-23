@@ -291,16 +291,39 @@ const MultiStepForm = () => {
         }
     };
 
+    const getVisibleSteps = () => {
+        const commonSteps = [1, 2, 3, 4];
+        const employedSteps = [5, 6, 7];
+        const finalSteps = [8, 9];
+
+        if (userData.emp_status === "0" || userData.emp_status === "1") {
+            return [...commonSteps, ...finalSteps];
+        }
+
+        return [...commonSteps, ...employedSteps, ...finalSteps];
+    };
+
+    const visibleSteps = getVisibleSteps();
+    const currentStepIndex = visibleSteps.indexOf(step) + 1;
+    const totalSteps = visibleSteps.length;
+
+
     return (
         <div>
             <Navbar />
             <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
-                {/* <ProgressBar step={step} /> */}
 
-                {step === 1 && <PersonalInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
+
+                {step === 1 && <PersonalInfoStep userData={userData} handleChange={handleChange} errors={errors}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
+
                 {step === 2 && <AddressInfoStep userData={userData} setUserData={setUserData}
+                    handleChange={handleChange} errors={errors}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
+
+                {step === 3 && <EducationalBackgroundInfo userData={userData}
                     handleChange={handleChange} errors={errors} />}
-                {step === 3 && <EducationalBackgroundInfo userData={userData} handleChange={handleChange} errors={errors} />}
+
                 {step === 4 && <SkillsAndCertifications userData={userData}
                     handleChange={handleChange}
                     techSkills={techSkills}
@@ -312,13 +335,21 @@ const MultiStepForm = () => {
                     addSoftSkill={addSoftSkill}
                     removeSoftSkill={removeSoftSkill}
                     loadingSoft={loadingSoft}
-                    errors={errors} />}
+                    errors={errors}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps}
+                />}
 
-                {step === 5 && <EmploymentStatus userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 6 && <EmploymentInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 7 && <EmploymentAddressStep userData={userData} setUserData={setUserData} handleChange={handleChange} errors={errors} />}
-                {step === 8 && <AccountInfoStep userData={userData} handleChange={handleChange} errors={errors} />}
-                {step === 9 && <ReviewStep userData={userData} />}
+                {step === 5 && <EmploymentStatus userData={userData} handleChange={handleChange} errors={errors}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
+
+                {step === 6 && <EmploymentInfoStep userData={userData} handleChange={handleChange} errors={errors}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
+                {step === 7 && <EmploymentAddressStep userData={userData} setUserData={setUserData} handleChange={handleChange} errors={errors}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
+                {step === 8 && <AccountInfoStep userData={userData} handleChange={handleChange} errors={errors}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
+                {step === 9 && <ReviewStep userData={userData}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
 
                 <div className="flex justify-between mt-4">
                     {step > 1 && (

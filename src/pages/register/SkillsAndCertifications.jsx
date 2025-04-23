@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ProgressBar from "../user/Components/ProgressBar";
 
 
 const SkillsAndCertifications = ({ userData,
@@ -25,6 +26,9 @@ const SkillsAndCertifications = ({ userData,
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
         >
+            <div className="w-full max-w-3xl">
+                <ProgressBar currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
+            </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Skills and Certifications</h2>
 
             <div className="space-y-4">
@@ -89,7 +93,7 @@ const SkillsAndCertifications = ({ userData,
                                     <span className="text-sm text-gray-600 truncate max-w-[180px]">
                                         {userData.cert_file ? userData.cert_file.name : "No File Selected"}
                                     </span>
-                                </div>  
+                                </div>
                             </label>
                             <input
                                 type="file"

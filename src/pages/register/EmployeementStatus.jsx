@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import ProgressBar from "../user/Components/ProgressBar";
 
 const EmploymentStatus = ({ userData, handleChange, errors }) => (
     <motion.div
@@ -8,6 +9,9 @@ const EmploymentStatus = ({ userData, handleChange, errors }) => (
         transition={{ duration: 0.5 }}
     >
         <div>
+            <div className="w-full max-w-3xl">
+                <ProgressBar currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
+            </div>
             <h2 className="text-xl font-semibold mb-4">Employment Status</h2>
 
             {/* might add a function that detects the value of the employment status if it is less than 2 (which is employed the user will go to the review phase to check his form submittions) */}

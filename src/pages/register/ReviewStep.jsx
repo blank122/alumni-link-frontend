@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
+import ProgressBar from "../user/Components/ProgressBar";
 
 const courseNames = {
     1: "Bachelor of Science in Information Technology",
@@ -24,6 +25,9 @@ const ReviewStep = ({ userData }) => (
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
     >
+        <div className="w-full max-w-3xl">
+            <ProgressBar currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
+        </div>
         <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">
                 Review Your Information

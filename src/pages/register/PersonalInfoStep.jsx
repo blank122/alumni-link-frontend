@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
+import ProgressBar from "../user/Components/ProgressBar";
 
-const PersonalInfoStep = ({ userData, handleChange, errors }) => {
+const PersonalInfoStep = ({ userData, handleChange, errors, currentStepIndex, totalSteps }) => {
     return (
         <motion.div
             className="p-8 bg-white rounded-2xl shadow-lg w-full max-w-md mx-auto border border-gray-200"
@@ -9,6 +10,10 @@ const PersonalInfoStep = ({ userData, handleChange, errors }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
         >
+
+            <div className="w-full max-w-3xl">
+                <ProgressBar currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
+            </div>
             {/* Header with Gradient Bar */}
             <div className="flex items-center gap-3 mb-7">
                 <div className="w-2 h-8 bg-gradient-to-r from-green-500 to-yellow-400 rounded"></div>

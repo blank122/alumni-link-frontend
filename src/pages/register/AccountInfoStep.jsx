@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
+import ProgressBar from "../user/Components/ProgressBar";
 
 const AccountInfoStep = ({ userData, handleChange, errors }) => (
     <motion.div
@@ -9,6 +10,9 @@ const AccountInfoStep = ({ userData, handleChange, errors }) => (
         transition={{ duration: 0.5 }}
     >
         <div>
+            <div className="w-full max-w-3xl">
+                <ProgressBar currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
+            </div>
             <h2 className="text-xl font-semibold mb-4">Account Information</h2>
             <input type="text" name="email" placeholder="Email" onChange={handleChange} value={userData.email} className="w-full p-2 border rounded mb-1" />
             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}

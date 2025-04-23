@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useGeolocated } from "react-geolocated";
 import { Map, Marker } from "pigeon-maps";
+import ProgressBar from "../user/Components/ProgressBar";
 
 const EmploymentAddressStep = ({ userData, setUserData, handleChange, errors }) => {
     const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
@@ -49,6 +50,9 @@ const EmploymentAddressStep = ({ userData, setUserData, handleChange, errors }) 
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
+            <div className="w-full max-w-3xl">
+                <ProgressBar currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
+            </div>
             {/* Header */}
             <div className="flex items-center gap-3 mb-6">
                 <div className="w-3 h-8 bg-gradient-to-r from-green-500 to-yellow-500 rounded-full"></div>
