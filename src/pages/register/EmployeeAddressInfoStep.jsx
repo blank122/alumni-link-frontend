@@ -5,7 +5,7 @@ import { useGeolocated } from "react-geolocated";
 import { Map, Marker } from "pigeon-maps";
 import ProgressBar from "../user/Components/ProgressBar";
 
-const EmploymentAddressStep = ({ userData, setUserData, handleChange, errors }) => {
+const EmploymentAddressStep = ({ userData, setUserData, handleChange, errors, currentStepIndex, totalSteps }) => {
     const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
         positionOptions: { enableHighAccuracy: true },
         userDecisionTimeout: 5000,

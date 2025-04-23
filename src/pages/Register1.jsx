@@ -196,7 +196,7 @@ const MultiStepForm = () => {
                 const data = JSON.parse(text);
                 console.log("Server Response:", data);
                 alert("Registration Successful!");
-                // navigate("/"); // Redirect after success
+                navigate("/"); // Redirect after success
             } catch (err) {
                 console.error("Unexpected response format:", text);
                 alert("Unexpected response from server.");
@@ -322,7 +322,10 @@ const MultiStepForm = () => {
                     currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
 
                 {step === 3 && <EducationalBackgroundInfo userData={userData}
-                    handleChange={handleChange} errors={errors} />}
+                    handleChange={handleChange} errors={errors}
+                    currentStepIndex={currentStepIndex} totalSteps={totalSteps}
+
+                    />}
 
                 {step === 4 && <SkillsAndCertifications userData={userData}
                     handleChange={handleChange}

@@ -16,7 +16,9 @@ const SkillsAndCertifications = ({ userData,
     addSoftSkill,
     removeSoftSkill,
     loadingSoft,
-    errors }) => {
+    errors,
+    currentStepIndex, totalSteps
+ }) => {
 
 
     return (

@@ -18,7 +18,7 @@ const employmentData = {
     2: "Employed",
 };
 
-const ReviewStep = ({ userData }) => (
+const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
     <motion.div
         className="p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-100"
         initial={{ opacity: 0, y: 30 }}

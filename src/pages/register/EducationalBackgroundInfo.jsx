@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ProgressBar from "../user/Components/ProgressBar";
 
-const EducationalBackgroundInfo = ({ userData, handleChange, errors }) => {
+const EducationalBackgroundInfo = ({ userData, handleChange, errors, currentStepIndex, totalSteps }) => {
     const [isAttendingMasters, setIsAttendingMasters] = useState(false);
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);

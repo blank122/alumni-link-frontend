@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import ProgressBar from "../user/Components/ProgressBar";
 
-const AccountInfoStep = ({ userData, handleChange, errors }) => (
+const AccountInfoStep = ({ userData, handleChange, errors, currentStepIndex, totalSteps }) => (
     <motion.div
         className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
         initial={{ opacity: 0, x: 50 }}
