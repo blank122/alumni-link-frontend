@@ -56,17 +56,16 @@ const Profile = () => {
                         <h1 className="text-2xl font-semibold text-gray-800">
                             {alumni.alm_first_name} {alumni.alm_last_name}
                         </h1>
-                        <p className="text-gray-500 text-sm mt-1">
-                            {employment_status.length > 0 ? (
-                                employment_status[0].emp_info_status === 0
-                                    ? "Unemployed"
-                                    : employment_status[0].emp_info_status === 1
-                                        ? "Freelancer"
-                                        : employment_status[0].emp_info_status === 2
-                                            ? "Employed"
-                                            : "Unknown status"
-                            ) : "Not employed"}
+                        <p className="mt-2 text-gray-700">  
+                            <strong>Employment Status:</strong>{' '}
+                            {
+                                employment_status?.emp_info_status === '0' ? 'Unemployed' :
+                                employment_status?.emp_info_status === '1' ? 'Freelancer' :
+                                employment_status?.emp_info_status === '2' ? 'Employed' :
+                                            'Not specified'
+                            }
                         </p>
+
                     </div>
                 </div>
 
