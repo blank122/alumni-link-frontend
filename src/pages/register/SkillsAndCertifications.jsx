@@ -18,12 +18,12 @@ const SkillsAndCertifications = ({ userData,
     loadingSoft,
     errors,
     currentStepIndex, totalSteps
- }) => {
+}) => {
 
 
     return (
         <motion.div
-            className="p-6 bg-white rounded-2xl shadow-lg w-full max-w-md mx-auto border border-gray-200"
+            className="p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-100 max-h-[80vh] overflow-y-auto"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}

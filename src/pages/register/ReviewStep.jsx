@@ -20,7 +20,7 @@ const employmentData = {
 
 const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
     <motion.div
-        className="p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-100"
+        className="p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-100 max-h-[80vh] overflow-y-auto"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -92,6 +92,47 @@ const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
                         </div>
                     </div>
                 </div>
+                {/* Skills */}
+
+                <div className="p-5 rounded-xl">
+                    <div className="flex items-center mb-3">
+                        <div className="bg-green-100 p-2 rounded-lg mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <p className="text-lg font-semibold text-gray-700">Technical Skills</p>
+                    </div>
+                    <div className="space-y-3">
+                        {userData.technical_skills_logs.length > 0 ? (
+                            <ul className="list-disc list-inside text-gray-800">
+                                {userData.technical_skills_logs.map((skill, index) => (
+                                    <li key={index}>{skill}</li>
+                                ))}
+                            </ul>
+                        ) : <p className="text-gray-800 font-medium">N/A</p>}
+                    </div>
+                    <div className="flex items-center mb-3">
+                        <div className="bg-green-100 p-2 rounded-lg mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <p className="text-sm text-gray-500 font-medium">Soft Skills</p>
+                    </div>
+                    <div className="space-y-3">
+                        {userData.technical_skills_logs.length > 0 ? (
+                            <ul className="list-disc list-inside text-gray-800">
+                                {userData.technical_skills_logs.map((skill, index) => (
+                                    <li key={index}>{skill}</li>
+                                ))}
+                            </ul>
+                        ) : <p className="text-gray-800 font-medium">N/A</p>}
+                    </div>
+                </div>
+
             </div>
 
             {/* Right Column */}
@@ -173,6 +214,45 @@ const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
                         )}
                     </div>
                 </div>
+
+                {/* Certificates and Skills */}
+                <div className="p-5 rounded-xl">
+                    <div className="flex items-center mb-3">
+                        <div className="bg-sky-100 p-2 rounded-lg mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-700">Certificates & Skills</h3>
+                    </div>
+
+                    <div className="space-y-3">
+                        {/* Certificate */}
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium">Certificate Serial No.</p>
+                            <p className="text-gray-800 font-medium">{userData.cert_serial_no || "N/A"}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium">Certificate Name</p>
+                            <p className="text-gray-800 font-medium">{userData.cert_name || "N/A"}</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium">Awarded Date</p>
+                            <p className="text-gray-800 font-medium">{userData.cert_awarded || "N/A"}</p>
+                        </div>
+                        {/* <div>
+                            <p className="text-sm text-gray-500 font-medium">Certificate File</p>
+                            <p className="text-gray-800 font-medium">{userData.cert_file ? (
+                                <a href={userData.cert_file} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
+                                    View Certificate
+                                </a>
+                            ) : "N/A"}</p>
+                        </div> */}
+
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </motion.div>
