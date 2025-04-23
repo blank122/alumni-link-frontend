@@ -2,22 +2,23 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLock, FaPlus } from "react-icons/fa";
+import EmploymentModal from "./Components/EmploymentModal";
 
 const Profile = () => {
     const { user, token } = useAuth();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [changePassword, setChangePassword] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const [newJob, setNewJob] = useState({
-        job_title: '',
-        company_name: '',
-        start_date: '',
-        end_date: '',
-        // address_employment: { full_address: '' },
+    const [showModal, setShowModal] = useState(false);
+    const [employmentHistory, setEmploymentHistory] = useState({
+        job_title: "",
+        company_name: "",
+        start_date: "",
+        end_date: "",
     });
-
+    const handleSaveJob = (job) => {
+        setEmploymentHistory((prev) => [...prev, job]);
+    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -39,20 +40,6 @@ const Profile = () => {
             fetchData();
         }
     }, [user, token]);
-
-    const handleAddJob = () => {
-        // Here you can add logic to save the new job (e.g., API call)
-        console.log(newJob);
-        setIsModalOpen(false);
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewJob({
-            ...newJob,
-            [name]: value,
-        });
-    };
 
     if (loading) return <div className="flex justify-center items-center h-screen text-gray-500 text-lg">Loading profile...</div>;
     if (!data) return <div className="text-center text-red-500 mt-6">Failed to load profile data.</div>;
@@ -157,9 +144,7 @@ const Profile = () => {
                             <p className="text-gray-800">
                                 <span className="font-medium">Location:</span> {address.full_address}
                             </p>
-                            <p className="text-gray-600 text-sm">
-                                <span className="font-medium">Address:</span> {address.full_address}
-                            </p>
+
                         </div>
                     </div>
                 </div>
@@ -174,11 +159,19 @@ const Profile = () => {
                             Employment History
                             {/* Plus Button to Open Modal */}
                             <button
-                                onClick={() => setIsModalOpen(true)}
-                                className="ml-auto text-blue-600 text-2xl hover:text-blue-800"
+                                onClick={() => setShowModal(true)}
+                                className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                             >
+
                                 <FaPlus />
                             </button>
+
+
+                            <EmploymentModal
+                                isOpen={showModal}
+                                onClose={() => setShowModal(false)}
+                                onSave={handleSaveJob}
+                            />
                         </h2>
 
                         <div className="space-y-6">
@@ -213,7 +206,7 @@ const Profile = () => {
 
 
             {/* change password modal */}
-              {changePassword && (
+            {changePassword && (
                 <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg w-full max-w-lg p-6">
                         <h3 className="text-xl font-semibold mb-4">Add New Job</h3>
@@ -234,164 +227,6 @@ const Profile = () => {
                                 >
                                     Add Job
                                 </button> */}
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}   
-            {/* Modal for Adding a New Job */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg w-full max-w-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4">Add New Job</h3>
-
-                        <form>
-                            <div className="mb-4">
-                                <label className="block font-medium text-gray-700">Job Title</label>
-                                <input
-                                    type="text"
-                                    name="job_title"
-                                    value={newJob.job_title}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block font-medium text-gray-700">Company Name</label>
-                                <input
-                                    type="text"
-                                    name="company_name"
-                                    value={newJob.company_name}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block font-medium text-gray-700">Start Date</label>
-                                <input
-                                    type="date"
-                                    name="start_date"
-                                    value={newJob.start_date}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block font-medium text-gray-700">End Date</label>
-                                <input
-                                    type="date"
-                                    name="end_date"
-                                    value={newJob.end_date}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-                            {/* <div className="mb-4">
-                                <label className="block font-medium text-gray-700">Work Location</label>
-                                <input
-                                    type="text"
-                                    name="address_employment.full_address"
-                                    value={newJob.address_employment?.full_address}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div> */}
-
-                            <div className="flex justify-end gap-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleAddJob}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                                >
-                                    Add Job
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-
-            {/* Modal for Adding a New Job */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg w-full max-w-lg p-6">
-                        <h3 className="text-xl font-semibold mb-4">Add New Job</h3>
-
-                        <form>
-                            <div className="mb-4">
-                                <label className="block font-medium text-gray-700">Job Title</label>
-                                <input
-                                    type="text"
-                                    name="job_title"
-                                    value={newJob.job_title}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block font-medium text-gray-700">Company Name</label>
-                                <input
-                                    type="text"
-                                    name="company_name"
-                                    value={newJob.company_name}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block font-medium text-gray-700">Start Date</label>
-                                <input
-                                    type="date"
-                                    name="start_date"
-                                    value={newJob.start_date}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block font-medium text-gray-700">End Date</label>
-                                <input
-                                    type="date"
-                                    name="end_date"
-                                    value={newJob.end_date}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div>
-                            {/* <div className="mb-4">
-                                <label className="block font-medium text-gray-700">Work Location</label>
-                                <input
-                                    type="text"
-                                    name="address_employment.full_address"
-                                    value={newJob.address_employment?.full_address}
-                                    onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded-md"
-                                />
-                            </div> */}
-
-                            <div className="flex justify-end gap-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleAddJob}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                                >
-                                    Add Job
-                                </button>
                             </div>
                         </form>
                     </div>
