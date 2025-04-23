@@ -8,9 +8,9 @@ const AddressModal = ({ isOpen, onClose }) => {
 
   const [markerPosition, setMarkerPosition] = useState([10.3157, 123.8854]);
   const [newAddress, setNewAddress] = useState({
-    emp_full_address: "",
-    emp_add_lat: "",
-    emp_add_long: "",
+    full_address: "",
+    add_lat: "",
+    add_long: "",
   });
 
   const { coords } = useGeolocated({
@@ -25,8 +25,8 @@ const AddressModal = ({ isOpen, onClose }) => {
       setMarkerPosition([parseFloat(lat), parseFloat(long)]);
       setNewAddress((prev) => ({
         ...prev,
-        emp_add_lat: lat,
-        emp_add_long: long,
+        add_lat: lat,
+        add_long: long,
       }));
     }
   }, [coords]);
@@ -36,8 +36,8 @@ const AddressModal = ({ isOpen, onClose }) => {
     setMarkerPosition([lat, long]);
     setNewAddress((prev) => ({
       ...prev,
-      emp_add_lat: lat.toFixed(6),
-      emp_add_long: long.toFixed(6),
+      add_lat: lat.toFixed(6),
+      add_long: long.toFixed(6),
     }));
   };
 
@@ -66,7 +66,7 @@ const AddressModal = ({ isOpen, onClose }) => {
 
       const result = await response.json();
       console.log("Server response:", result);
-      onClose(); // close modal after success
+    //   onClose(); // close modal after success
     } catch (error) {
       console.error("Failed to send address:", error);
     }
@@ -83,8 +83,8 @@ const AddressModal = ({ isOpen, onClose }) => {
           <label className="block font-medium text-gray-700">Full Address</label>
           <input
             type="text"
-            name="emp_full_address"
-            value={newAddress.emp_full_address}
+            name="full_address"
+            value={newAddress.full_address}
             onChange={handleInputChange}
             placeholder="Enter address"
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -95,7 +95,7 @@ const AddressModal = ({ isOpen, onClose }) => {
           <input
             type="text"
             name="emp_add_lat"
-            value={newAddress.emp_add_lat}
+            value={newAddress.add_lat}
             readOnly
             placeholder="Latitude"
             className="w-full p-2 border border-gray-300 rounded-md"
@@ -103,7 +103,7 @@ const AddressModal = ({ isOpen, onClose }) => {
           <input
             type="text"
             name="emp_add_long"
-            value={newAddress.emp_add_long}
+            value={newAddress.add_long}
             readOnly
             placeholder="Longitude"
             className="w-full p-2 border border-gray-300 rounded-md"

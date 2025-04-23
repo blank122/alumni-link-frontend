@@ -11,6 +11,8 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
     const [changePassword, setChangePassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showAddressModal, setShowAddressModal] = useState(false);
+
     const [employmentHistory, setEmploymentHistory] = useState({
         job_title: "",
         company_name: "",
@@ -153,7 +155,7 @@ const Profile = () => {
                             Address
 
                             <button
-                                onClick={() => setShowModal(true)}
+                                onClick={() => setShowAddressModal(true)}
                                 className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                             >
 
@@ -161,8 +163,8 @@ const Profile = () => {
                             </button>
 
                             <AddressModal
-                                isOpen={showModal}
-                                onClose={() => setShowModal(false)}
+                                isOpen={showAddressModal}
+                                onClose={() => setShowAddressModal(false)}
                             />
                         </h2>
 
