@@ -9,6 +9,7 @@ import EducationalBackgroundInfo from "./register/EducationalBackgroundInfo";
 import EmploymentAddressStep from "./register/EmployeeAddressInfoStep";
 import EmploymentStatus from "./register/EmployeementStatus";
 import EmploymentInfoStep from "./register/EmploymentInfoStep";
+import AccountInfoStep from "./register/AccountInfoStep";
 
 import ReviewStep from "./register/ReviewStep";
 import { useNavigate } from "react-router-dom";
@@ -195,7 +196,7 @@ const MultiStepForm = () => {
                 const data = JSON.parse(text);
                 console.log("Server Response:", data);
                 alert("Registration Successful!");
-                navigate("/"); // Redirect after success
+                // navigate("/"); // Redirect after success
             } catch (err) {
                 console.error("Unexpected response format:", text);
                 alert("Unexpected response from server.");

@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 const EmploymentStatus = ({ userData, handleChange, errors }) => (
     <motion.div
         className="p-6 bg-white rounded-lg shadow-lg w-96 mx-auto"
@@ -20,3 +22,6 @@ const EmploymentStatus = ({ userData, handleChange, errors }) => (
     </motion.div>
 
 );
+
+export default EmploymentStatus;
+
