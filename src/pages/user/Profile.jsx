@@ -3,6 +3,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLock, FaPlus } from "react-icons/fa";
 import EmploymentModal from "./Components/EmploymentModal";
+import AddressModal from "./Components/AddressModal";
 
 const Profile = () => {
     const { user, token } = useAuth();
@@ -15,8 +16,20 @@ const Profile = () => {
         company_name: "",
         start_date: "",
         end_date: "",
+        emp_full_address: "",
+        emp_add_lat: "",
+        emp_add_long: "",
+    });
+
+    const [newAddress, setNewAddress] = useState({
+        emp_full_address: "",
+        emp_add_lat: "",
+        emp_add_long: "",
     });
     const handleSaveJob = (job) => {
+        setEmploymentHistory((prev) => [...prev, job]);
+    };
+    const handleEditAddress = (job) => {
         setEmploymentHistory((prev) => [...prev, job]);
     };
     useEffect(() => {
@@ -138,6 +151,19 @@ const Profile = () => {
                         <h2 className="text-2xl font-bold flex items-center gap-3 text-gray-800 mb-4">
                             <FaMapMarkerAlt className="text-blue-600 text-2xl" />
                             Address
+
+                            <button
+                                onClick={() => setShowModal(true)}
+                                className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                            >
+
+                                <FaPlus />
+                            </button>
+
+                            <AddressModal
+                                isOpen={showModal}
+                                onClose={() => setShowModal(false)}
+                            />
                         </h2>
 
                         <div className="space-y-2">

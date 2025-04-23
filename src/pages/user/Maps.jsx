@@ -10,10 +10,12 @@ const Maps = () => {
     const [markerPosition, setMarkerPosition] = useState([10.3157, 123.8854]); // Default: Cebu City
 
     useEffect(() => {
+        if (!user?.alumni_id || !token) return;
+    
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    `http://127.0.0.1:8000/api/user-location/${user?.alumni_id}`,
+                    `http://127.0.0.1:8000/api/user-location/${user.alumni_id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -21,30 +23,28 @@ const Maps = () => {
                         },
                     }
                 );
-
+    
                 const locationData = response.data.data;
                 setMaps(locationData);
-
-                // If data exists, update marker position
+    
                 if (locationData.length > 0) {
                     setMarkerPosition([
                         parseFloat(locationData[0].add_lat),
                         parseFloat(locationData[0].add_long),
                     ]);
                 }
-
+    
                 console.log(locationData);
             } catch (error) {
-                console.error("Error fetching announcements:", error);
+                console.error("Error fetching user location:", error);
             } finally {
                 setLoading(false);
             }
         };
-
-        if (token) {
-            fetchData();
-        }
-    }, [user, token, markerPosition]);
+    
+        fetchData();
+    }, [user?.alumni_id, token]);
+    
 
     return (
         <div className="flex flex-col h-screen p-6 bg-gray-100">
