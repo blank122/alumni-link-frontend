@@ -17,9 +17,9 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
 };
 
 // Cluster markers based on zoom level and proximity
-const createClusters = (markers, zoom, clusterRadius = 50) => {
+const createClusters = (markers, zoom, clusterRadius = 30) => {
   // At high zoom levels, show all markers
-  if (zoom > 12) return markers.map(marker => ({ ...marker, isCluster: false }));
+  if (zoom > 10) return markers.map(marker => ({ ...marker, isCluster: false }));
   
   const clusters = [];
   const processed = new Set();
@@ -97,7 +97,8 @@ const ManageMap = () => {
         });
 
         setAccounts(response.data.data);
-        
+        console.log('Total records received:', response.data.data.length);
+
         // You might want to fetch city data here if you have an API for reverse geocoding
         // This would help display city names in clusters
       } catch (error) {
@@ -113,25 +114,73 @@ const ManageMap = () => {
   }, [token]);
 
   // Group alumni by company name and collect details
+  // const groupedByCompany = useMemo(() => {
+  //   return accounts.reduce((acc, user) => {
+  //     const employment = user.alumni?.employment_history[0];
+  //     const address = employment?.employment_address;
+  //     if (employment && address) {
+  //       const key = employment.company_name;
+  //       if (!acc[key]) {
+  //         acc[key] = {
+  //           company_name: key,
+  //           coordinates: [parseFloat(address.emp_add_lat), parseFloat(address.emp_add_long)],
+  //           employees: [],
+  //         };
+  //       }
+
+  //       acc[key].employees.push({
+  //         name: `${user.alumni.alm_first_name} ${user.alumni.alm_last_name}`,
+  //         job_title: employment.job_title,
+  //       });
+  //     }
+  //     return acc;
+  //   }, {});
+  // }, [accounts]);
   const groupedByCompany = useMemo(() => {
     return accounts.reduce((acc, user) => {
-      const employment = user.alumni?.employment_history[0];
-      const address = employment?.employment_address;
-      if (employment && address) {
-        const key = employment.company_name;
+      try {
+        if (!user.alumni) {
+          console.log('Skipping user - no alumni data:', user);
+          return acc;
+        }
+  
+        const employment = user.alumni?.employment_history?.[0];
+        if (!employment) {
+          console.log('Skipping user - no employment history:', user.alumni);
+          return acc;
+        }
+  
+        const address = employment?.employment_address;
+        if (!address) {
+          console.log('Skipping employment - no address:', employment);
+          return acc;
+        }
+  
+        const lat = parseFloat(address.emp_add_lat);
+        const lng = parseFloat(address.emp_add_long);
+        
+        if (isNaN(lat) || isNaN(lng)) {
+          console.log('Skipping - invalid coordinates:', address);
+          return acc;
+        }
+  
+        const key = employment.company_name || 'Unknown Company';
         if (!acc[key]) {
           acc[key] = {
             company_name: key,
-            coordinates: [parseFloat(address.emp_add_lat), parseFloat(address.emp_add_long)],
+            coordinates: [lat, lng],
             employees: [],
           };
         }
-
+  
         acc[key].employees.push({
           name: `${user.alumni.alm_first_name} ${user.alumni.alm_last_name}`,
           job_title: employment.job_title,
         });
+      } catch (error) {
+        console.error('Error processing user:', user, error);
       }
+      
       return acc;
     }, {});
   }, [accounts]);
