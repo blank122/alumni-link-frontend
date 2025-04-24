@@ -50,7 +50,6 @@ const softSkills =
     8: "Attention to Detail",
     9: "Emotional Intelligence (EQ)",
     10: "Ethical & Professional Responsibility",
-   
 }
 
 
