@@ -13,27 +13,6 @@ const Profile = () => {
     const [showModal, setShowModal] = useState(false);
     const [showAddressModal, setShowAddressModal] = useState(false);
 
-    const [employmentHistory, setEmploymentHistory] = useState({
-        job_title: "",
-        company_name: "",
-        start_date: "",
-        end_date: "",
-        emp_full_address: "",
-        emp_add_lat: "",
-        emp_add_long: "",
-    });
-
-    const [newAddress, setNewAddress] = useState({
-        emp_full_address: "",
-        emp_add_lat: "",
-        emp_add_long: "",
-    });
-    const handleSaveJob = (job) => {
-        setEmploymentHistory((prev) => [...prev, job]);
-    };
-    const handleEditAddress = (job) => {
-        setEmploymentHistory((prev) => [...prev, job]);
-    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -179,29 +158,26 @@ const Profile = () => {
             )}
 
             {/* Employment */}
-            {employment_history.length > 0 && (
-                <div className="mt-10 w-full max-w-6xl mx-auto px-4">
-                    <div className="bg-white shadow-xl rounded-2xl p-8 transition duration-300 ease-in-out">
-                        <h2 className="text-2xl font-bold flex items-center gap-3 text-gray-800 mb-6">
-                            <FaBuilding className="text-blue-600 text-2xl" />
-                            Employment History
-                            {/* Plus Button to Open Modal */}
-                            <button
-                                onClick={() => setShowModal(true)}
-                                className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                            >
+            <div className="mt-10 w-full max-w-6xl mx-auto px-4">
+                <div className="bg-white shadow-xl rounded-2xl p-8 transition duration-300 ease-in-out">
+                    <h2 className="text-2xl font-bold flex items-center gap-3 text-gray-800 mb-6">
+                        <FaBuilding className="text-blue-600 text-2xl" />
+                        Employment History
+                        {/* Plus Button to Open Modal */}
+                        <button
+                            onClick={() => setShowModal(true)}
+                            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                        >
+                            <FaPlus />
+                        </button>
 
-                                <FaPlus />
-                            </button>
+                        <EmploymentModal
+                            isOpen={showModal}
+                            onClose={() => setShowModal(false)}
+                        />
+                    </h2>
 
-
-                            <EmploymentModal
-                                isOpen={showModal}
-                                onClose={() => setShowModal(false)}
-                                onSave={handleSaveJob}
-                            />
-                        </h2>
-
+                    {employment_history && employment_history.length > 0 ? (
                         <div className="space-y-6">
                             {employment_history.map((job) => (
                                 <div
@@ -228,9 +204,13 @@ const Profile = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    ) : (
+                        <div className="text-center py-8 text-gray-500">
+                            No job history
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
 
 
             {/* change password modal */}
