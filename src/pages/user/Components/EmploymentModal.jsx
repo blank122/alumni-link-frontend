@@ -11,7 +11,7 @@ const EmploymentModal = ({ isOpen, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const [newJob, setNewJob] = useState({
-        emp_status: "",
+        emp_status: "2",
         job_title: "",
         company_name: "",
         start_date: "",
