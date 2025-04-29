@@ -16,32 +16,24 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
   return R * c;
 };
 
-// Cluster markers based on zoom level and proximity
 const createClusters = (markers, zoom, clusterRadius = 30) => {
-  // At high zoom levels, show all markers
   if (zoom > 10) return markers.map(marker => ({ ...marker, isCluster: false }));
   
   const clusters = [];
   const processed = new Set();
-  
-  // Adjust cluster radius based on zoom level
   const dynamicRadius = clusterRadius / Math.pow(2, zoom - 1);
-  
   markers.forEach((marker, index) => {
     if (processed.has(index)) return;
     
     const cluster = { ...marker };
     const nearbyIndices = [];
     
-    // Find nearby markers
     markers.forEach((otherMarker, otherIndex) => {
       if (index === otherIndex || processed.has(otherIndex)) return;
-      
       const distance = getDistance(
         marker.coordinates[0], marker.coordinates[1],
         otherMarker.coordinates[0], otherMarker.coordinates[1]
       );
-      
       if (distance * 1000 <= dynamicRadius) { // Convert km to meters
         nearbyIndices.push(otherIndex);
       }
@@ -113,29 +105,6 @@ const ManageMap = () => {
     }
   }, [token]);
 
-  // Group alumni by company name and collect details
-  // const groupedByCompany = useMemo(() => {
-  //   return accounts.reduce((acc, user) => {
-  //     const employment = user.alumni?.employment_history[0];
-  //     const address = employment?.employment_address;
-  //     if (employment && address) {
-  //       const key = employment.company_name;
-  //       if (!acc[key]) {
-  //         acc[key] = {
-  //           company_name: key,
-  //           coordinates: [parseFloat(address.emp_add_lat), parseFloat(address.emp_add_long)],
-  //           employees: [],
-  //         };
-  //       }
-
-  //       acc[key].employees.push({
-  //         name: `${user.alumni.alm_first_name} ${user.alumni.alm_last_name}`,
-  //         job_title: employment.job_title,
-  //       });
-  //     }
-  //     return acc;
-  //   }, {});
-  // }, [accounts]);
   const groupedByCompany = useMemo(() => {
     return accounts.reduce((acc, user) => {
       try {

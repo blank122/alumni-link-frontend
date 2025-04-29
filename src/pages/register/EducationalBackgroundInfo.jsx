@@ -28,7 +28,20 @@ const EducationalBackgroundInfo = ({ userData, handleChange, errors, currentStep
         };
         fetchData();
     }, []);
+    const generateAcademicYears = () => {
+        const currentYear = new Date().getFullYear();
+        const startYear = 2000; // Adjust this as needed
+        const years = [];
 
+        for (let year = currentYear; year >= startYear; year--) {
+            years.push({
+                value: `${year}-${year + 1}`,
+                label: `${year}-${year + 1}`
+            });
+        }
+
+        return years;
+    };
     return (
         <motion.div
             className="p-6 bg-white rounded-2xl shadow-lg w-full max-w-md mx-auto border border-gray-200"
@@ -68,25 +81,25 @@ const EducationalBackgroundInfo = ({ userData, handleChange, errors, currentStep
                     {errors.course_id && <p className="text-red-500 text-xs mt-1">{errors.course_id}</p>}
                 </div>
 
-                {/* Year Graduated (Date Picker) */}
+                {/* Academic Year Picker */}
                 <div>
                     <label htmlFor="year_graduated" className="block text-sm font-medium text-gray-700">
                         School Year Graduated
                     </label>
-                    <DatePicker
+                    <select
                         id="year_graduated"
-                        selected={userData.year_graduated ? new Date(userData.year_graduated) : null}
-                        onChange={(date) => handleChange({
-                            target: {
-                                name: "year_graduated",
-                                value: date ? date.getFullYear().toString() : "" // Convert to string
-                            }
-                        })}
-                        showYearPicker
-                        dateFormat="yyyy"
+                        name="year_graduated"
+                        value={userData.year_graduated || ''}
+                        onChange={handleChange}
                         className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300"
-                        placeholderText="Select Year"
-                    />
+                    >
+                        <option value="">Select Academic Year</option>
+                        {generateAcademicYears().map((year) => (
+                            <option key={year.value} value={year.value}>
+                                {year.label}
+                            </option>
+                        ))}
+                    </select>
                     {errors.year_graduated && <p className="text-red-500 text-xs mt-1">{errors.year_graduated}</p>}
                 </div>
 
