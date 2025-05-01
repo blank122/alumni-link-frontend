@@ -6,7 +6,7 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveCo
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import StatsCard from "../../components/StatsCard";
 const DashboardAdmin = () => {
     const { token } = useAuth();
     const [UnemployedCount, setUnemployedCount] = useState([]);
@@ -172,7 +172,7 @@ const DashboardAdmin = () => {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
                     },
-                }); 
+                });
                 setUserRegDemograph(response.data.data);
             } catch (error) {
                 console.error("Error fetching alumni data:", error);
@@ -185,7 +185,6 @@ const DashboardAdmin = () => {
             fetchUserRegDemograph();
         }
     }, [token]);
-
 
     useEffect(() => {
         const fetchUnemploymentDemograph = async () => {
@@ -231,164 +230,54 @@ const DashboardAdmin = () => {
 
             </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
                 {/* Unemployed Alumni Card */}
-                <motion.div
-                    className="p-8 bg-gray-300 shadow-lg rounded-xl flex flex-col items-center w-full max-w-md"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex items-center space-x-4">
-                        {/* Icon */}
-                        <div className="text-4xl text-gray-700">
-                            <FaUserTimes />
-                        </div>
-
-
-                        {/* Text Content */}
-                        <div>
-                            <p className="text-gray-800 text-lg">Unemployed Alumni</p>
-                            {LoadingUnemployed ? (
-                                <p className="text-gray-500">Loading...</p>
-                            ) : (
-                                <p className="text-3xl font-extrabold text-gray-900">{UnemployedCount ?? 0}</p>
-                            )}
-                        </div>
-                    </div>
-                </motion.div>
-
+                <StatsCard
+                    icon={FaUserTimes}
+                    title="Unemployed Alumni"
+                    value={UnemployedCount}
+                    isLoading={LoadingUnemployed}
+                    bgColor="bg-orange-200"
+                />
                 {/* Employed Alumni Card */}
-                <motion.div
-                    className="p-4 bg-orange-200 shadow-lg rounded-xl flex items-center w-full max-w-md"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex items-center space-x-4">
-                        {/* Icon */}
-                        <div className="text-4xl text-gray-700">
-                            <FaBriefcase />
-                        </div>
-
-
-                        {/* Text Content */}
-                        <div>
-                            <p className="text-gray-800 text-lg">Employed Alumni</p>
-                            {LoadingEmployed ? (
-                                <p className="text-gray-500">Loading...</p>
-                            ) : (
-                                <p className="text-3xl font-extrabold text-gray-900">{EmployedCount ?? 0}</p>
-                            )}
-                        </div>
-                    </div>
-                </motion.div>
-
+                <StatsCard
+                    icon={FaBriefcase}
+                    title="Employed Alumni"
+                    value={EmployedCount}
+                    isLoading={LoadingEmployed}
+                    bgColor="bg-green-200"
+                />
                 {/* Freelancing Alumni Card */}
-                <motion.div
-                    className="p-4 bg-amber-300 shadow-lg rounded-xl flex items-center w-full max-w-md"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex items-center space-x-4">
-                        {/* Icon */}
-                        <div className="bg-yellow-500 p-2 rounded-full">
-                            <svg className="w-8 h-8 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                            </svg>
-                        </div>
+                <StatsCard
+                    icon={FaBriefcase}
+                    title="Freelance Alumni"
+                    value={FreelanceCount}
+                    isLoading={LoadingFreelance}
+                    bgColor="bg-brown-200"
+                />
+                <StatsCard
+                    icon={FaUserClock}
+                    title="Pending Accounts"
+                    value={PendingCount}
+                    isLoading={LoadingPending}
+                    bgColor="bg-purple-200"
+                />
 
-                        {/* Text Content */}
-                        <div>
-                            <p className="text-gray-800 text-lg">Freelance Alumni</p>
-                            {LoadingFreelance ? (
-                                <p className="text-gray-500">Loading...</p>
-                            ) : (
-                                <p className="text-3xl font-extrabold text-gray-900">{FreelanceCount ?? 0}</p>
-                            )}
-                        </div>
-                    </div>
-                </motion.div>
+                <StatsCard
+                    icon={FaCheckCircle}
+                    title="Approved Accounts"
+                    value={ApprovedCount}
+                    isLoading={LoadingApproved}
+                    bgColor="bg-blue-200"
+                />
 
-
-                <motion.div
-                    className="p-8 bg-purple-200 shadow-lg rounded-xl flex flex-col items-center w-full max-w-md"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex items-center space-x-4">
-                        {/* Icon */}
-                        <div className="text-4xl text-gray-700">
-                            <FaUserClock />
-                        </div>
-
-
-                        {/* Text Content */}
-                        <div>
-                            <p className="text-gray-800 text-lg">Pending Accounts</p>
-                            {LoadingPending ? (
-                                <p className="text-gray-500">Loading...</p>
-                            ) : (
-                                <p className="text-3xl font-extrabold text-gray-900">{PendingCount ?? 0}</p>
-                            )}
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* Approved Accounts Alumni Card */}
-                <motion.div
-                    className="p-4 bg-blue-200 shadow-lg rounded-xl flex items-center w-full max-w-md"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex items-center space-x-4">
-                        {/* Icon */}
-                        <div className="text-4xl text-gray-700">
-                            <FaCheckCircle />
-                        </div>
-
-
-                        {/* Text Content */}
-                        <div>
-                            <p className="text-gray-800 text-lg">Approved Accounts</p>
-                            {LoadingApproved ? (
-                                <p className="text-gray-500">Loading...</p>
-                            ) : (
-                                <p className="text-3xl font-extrabold text-gray-900">{ApprovedCount ?? 0}</p>
-                            )}
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* Employed Alumni Card */}
-                <motion.div
-                    className="p-4 bg-red-200 shadow-lg rounded-xl flex items-center w-full max-w-md"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex items-center space-x-4">
-                        {/* Icon */}
-                        <div className="text-4xl text-gray-700">
-                            <FaUserCheck />
-                        </div>
-
-
-                        {/* Text Content */}
-                        <div>
-                            <p className="text-gray-800 text-lg">Registered Accounts</p>
-                            {LoadingTotal ? (
-                                <p className="text-gray-500">Loading...</p>
-                            ) : (
-                                <p className="text-3xl font-extrabold text-gray-900">{TotalAccountsCount ?? 0}</p>
-                            )}
-                        </div>
-                    </div>
-                </motion.div>
-
-
+                <StatsCard
+                    icon={FaCheckCircle}
+                    title="Registered Accounts"
+                    value={TotalAccountsCount}
+                    isLoading={LoadingTotal}
+                    bgColor="bg-red-200"
+                />
             </div>
 
             {/* Analytics Charts */}

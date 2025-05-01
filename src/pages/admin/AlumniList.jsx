@@ -85,9 +85,6 @@ const AlumniList = () => {
         }
     }, [token, API_BASE_URL]);
 
-
-
-
     const handleAction = async (id, actionType) => {
         const confirmation = window.confirm(`Are you sure you want to ${actionType} this account?`);
         if (!confirmation) return;
