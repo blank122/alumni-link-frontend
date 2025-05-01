@@ -21,8 +21,7 @@ const SmsPage = () => {
 
     try {
       const api = createApiClient(token);
-      const status = actionType === "Approve" ? "2" : "0";
-      await api.updateAccountStatus(id, status);
+      await api.sendSms(id);
       
       alert(`${actionType} action successful!`);
       window.location.reload();
@@ -108,7 +107,7 @@ const AlumniTableRow = ({ item, loadingAction, onAction }) => {
       <td className="px-6 py-4 text-gray-700">{employmentInfo}</td>
       <td className="px-6 py-4 text-center">
         <ActionButton 
-          actionType="Send SMS"
+          actionType="Send SMS Update"
           itemId={item.id}
           isProcessing={isProcessing}
           onClick={onAction}

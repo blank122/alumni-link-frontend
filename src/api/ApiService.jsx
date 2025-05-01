@@ -16,7 +16,7 @@ export const createApiClient = (token) => {
       axios.put(`${API_BASE_URL}/admin/approval-email/${id}`, { status }, { headers }),
     getUnemployed:  () => axios.get(`${API_BASE_URL}/admin/unemployed-alumni-data`, { headers }),
     sendSms:(id) => 
-        axios.put(`${API_BASE_URL}/admin/send-sms/${id}`, { headers }),
+        axios.post(`${API_BASE_URL}/admin/send-sms-unemployed/${id}`, { headers }),
   };
 };
 
