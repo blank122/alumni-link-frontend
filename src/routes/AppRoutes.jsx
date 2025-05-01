@@ -41,6 +41,7 @@ import UserFeedback from "../pages/user/Feedback";
 import UserHelp from "../pages/user/Help";
 
 import Unauthorized from "../pages/errors/Unauthorized";
+import SmsPage from "../pages/admin/SmsPage";
 
 const AppRoutes = () => {
     return (
@@ -70,9 +71,10 @@ const AppRoutes = () => {
                     <Route path="alumni-list" element={<AlumniList />} />
                     <Route path="manage-map" element={<ManageMap />} />
                     <Route path="alumni-map" element={<AlumniGISMap />} />
-
                     <Route path="manage-feedback" element={<ManageFeedback />} />
                     <Route path="statistical-reports" element={<StatisticalReports />} />
+                    <Route path="sms" element={<SmsPage />} />
+
                 </Route>
             </Route>
 

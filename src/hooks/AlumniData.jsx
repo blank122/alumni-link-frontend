@@ -67,3 +67,29 @@ export const useAccountCounts = (token) => {
 
   return { pendingCount, approvedCount, loadingPending, loadingApproved };
 };
+
+export const useUnemployedData = (token) => {
+    const [account, setAccount] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        if (!token) return;
+        
+        try {
+          const api = createApiClient(token);
+          const response = await api.getUnemployed();
+          console.log("fetched data", response);
+          setAccount(response.data.data);
+        } catch (error) {
+          console.error("Error fetching alumni data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchData();
+    }, [token]);
+  
+    return { account, loading };
+  };
