@@ -76,7 +76,6 @@ const ManageMap = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [center, setCenter] = useState([14.5995, 120.9842]);
   const [zoom, setZoom] = useState(11);
-  const [cityData, setCityData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,9 +89,6 @@ const ManageMap = () => {
 
         setAccounts(response.data.data);
         console.log('Total records received:', response.data.data.length);
-
-        // You might want to fetch city data here if you have an API for reverse geocoding
-        // This would help display city names in clusters
       } catch (error) {
         console.error("Error fetching user locations:", error);
       } finally {
