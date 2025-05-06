@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Map, Marker, Overlay } from 'pigeon-maps';
 import axios from 'axios';
 import { useAuth } from "../../contexts/AuthContext";
+import { FiSearch, FiX, FiUsers, FiMapPin, FiBriefcase } from 'react-icons/fi';
 
 // Helper function to calculate distance between coordinates
 const getDistance = (lat1, lon1, lat2, lon2) => {
@@ -76,6 +77,8 @@ const ManageMap = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [center, setCenter] = useState([14.5995, 120.9842]);
   const [zoom, setZoom] = useState(11);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,8 +104,20 @@ const ManageMap = () => {
     }
   }, [token]);
 
+  const filteredAccounts = useMemo(() => {
+    if (!searchTerm) return accounts;
+    
+    const term = searchTerm.toLowerCase();
+    return accounts.filter(account => {
+      const fullName = `${account.alumni?.alm_first_name || ''} ${account.alumni?.alm_last_name || ''}`.toLowerCase();
+      const companyName = account.alumni?.employment_history?.[0]?.company_name?.toLowerCase() || '';
+      
+      return fullName.includes(term) || companyName.includes(term);
+    });
+  }, [accounts, searchTerm]);
+
   const groupedByCompany = useMemo(() => {
-    return accounts.reduce((acc, user) => {
+    return filteredAccounts.reduce((acc, user) => {
       try {
         if (!user.alumni) {
           console.log('Skipping user - no alumni data:', user);
@@ -148,7 +163,7 @@ const ManageMap = () => {
 
       return acc;
     }, {});
-  }, [accounts]);
+  }, [filteredAccounts]);
 
   const markers = Object.values(groupedByCompany);
   const clusters = createClusters(markers, zoom);
@@ -158,8 +173,105 @@ const ManageMap = () => {
     setZoom(zoom);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setShowSearchResults(true);
+  };
+
+  const clearSearch = () => {
+    setSearchTerm('');
+    setShowSearchResults(false);
+  };
+
   return (
-    <div style={{ height: '100vh' }}>
+    <div style={{ height: '100vh', position: 'relative' }}>
+      {/* Search Bar */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        left: '20px',
+        zIndex: 1000,
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        padding: '10px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+        width: '300px'
+      }}>
+        <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ position: 'relative', flex: 1 }}>
+            <FiSearch style={{
+              position: 'absolute',
+              left: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: '#666'
+            }} />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search employee or company..."
+              style={{
+                width: '100%',
+                padding: '8px 8px 8px 35px',
+                borderRadius: '4px',
+                border: '1px solid #ddd',
+                fontSize: '14px'
+              }}
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                style={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#666'
+                }}
+              >
+                <FiX />
+              </button>
+            )}
+          </div>
+          <button
+            type="submit"
+            style={{
+              marginLeft: '8px',
+              padding: '8px 12px',
+              background: '#3388ff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <FiSearch style={{ marginRight: '5px' }} />
+            Search
+          </button>
+        </form>
+
+        {/* Search Results Info */}
+        {showSearchResults && searchTerm && (
+          <div style={{ marginTop: '10px', padding: '10px', background: '#f8f9fa', borderRadius: '4px' }}>
+            <p style={{ margin: 0, fontSize: '14px', display: 'flex', alignItems: 'center' }}>
+              <FiUsers style={{ marginRight: '5px' }} />
+              <strong>{filteredAccounts.length}</strong> {filteredAccounts.length === 1 ? 'result' : 'results'} found
+            </p>
+            <p style={{ margin: '5px 0 0', fontSize: '14px', display: 'flex', alignItems: 'center' }}>
+              <FiBriefcase style={{ marginRight: '5px' }} />
+              <strong>{markers.length}</strong> {markers.length === 1 ? 'company' : 'companies'} displayed
+            </p>
+          </div>
+        )}
+      </div>
+
       <Map
         center={center}
         zoom={zoom}
@@ -185,7 +297,7 @@ const ManageMap = () => {
             })}
             color={cluster.isCluster ? '#FF5722' : '#3388ff'}
           >
-            {cluster.isCluster && (
+            {cluster.isCluster ? (
               <div style={{
                 background: '#FF5722',
                 borderRadius: '50%',
@@ -203,6 +315,24 @@ const ManageMap = () => {
               }}>
                 {cluster.size}
               </div>
+            ) : (
+              <div style={{
+                background: '#3388ff',
+                borderRadius: '50%',
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '30px',
+                border: '2px solid white',
+                cursor: 'pointer',
+                pointerEvents: 'auto'
+              }}>
+                <FiMapPin />
+              </div>
             )}
           </Marker>
         ))}
@@ -219,19 +349,40 @@ const ManageMap = () => {
             }}>
               {selectedCompany.isCluster ? (
                 <>
-                  <h4>Cluster ({selectedCompany.size} companies)</h4>
-                  <p><strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}</p>
-                  <p><strong>Total Employees:</strong> {selectedCompany.employees.length}</p>
+                  <h4 style={{ margin: '0 0 10px', display: 'flex', alignItems: 'center' }}>
+                    <FiUsers style={{ marginRight: '5px' }} />
+                    Cluster ({selectedCompany.size} companies)
+                  </h4>
+                  <p style={{ margin: '5px 0', display: 'flex', alignItems: 'center' }}>
+                    <FiMapPin style={{ marginRight: '5px' }} />
+                    <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
+                  </p>
+                  <p style={{ margin: '5px 0', display: 'flex', alignItems: 'center' }}>
+                    <FiUsers style={{ marginRight: '5px' }} />
+                    <strong>Total Employees:</strong> {selectedCompany.employees.length}
+                  </p>
 
                   <div style={{ margin: '10px 0', borderTop: '1px solid #eee', paddingTop: '10px' }}>
-                    <h5>Companies in this cluster:</h5>
+                    <h5 style={{ display: 'flex', alignItems: 'center', margin: '0 0 10px' }}>
+                      <FiBriefcase style={{ marginRight: '5px' }} />
+                      Companies in this cluster:
+                    </h5>
                     <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                       {selectedCompany.originalCompanies.map((company, i) => (
-                        <div key={i} style={{ marginBottom: '8px', paddingBottom: '8px', borderBottom: '1px solid #f5f5f5' }}>
-                          <p style={{ fontWeight: 'bold', marginBottom: '4px' }}>{company.company_name}</p>
-                          <p style={{ fontSize: '0.9em', marginBottom: '4px' }}>
-                            Employees: {company.employees.length}
-                          </p>
+                        <div key={i} style={{ 
+                          marginBottom: '8px', 
+                          paddingBottom: '8px', 
+                          borderBottom: '1px solid #f5f5f5',
+                          display: 'flex',
+                          alignItems: 'center'
+                        }}>
+                          <FiBriefcase style={{ marginRight: '8px', flexShrink: 0 }} />
+                          <div>
+                            <p style={{ fontWeight: 'bold', marginBottom: '4px' }}>{company.company_name}</p>
+                            <p style={{ fontSize: '0.9em', margin: 0 }}>
+                              Employees: {company.employees.length}
+                            </p>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -239,14 +390,32 @@ const ManageMap = () => {
                 </>
               ) : (
                 <>
-                  <h4>{selectedCompany.company_name}</h4>
-                  <p><strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}</p>
-                  <p><strong>Employees:</strong> {selectedCompany.employees.length}</p>
+                  <h4 style={{ margin: '0 0 10px', display: 'flex', alignItems: 'center' }}>
+                    <FiBriefcase style={{ marginRight: '5px' }} />
+                    {selectedCompany.company_name}
+                  </h4>
+                  <p style={{ margin: '5px 0', display: 'flex', alignItems: 'center' }}>
+                    <FiMapPin style={{ marginRight: '5px' }} />
+                    <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
+                  </p>
+                  <p style={{ margin: '5px 0', display: 'flex', alignItems: 'center' }}>
+                    <FiUsers style={{ marginRight: '5px' }} />
+                    <strong>Employees:</strong> {selectedCompany.employees.length}
+                  </p>
                   <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                     {selectedCompany.employees.map((emp, i) => (
-                      <div key={i} style={{ marginBottom: '8px', paddingBottom: '8px', borderBottom: '1px solid #f5f5f5' }}>
-                        <strong>{emp.name}</strong><br />
-                        <span>{emp.job_title}</span>
+                      <div key={i} style={{ 
+                        marginBottom: '8px', 
+                        paddingBottom: '8px', 
+                        borderBottom: '1px solid #f5f5f5',
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}>
+                        <FiUsers style={{ marginRight: '8px', flexShrink: 0 }} />
+                        <div>
+                          <strong>{emp.name}</strong><br />
+                          <span style={{ fontSize: '0.9em' }}>{emp.job_title}</span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -263,9 +432,13 @@ const ManageMap = () => {
                   border: 'none',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  width: '100%'
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
+                <FiX style={{ marginRight: '5px' }} />
                 Close
               </button>
             </div>
