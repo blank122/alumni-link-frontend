@@ -175,7 +175,18 @@ const ManageMap = () => {
             key={idx}
             width={cluster.isCluster ? 40 + Math.min(cluster.size, 10) * 3 : 30}
             anchor={cluster.coordinates}
-            onClick={() => setSelectedCompany(cluster)}
+            onClick={() => setSelectedCompany({
+              ...cluster,
+              // For clusters, we'll add the original companies information
+              originalCompanies: cluster.isCluster 
+                ? markers.filter(m => 
+                    getDistance(
+                      m.coordinates[0], m.coordinates[1],
+                      cluster.coordinates[0], cluster.coordinates[1]
+                    ) * 1000 <= (30 / Math.pow(2, zoom - 1))
+                  )
+                : [cluster]
+            })}
             color={cluster.isCluster ? '#FF5722' : '#3388ff'}
           >
             {cluster.isCluster && (
@@ -190,7 +201,8 @@ const ManageMap = () => {
                 color: 'white',
                 fontWeight: 'bold',
                 fontSize: '14px',
-                border: '2px solid white'
+                border: '2px solid white',
+                cursor: 'pointer'
               }}>
                 {cluster.size}
               </div>
@@ -203,9 +215,9 @@ const ManageMap = () => {
             <div style={{
               background: 'white',
               borderRadius: '8px',
-              padding: '10px',
+              padding: '15px',
               boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-              maxWidth: '250px',
+              maxWidth: '300px',
               zIndex: 1000
             }}>
               {selectedCompany.isCluster ? (
@@ -213,44 +225,48 @@ const ManageMap = () => {
                   <h4>Cluster ({selectedCompany.size} companies)</h4>
                   <p><strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}</p>
                   <p><strong>Total Employees:</strong> {selectedCompany.employees.length}</p>
-                  <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                    <ul>
-                      {selectedCompany.employees.slice(0, 10).map((emp, i) => (
-                        <li key={i}>
-                          <strong>{emp.name}</strong><br />
-                          <span>{emp.job_title}</span>
-                        </li>
+                  
+                  <div style={{ margin: '10px 0', borderTop: '1px solid #eee', paddingTop: '10px' }}>
+                    <h5>Companies in this cluster:</h5>
+                    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                      {selectedCompany.originalCompanies.map((company, i) => (
+                        <div key={i} style={{ marginBottom: '8px', paddingBottom: '8px', borderBottom: '1px solid #f5f5f5' }}>
+                          <p style={{ fontWeight: 'bold', marginBottom: '4px' }}>{company.company_name}</p>
+                          <p style={{ fontSize: '0.9em', marginBottom: '4px' }}>
+                            Employees: {company.employees.length}
+                          </p>
+                        </div>
                       ))}
-                      {selectedCompany.employees.length > 10 && (
-                        <li>...and {selectedCompany.employees.length - 10} more</li>
-                      )}
-                    </ul>
+                    </div>
                   </div>
                 </>
               ) : (
                 <>
                   <h4>{selectedCompany.company_name}</h4>
-                  <p><strong>Total Employees:</strong> {selectedCompany.employees.length}</p>
-                  <ul>
+                  <p><strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}</p>
+                  <p><strong>Employees:</strong> {selectedCompany.employees.length}</p>
+                  <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                     {selectedCompany.employees.map((emp, i) => (
-                      <li key={i}>
+                      <div key={i} style={{ marginBottom: '8px', paddingBottom: '8px', borderBottom: '1px solid #f5f5f5' }}>
                         <strong>{emp.name}</strong><br />
                         <span>{emp.job_title}</span>
-                      </li>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </>
               )}
+              
               <button 
                 onClick={() => setSelectedCompany(null)}
                 style={{
                   marginTop: '10px',
-                  padding: '5px 10px',
+                  padding: '8px 15px',
                   background: '#FF5722',
                   color: 'white',
                   border: 'none',
                   borderRadius: '4px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  width: '100%'
                 }}
               >
                 Close
