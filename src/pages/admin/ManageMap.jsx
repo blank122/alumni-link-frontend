@@ -8,26 +8,26 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371; // Earth's radius in km
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 };
 
 const createClusters = (markers, zoom, clusterRadius = 30) => {
   if (zoom > 10) return markers.map(marker => ({ ...marker, isCluster: false }));
-  
+
   const clusters = [];
   const processed = new Set();
   const dynamicRadius = clusterRadius / Math.pow(2, zoom - 1);
   markers.forEach((marker, index) => {
     if (processed.has(index)) return;
-    
+
     const cluster = { ...marker };
     const nearbyIndices = [];
-    
+
     markers.forEach((otherMarker, otherIndex) => {
       if (index === otherIndex || processed.has(otherIndex)) return;
       const distance = getDistance(
@@ -38,34 +38,34 @@ const createClusters = (markers, zoom, clusterRadius = 30) => {
         nearbyIndices.push(otherIndex);
       }
     });
-    
+
     // If there are nearby markers, create a cluster
     if (nearbyIndices.length > 0) {
       const allMarkers = [marker, ...nearbyIndices.map(i => markers[i])];
-      
+
       // Calculate average position for the cluster
       const avgLat = allMarkers.reduce((sum, m) => sum + m.coordinates[0], 0) / allMarkers.length;
       const avgLon = allMarkers.reduce((sum, m) => sum + m.coordinates[1], 0) / allMarkers.length;
-      
+
       // Combine all employees from the cluster
       const allEmployees = allMarkers.flatMap(m => m.employees);
-      
+
       cluster.coordinates = [avgLat, avgLon];
       cluster.employees = allEmployees;
       cluster.isCluster = true;
       cluster.size = allMarkers.length;
-      
+
       // Mark all clustered markers as processed
       nearbyIndices.forEach(i => processed.add(i));
     } else {
       cluster.isCluster = false;
       cluster.size = 1;
     }
-    
+
     clusters.push(cluster);
     processed.add(index);
   });
-  
+
   return clusters;
 };
 
@@ -112,27 +112,27 @@ const ManageMap = () => {
           console.log('Skipping user - no alumni data:', user);
           return acc;
         }
-  
+
         const employment = user.alumni?.employment_history?.[0];
         if (!employment) {
           console.log('Skipping user - no employment history:', user.alumni);
           return acc;
         }
-  
+
         const address = employment?.employment_address;
         if (!address) {
           console.log('Skipping employment - no address:', employment);
           return acc;
         }
-  
+
         const lat = parseFloat(address.emp_add_lat);
         const lng = parseFloat(address.emp_add_long);
-        
+
         if (isNaN(lat) || isNaN(lng)) {
           console.log('Skipping - invalid coordinates:', address);
           return acc;
         }
-  
+
         const key = employment.company_name || 'Unknown Company';
         if (!acc[key]) {
           acc[key] = {
@@ -141,7 +141,7 @@ const ManageMap = () => {
             employees: [],
           };
         }
-  
+
         acc[key].employees.push({
           name: `${user.alumni.alm_first_name} ${user.alumni.alm_last_name}`,
           job_title: employment.job_title,
@@ -149,7 +149,7 @@ const ManageMap = () => {
       } catch (error) {
         console.error('Error processing user:', user, error);
       }
-      
+
       return acc;
     }, {});
   }, [accounts]);
@@ -164,9 +164,9 @@ const ManageMap = () => {
 
   return (
     <div style={{ height: '100vh' }}>
-      <Map 
-        center={center} 
-        zoom={zoom} 
+      <Map
+        center={center}
+        zoom={zoom}
         height={600}
         onBoundsChanged={handleBoundsChange}
       >
@@ -178,13 +178,13 @@ const ManageMap = () => {
             onClick={() => setSelectedCompany({
               ...cluster,
               // For clusters, we'll add the original companies information
-              originalCompanies: cluster.isCluster 
-                ? markers.filter(m => 
-                    getDistance(
-                      m.coordinates[0], m.coordinates[1],
-                      cluster.coordinates[0], cluster.coordinates[1]
-                    ) * 1000 <= (30 / Math.pow(2, zoom - 1))
-                  )
+              originalCompanies: cluster.isCluster
+                ? markers.filter(m =>
+                  getDistance(
+                    m.coordinates[0], m.coordinates[1],
+                    cluster.coordinates[0], cluster.coordinates[1]
+                  ) * 1000 <= (30 / Math.pow(2, zoom - 1))
+                )
                 : [cluster]
             })}
             color={cluster.isCluster ? '#FF5722' : '#3388ff'}
@@ -202,7 +202,8 @@ const ManageMap = () => {
                 fontWeight: 'bold',
                 fontSize: '14px',
                 border: '2px solid white',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                pointerEvents: 'auto'
               }}>
                 {cluster.size}
               </div>
@@ -225,7 +226,7 @@ const ManageMap = () => {
                   <h4>Cluster ({selectedCompany.size} companies)</h4>
                   <p><strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}</p>
                   <p><strong>Total Employees:</strong> {selectedCompany.employees.length}</p>
-                  
+
                   <div style={{ margin: '10px 0', borderTop: '1px solid #eee', paddingTop: '10px' }}>
                     <h5>Companies in this cluster:</h5>
                     <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
@@ -255,8 +256,8 @@ const ManageMap = () => {
                   </div>
                 </>
               )}
-              
-              <button 
+
+              <button
                 onClick={() => setSelectedCompany(null)}
                 style={{
                   marginTop: '10px',
