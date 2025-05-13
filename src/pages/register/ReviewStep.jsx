@@ -18,7 +18,6 @@ const employmentData = {
     2: "Employed",
 };
 
-
 const technicalSkills =
 {
     1: "Programming & Software Development",
@@ -36,6 +35,7 @@ const technicalSkills =
     13: "Business & Enterprise Computing",
     14: "Game AI & Physics Simulation",
     15: "Augmented & Virtual Reality (AR/VR)",
+    16: "Others"
 }
 
 const softSkills =
@@ -50,6 +50,7 @@ const softSkills =
     8: "Attention to Detail",
     9: "Emotional Intelligence (EQ)",
     10: "Ethical & Professional Responsibility",
+    11: "Others",
 }
 
 
