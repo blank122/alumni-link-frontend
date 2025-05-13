@@ -106,12 +106,12 @@ const ManageMap = () => {
 
   const filteredAccounts = useMemo(() => {
     if (!searchTerm) return accounts;
-    
+
     const term = searchTerm.toLowerCase();
     return accounts.filter(account => {
       const fullName = `${account.alumni?.alm_first_name || ''} ${account.alumni?.alm_last_name || ''}`.toLowerCase();
       const companyName = account.alumni?.employment_history?.[0]?.company_name?.toLowerCase() || '';
-      
+
       return fullName.includes(term) || companyName.includes(term);
     });
   }, [accounts, searchTerm]);
@@ -186,53 +186,22 @@ const ManageMap = () => {
   return (
     <div style={{ height: '100vh', position: 'relative' }}>
       {/* Search Bar */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        left: '20px',
-        zIndex: 1000,
-        backgroundColor: 'white',
-        borderRadius: '8px',
-        padding: '10px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-        width: '300px'
-      }}>
-        <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ position: 'relative', flex: 1 }}>
-            <FiSearch style={{
-              position: 'absolute',
-              left: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: '#666'
-            }} />
+      <div className="absolute top-5 left-5 z-[1000] bg-white rounded-lg p-3 shadow-md w-[300px]">
+        <form onSubmit={handleSearch} className="flex items-center">
+          <div className="relative flex-1">
+            <FiSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search employee or company..."
-              style={{
-                width: '100%',
-                padding: '8px 8px 8px 35px',
-                borderRadius: '4px',
-                border: '1px solid #ddd',
-                fontSize: '14px'
-              }}
+              className="w-full pl-9 pr-8 py-2 rounded border border-gray-300 text-sm"
             />
             {searchTerm && (
               <button
                 type="button"
                 onClick={clearSearch}
-                style={{
-                  position: 'absolute',
-                  right: '8px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#666'
-                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-gray-500"
               >
                 <FiX />
               </button>
@@ -240,32 +209,22 @@ const ManageMap = () => {
           </div>
           <button
             type="submit"
-            style={{
-              marginLeft: '8px',
-              padding: '8px 12px',
-              background: '#3388ff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center'
-            }}
+            className="ml-2 px-3 py-2 bg-[#3388ff] text-white border-none rounded cursor-pointer flex items-center"
           >
-            <FiSearch style={{ marginRight: '5px' }} />
+            <FiSearch className="mr-1" />
             Search
           </button>
         </form>
 
         {/* Search Results Info */}
         {showSearchResults && searchTerm && (
-          <div style={{ marginTop: '10px', padding: '10px', background: '#f8f9fa', borderRadius: '4px' }}>
-            <p style={{ margin: 0, fontSize: '14px', display: 'flex', alignItems: 'center' }}>
-              <FiUsers style={{ marginRight: '5px' }} />
+          <div className="mt-2 p-2 bg-gray-50 rounded">
+            <p className="m-0 text-sm flex items-center">
+              <FiUsers className="mr-1" />
               <strong>{filteredAccounts.length}</strong> {filteredAccounts.length === 1 ? 'result' : 'results'} found
             </p>
-            <p style={{ margin: '5px 0 0', fontSize: '14px', display: 'flex', alignItems: 'center' }}>
-              <FiBriefcase style={{ marginRight: '5px' }} />
+            <p className="mt-1 text-sm flex items-center">
+              <FiBriefcase className="mr-1" />
               <strong>{markers.length}</strong> {markers.length === 1 ? 'company' : 'companies'} displayed
             </p>
           </div>
@@ -298,39 +257,21 @@ const ManageMap = () => {
             color={cluster.isCluster ? '#FF5722' : '#3388ff'}
           >
             {cluster.isCluster ? (
-              <div style={{
-                background: '#FF5722',
-                borderRadius: '50%',
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: '14px',
-                border: '2px solid white',
-                cursor: 'pointer',
-                pointerEvents: 'auto'
-              }}>
+              <div className={`
+        bg-[#FF5722] rounded-full w-full h-full
+        flex justify-center items-center text-white
+        font-bold text-sm border-2 border-white
+        cursor-pointer pointer-events-auto
+      `}>
                 {cluster.size}
               </div>
             ) : (
-              <div style={{
-                background: '#3388ff',
-                borderRadius: '50%',
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: '30px',
-                border: '2px solid white',
-                cursor: 'pointer',
-                pointerEvents: 'auto'
-              }}>
+              <div className={`
+                  bg-[#3388ff] rounded-full w-full h-full
+                  flex justify-center items-center text-white
+                  font-bold text-[30px] border-2 border-white
+                  cursor-pointer pointer-events-auto
+                `}>
                 <FiMapPin />
               </div>
             )}
@@ -339,47 +280,34 @@ const ManageMap = () => {
 
         {selectedCompany && (
           <Overlay anchor={selectedCompany.coordinates} offset={[120, 30]}>
-            <div style={{
-              background: 'white',
-              borderRadius: '8px',
-              padding: '15px',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-              maxWidth: '300px',
-              zIndex: 1000
-            }}>
+            <div className="bg-white rounded-lg p-4 shadow-lg max-w-[300px] z-[1000]">
               {selectedCompany.isCluster ? (
                 <>
-                  <h4 style={{ margin: '0 0 10px', display: 'flex', alignItems: 'center' }}>
-                    <FiUsers style={{ marginRight: '5px' }} />
+                  <h4 className="m-0 mb-2 flex items-center">
+                    <FiUsers className="mr-1" />
                     Cluster ({selectedCompany.size} companies)
                   </h4>
-                  <p style={{ margin: '5px 0', display: 'flex', alignItems: 'center' }}>
-                    <FiMapPin style={{ marginRight: '5px' }} />
+                  <p className="m-1 flex items-center">
+                    <FiMapPin className="mr-1" />
                     <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
                   </p>
-                  <p style={{ margin: '5px 0', display: 'flex', alignItems: 'center' }}>
-                    <FiUsers style={{ marginRight: '5px' }} />
+                  <p className="m-1 flex items-center">
+                    <FiUsers className="mr-1" />
                     <strong>Total Employees:</strong> {selectedCompany.employees.length}
                   </p>
 
-                  <div style={{ margin: '10px 0', borderTop: '1px solid #eee', paddingTop: '10px' }}>
-                    <h5 style={{ display: 'flex', alignItems: 'center', margin: '0 0 10px' }}>
-                      <FiBriefcase style={{ marginRight: '5px' }} />
+                  <div className="my-2 border-t border-gray-200 pt-2">
+                    <h5 className="flex items-center m-0 mb-2">
+                      <FiBriefcase className="mr-1" />
                       Companies in this cluster:
                     </h5>
-                    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                    <div className="max-h-[200px] overflow-y-auto">
                       {selectedCompany.originalCompanies.map((company, i) => (
-                        <div key={i} style={{ 
-                          marginBottom: '8px', 
-                          paddingBottom: '8px', 
-                          borderBottom: '1px solid #f5f5f5',
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}>
-                          <FiBriefcase style={{ marginRight: '8px', flexShrink: 0 }} />
+                        <div key={i} className="mb-2 pb-2 border-b border-gray-100 flex items-center">
+                          <FiBriefcase className="mr-2 flex-shrink-0" />
                           <div>
-                            <p style={{ fontWeight: 'bold', marginBottom: '4px' }}>{company.company_name}</p>
-                            <p style={{ fontSize: '0.9em', margin: 0 }}>
+                            <p className="font-bold mb-1">{company.company_name}</p>
+                            <p className="text-sm m-0">
                               Employees: {company.employees.length}
                             </p>
                           </div>
@@ -390,31 +318,25 @@ const ManageMap = () => {
                 </>
               ) : (
                 <>
-                  <h4 style={{ margin: '0 0 10px', display: 'flex', alignItems: 'center' }}>
-                    <FiBriefcase style={{ marginRight: '5px' }} />
+                  <h4 className="m-0 mb-2 flex items-center">
+                    <FiBriefcase className="mr-1" />
                     {selectedCompany.company_name}
                   </h4>
-                  <p style={{ margin: '5px 0', display: 'flex', alignItems: 'center' }}>
-                    <FiMapPin style={{ marginRight: '5px' }} />
+                  <p className="m-1 flex items-center">
+                    <FiMapPin className="mr-1" />
                     <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
                   </p>
-                  <p style={{ margin: '5px 0', display: 'flex', alignItems: 'center' }}>
-                    <FiUsers style={{ marginRight: '5px' }} />
+                  <p className="m-1 flex items-center">
+                    <FiUsers className="mr-1" />
                     <strong>Employees:</strong> {selectedCompany.employees.length}
                   </p>
-                  <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                  <div className="max-h-[200px] overflow-y-auto">
                     {selectedCompany.employees.map((emp, i) => (
-                      <div key={i} style={{ 
-                        marginBottom: '8px', 
-                        paddingBottom: '8px', 
-                        borderBottom: '1px solid #f5f5f5',
-                        display: 'flex',
-                        alignItems: 'center'
-                      }}>
-                        <FiUsers style={{ marginRight: '8px', flexShrink: 0 }} />
+                      <div key={i} className="mb-2 pb-2 border-b border-gray-100 flex items-center">
+                        <FiUsers className="mr-2 flex-shrink-0" />
                         <div>
                           <strong>{emp.name}</strong><br />
-                          <span style={{ fontSize: '0.9em' }}>{emp.job_title}</span>
+                          <span className="text-sm">{emp.job_title}</span>
                         </div>
                       </div>
                     ))}
@@ -424,21 +346,9 @@ const ManageMap = () => {
 
               <button
                 onClick={() => setSelectedCompany(null)}
-                style={{
-                  marginTop: '10px',
-                  padding: '8px 15px',
-                  background: '#FF5722',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
+                className="mt-2 px-4 py-2 bg-[#FF5722] text-white border-none rounded cursor-pointer w-full flex items-center justify-center"
               >
-                <FiX style={{ marginRight: '5px' }} />
+                <FiX className="mr-1" />
                 Close
               </button>
             </div>
