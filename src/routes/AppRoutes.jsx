@@ -42,6 +42,7 @@ import UserHelp from "../pages/user/Help";
 
 import Unauthorized from "../pages/errors/Unauthorized";
 import SmsPage from "../pages/admin/SmsPage";
+import Updates from "../pages/admin/UnemploymentUpdates";
 
 const AppRoutes = () => {
     return (
@@ -73,7 +74,7 @@ const AppRoutes = () => {
                     <Route path="alumni-map" element={<AlumniGISMap />} />
                     <Route path="manage-feedback" element={<ManageFeedback />} />
                     <Route path="statistical-reports" element={<StatisticalReports />} />
-                    <Route path="sms" element={<SmsPage />} />
+                    <Route path="updates" element={<Updates />} />
 
                 </Route>
             </Route>

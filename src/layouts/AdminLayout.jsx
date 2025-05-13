@@ -53,7 +53,7 @@ const AdminLayout = ({ children }) => {
                                 { path: "/admin/manage-map", label: "Manage Map", icon: "🗺️" },
                                 { path: "/admin/manage-feedback", label: "Feedback", icon: "📝" },
                                 { path: "/admin/statistical-reports", label: "Statistical Reports", icon: "📊" },
-                                { path: "/admin/sms", label: "SMS Page", icon: "📲" },
+                                { path: "/admin/updates", label: "Unemployment Updates", icon: "📲" },
                             ].map(({ path, label, icon }) => (
                                 <li key={path}>
                                     <NavLink
