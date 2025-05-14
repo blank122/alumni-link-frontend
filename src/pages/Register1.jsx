@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
-import axios from "axios";
+import {  useState } from "react";
 import Navbar from "../components/layouts/Navbar";
 import PersonalInfoStep from "./register/PersonalInfoStep";
 import AddressInfoStep from "./register/AddressInfoStep";
@@ -15,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import SkillsAndCertifications from "./register/SkillsAndCertifications";
 
 const MultiStepForm = () => {
-
     const [step, setStep] = useState(1);
     const [userData, setUserData] = useState({
         //personal info
@@ -70,10 +68,8 @@ const MultiStepForm = () => {
         }
     };
 
-
     const handleSubmit = async () => {
         setLoading(true); // Show loading indicator
-
         try {
             const formData = new FormData();
 
@@ -89,7 +85,6 @@ const MultiStepForm = () => {
                     formData.append(key, value);
                 }
             });
-
             // Log properly formatted data
             const jsonObject = {};
             formData.forEach((value, key) => {
@@ -99,9 +94,7 @@ const MultiStepForm = () => {
                     jsonObject[key] = value;
                 }
             });
-
             console.log("Data to be sent to the server:", JSON.stringify(jsonObject, null, 2));
-
             const response = await fetch("http://127.0.0.1:8000/api/register-alumni-dummy", {
                 method: "POST",
                 headers: {
@@ -109,7 +102,6 @@ const MultiStepForm = () => {
                 },
                 body: formData, // Send FormData
             });
-
             const text = await response.text(); // Read response as text first
             try {
                 const data = JSON.parse(text);
@@ -127,11 +119,9 @@ const MultiStepForm = () => {
             setLoading(false);
         }
     };
-
     const validateStep = () => {
         let newErrors = {};
         const phoneRegex = /^(09|\+639)\d{9}$/;
-
         //registration
         if (step === 1) {
             if (!userData.alm_first_name) newErrors.alm_first_name = "First Name is required";
@@ -147,7 +137,6 @@ const MultiStepForm = () => {
             if (!userData.add_full_address) newErrors.add_full_address = "Full Address is required";
             if (!userData.add_lat) newErrors.add_lat = "Latitude is required";
             if (!userData.add_long) newErrors.add_long = "Longitude is required";
-
         }
         //education
         else if (step === 3) {
@@ -170,13 +159,11 @@ const MultiStepForm = () => {
             if (!userData.job_title) newErrors.job_title = "Job title is required";
             if (!userData.start_date) newErrors.start_date = "Year Started is required";
         }
-
         //address info
         else if (step === 7) {
             if (!userData.emp_full_address) newErrors.emp_full_address = "Full Address is required";
             if (!userData.emp_lat) newErrors.emp_lat = "Latitude is required";
             if (!userData.emp_long) newErrors.emp_long = "Longitude is required";
-
         }
         //account info
         else if (step === 8) {
@@ -189,7 +176,6 @@ const MultiStepForm = () => {
 
     const nextStep = () => {
         if (!validateStep()) return;
-
         // Skip Steps 5 & 6 if user is Unemployed (0) or Freelance (1)
         if (step === 5 && (userData.emp_status === "0" || userData.emp_status === "1")) {
             setStep(8); // Jump directly to AccountInfoStep
@@ -211,36 +197,27 @@ const MultiStepForm = () => {
         const commonSteps = [1, 2, 3, 4];
         const employedSteps = [5, 6, 7];
         const finalSteps = [8, 9];
-
         if (userData.emp_status === "0" || userData.emp_status === "1") {
             return [...commonSteps, ...finalSteps];
         }
-
         return [...commonSteps, ...employedSteps, ...finalSteps];
     };
-
     const visibleSteps = getVisibleSteps();
     const currentStepIndex = visibleSteps.indexOf(step) + 1;
     const totalSteps = visibleSteps.length;
-
     return (
         <div>
             <Navbar />
             <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
-
-
                 {step === 1 && <PersonalInfoStep userData={userData} handleChange={handleChange} errors={errors}
                     currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
-
                 {step === 2 && <AddressInfoStep userData={userData} setUserData={setUserData}
                     handleChange={handleChange} errors={errors}
                     currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
-
                 {step === 3 && <EducationalBackgroundInfo userData={userData}
                     handleChange={handleChange} errors={errors}
                     currentStepIndex={currentStepIndex} totalSteps={totalSteps}
                 />}
-
                 {step === 4 && <SkillsAndCertifications
                     userData={userData}
                     handleChange={handleChange}
@@ -254,10 +231,8 @@ const MultiStepForm = () => {
                         }));
                     }}
                 />}
-
                 {step === 5 && <EmploymentStatus userData={userData} handleChange={handleChange} errors={errors}
                     currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
-
                 {step === 6 && <EmploymentInfoStep userData={userData} handleChange={handleChange} errors={errors}
                     currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
                 {step === 7 && <EmploymentAddressStep userData={userData} setUserData={setUserData} handleChange={handleChange} errors={errors}
@@ -266,14 +241,12 @@ const MultiStepForm = () => {
                     currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
                 {step === 9 && <ReviewStep userData={userData}
                     currentStepIndex={currentStepIndex} totalSteps={totalSteps} />}
-
                 <div className="flex justify-between mt-4">
                     {step > 1 && (
                         <button onClick={prevStep} className="px-4 py-2 bg-gray-400 text-white rounded">
                             Back
                         </button>
                     )}
-
                     {step < 9 ? (
                         <button onClick={nextStep} className="px-4 py-2 bg-blue-500 text-white rounded">
                             Next
@@ -291,7 +264,6 @@ const MultiStepForm = () => {
                 </div>
             </div>
         </div>
-
     );
 };
 
