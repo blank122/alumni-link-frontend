@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Map, Marker } from "pigeon-maps";
 import { useGeolocated } from "react-geolocated";
 import { useAuth } from "../../../contexts/AuthContext";
+import { FaTimes, FaBuilding, FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa";
 
 const EmploymentModal = ({ isOpen, onClose }) => {
     const { user, token } = useAuth();
@@ -98,120 +99,186 @@ const EmploymentModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg w-full max-w-lg p-6 max-h-[95vh] overflow-y-auto">
-                <h2 className="text-xl font-bold mb-4">Add Employment</h2>
-
-                <div className="mb-4">
-                    <label className="block font-medium text-gray-700">Employment Type</label>
-                    <select
-                        value={employmentType}
-                        onChange={handleEmploymentTypeChange}
-                        className="w-full p-2 border border-gray-300 rounded-md"
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+            <div className="bg-white rounded-lg w-full max-w-2xl mx-auto shadow-xl flex flex-col max-h-[90vh]">
+                {/* Modal Header */}
+                <div className="border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 bg-white z-10">
+                    <h2 className="text-xl font-semibold text-gray-800">Add experience</h2>
+                    <button
+                        onClick={onClose}
+                        className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100"
                     >
-                        <option value="2">Full-time Employment</option>
-                        <option value="1">Freelancing/Part-time</option>
-                    </select>
+                        <FaTimes className="text-lg" />
+                    </button>
                 </div>
 
-                <div className="mb-4">
-                    <label className="block font-medium text-gray-700">Job Title</label>
-                    <input
-                        type="text"
-                        name="job_title"
-                        value={newJob.job_title}
-                        onChange={handleInputChange}
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                    />
-                </div>
+                {/* Scrollable Content */}
+                <div className="overflow-y-auto flex-1 px-6 py-4">
+                    <div className="space-y-6">
+                        {/* Employment Type */}
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-gray-700">Employment type</label>
+                            <div className="flex space-x-4">
+                                <button
+                                    type="button"
+                                    onClick={() => handleEmploymentTypeChange({ target: { value: "2" } })}
+                                    className={`px-4 py-2 text-sm rounded-full ${employmentType === "2" ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}
+                                >
+                                    Full-time
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleEmploymentTypeChange({ target: { value: "1" } })}
+                                    className={`px-4 py-2 text-sm rounded-full ${employmentType === "1" ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}
+                                >
+                                    Freelance
+                                </button>
+                            </div>
+                        </div>
 
-                <div className="mb-4">
-                    <label className="block font-medium text-gray-700">Company Name</label>
-                    <input
-                        type="text"
-                        name="company_name"
-                        value={newJob.company_name}
-                        onChange={handleInputChange}
-                        readOnly={employmentType === "1"}
-                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block font-medium text-gray-700">Start Date</label>
-                    <input
-                        type="date"
-                        name="start_date"
-                        value={newJob.start_date}
-                        onChange={handleInputChange}
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                    />
-                </div>
-
-                <div className="mb-4">
-                    <label className="block font-medium text-gray-700">End Date</label>
-                    <input
-                        type="date"
-                        name="end_date"
-                        value={newJob.end_date}
-                        onChange={handleInputChange}
-                        className="w-full p-2 border border-gray-300 rounded-md"
-                    />
-                </div>
-
-                {/* Show map fields only for full_time */}
-                {employmentType === "2" && (
-                    <>
-                        <div className="mb-4">
-                            <label className="block font-medium text-gray-700">Full Address</label>
+                        {/* Job Title */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Title*</label>
                             <input
                                 type="text"
-                                name="emp_full_address"
-                                value={newJob.emp_full_address}
+                                name="job_title"
+                                value={newJob.job_title}
                                 onChange={handleInputChange}
-                                placeholder="Enter address"
-                                className="w-full p-2 border border-gray-300 rounded-md"
+                                placeholder="Ex: Software Engineer"
+                                className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                required
                             />
                         </div>
 
-                        <div className="mb-4 grid grid-cols-2 gap-4">
-                            <input
-                                type="text"
-                                name="emp_add_lat"
-                                value={newJob.emp_add_lat}
-                                readOnly
-                                placeholder="Latitude"
-                                className="w-full p-2 border border-gray-300 rounded-md"
-                            />
-                            <input
-                                type="text"
-                                name="emp_add_long"
-                                value={newJob.emp_add_long}
-                                readOnly
-                                placeholder="Longitude"
-                                className="w-full p-2 border border-gray-300 rounded-md"
-                            />
+                        {/* Company Name */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">
+                                {employmentType === "1" ? "What do you do?" : "Company name*"}
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaBuilding className="text-gray-400" />
+                                </div>
+                                <input
+                                    type="text"
+                                    name="company_name"
+                                    value={newJob.company_name}
+                                    onChange={handleInputChange}
+                                    placeholder={employmentType === "1" ? "Ex: Graphic Design" : "Ex: Microsoft"}
+                                    readOnly={employmentType === "1"}
+                                    className={`w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 ${employmentType === "1" ? 'bg-gray-100' : ''}`}
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        <div className="mb-6 border rounded-md overflow-hidden">
-                            <Map
-                                height={300}
-                                center={markerPosition}
-                                defaultZoom={15}
-                                onClick={handleMapClick}
-                            >
-                                <Marker width={50} anchor={markerPosition} />
-                            </Map>
+                        {/* Date Range */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Start date*</label>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <FaCalendarAlt className="text-gray-400" />
+                                    </div>
+                                    <input
+                                        type="date"
+                                        name="start_date"
+                                        value={newJob.start_date}
+                                        onChange={handleInputChange}
+                                        className="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">End date</label>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <FaCalendarAlt className="text-gray-400" />
+                                    </div>
+                                    <input
+                                        type="date"
+                                        name="end_date"
+                                        value={newJob.end_date}
+                                        onChange={handleInputChange}
+                                        className="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                    />
+                                </div>
+                            </div>
                         </div>
-                    </>
-                )}
 
-                <div className="flex justify-end space-x-3">
-                    <button onClick={onClose} className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                        {/* Location Fields (only for full-time) */}
+                        {employmentType === "2" && (
+                            <>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Location</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <FaMapMarkerAlt className="text-gray-400" />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            name="emp_full_address"
+                                            value={newJob.emp_full_address}
+                                            onChange={handleInputChange}
+                                            placeholder="Ex: San Francisco, CA"
+                                            className="w-full pl-10 p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Latitude</label>
+                                        <input
+                                            type="text"
+                                            name="emp_add_lat"
+                                            value={newJob.emp_add_lat}
+                                            readOnly
+                                            className="w-full p-3 border border-gray-300 rounded-md bg-gray-100"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Longitude</label>
+                                        <input
+                                            type="text"
+                                            name="emp_add_long"
+                                            value={newJob.emp_add_long}
+                                            readOnly
+                                            className="w-full p-3 border border-gray-300 rounded-md bg-gray-100"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="border rounded-md overflow-hidden h-96">
+                                    <Map
+                                        height={384}
+                                        center={markerPosition}
+                                        defaultZoom={15}
+                                        onClick={handleMapClick}
+                                    >
+                                        <Marker width={50} anchor={markerPosition} />
+                                    </Map>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Sticky Footer */}
+                <div className="bg-gray-50 px-6 py-4 flex justify-end border-t border-gray-200 sticky bottom-0">
+                    <button
+                        onClick={onClose}
+                        className="px-6 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 mr-3"
+                    >
                         Cancel
                     </button>
-                    <button onClick={handleSave} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                        Save
+                    <button
+                        onClick={handleSave}
+                        disabled={isLoading}
+                        className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+                    >
+                        {isLoading ? 'Saving...' : 'Save'}
                     </button>
                 </div>
             </div>
