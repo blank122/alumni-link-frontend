@@ -4,6 +4,7 @@ import axios from "axios";
 import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLock, FaPlus } from "react-icons/fa";
 import EmploymentModal from "./Components/EmploymentModal";
 import AddressModal from "./Components/AddressModal";
+import formatDate from "../../utils/helper";
 
 const Profile = () => {
     const { user, token } = useAuth();
@@ -159,14 +160,16 @@ const Profile = () => {
 
             {/* Employment */}
             <div className="mt-10 w-full max-w-6xl mx-auto px-4">
-                <div className="bg-white shadow-xl rounded-2xl p-8 transition duration-300 ease-in-out">
-                    <h2 className="text-2xl font-bold flex items-center gap-3 text-gray-800 mb-6">
-                        <FaBuilding className="text-blue-600 text-2xl" />
-                        Employment History
-                        {/* Plus Button to Open Modal */}
+                <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                            <FaBuilding className="text-blue-600" />
+                            Experience
+                        </h2>
                         <button
                             onClick={() => setShowModal(true)}
-                            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                            className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
+                            title="Add experience"
                         >
                             <FaPlus />
                         </button>
@@ -175,42 +178,47 @@ const Profile = () => {
                             isOpen={showModal}
                             onClose={() => setShowModal(false)}
                         />
-                    </h2>
+                    </div>
 
                     {employment_history && employment_history.length > 0 ? (
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             {employment_history.map((job) => (
-                                <div
-                                    key={job.id}
-                                    className="bg-gray-50 hover:bg-gray-100 transition-colors duration-200 p-5 rounded-xl border border-gray-200"
-                                >
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <p className="text-gray-800">
-                                            <span className="font-medium">Profession:</span> {job.job_title}
-                                        </p>
-                                        <p className="text-gray-800">
-                                            <span className="font-medium">Company:</span> {job.company_name}
-                                        </p>
-                                        <p className="text-gray-800">
-                                            <span className="font-medium">Start Date:</span> {job.start_date}
-                                        </p>
-                                        <p className="text-gray-800">
-                                            <span className="font-medium">End Date:</span> {job.end_date || "Present"}
-                                        </p>
-                                        <p className="text-gray-600 col-span-full text-sm">
-                                            <span className="font-medium">Work Location:</span> {job.address_employment?.full_address || "N/A"}
-                                        </p>
+                                <div key={job.id} className="pb-4 border-b border-gray-100 last:border-0 last:pb-0">
+                                    <div className="flex gap-4">
+                                        <div className="mt-1">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <FaBuilding className="text-gray-600" />
+                                            </div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold text-gray-800">{job.job_title}</h3>
+                                            <p className="text-gray-600">{job.company_name}</p>
+                                            <p className="text-sm text-gray-500">
+                                                {formatDate(job.start_date)} - {job.end_date ? formatDate(job.end_date) : "Present"}
+                                            </p>
+                                            <p className="text-sm text-gray-500 mt-1">
+                                                <FaMapMarkerAlt className="inline mr-1" />
+                                                {job.employment_address?.full_address || "Location not specified"}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     ) : (
                         <div className="text-center py-8 text-gray-500">
-                            No job history
+                            <p className="mb-2">No experience added yet</p>
+                            <button
+                                onClick={() => setShowModal(true)}
+                                className="text-blue-500 hover:text-blue-700 font-medium"
+                            >
+                                + Add experience
+                            </button>
                         </div>
                     )}
                 </div>
             </div>
+
 
 
             {/* change password modal */}
