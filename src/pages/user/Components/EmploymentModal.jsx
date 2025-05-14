@@ -22,7 +22,7 @@ const EmploymentModal = ({ isOpen, onClose }) => {
         emp_add_long: "",
     });
 
-    const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated({
+    const { coords } = useGeolocated({
         positionOptions: { enableHighAccuracy: true },
         userDecisionTimeout: 5000,
     });

@@ -9,6 +9,7 @@ export const createApiClient = (token) => {
   };
 
   return {
+    //api for admin
     getAlumni: () => axios.get(`${API_BASE_URL}/admin/get-alumni`, { headers }),
     getPendingAccounts: () => axios.get(`${API_BASE_URL}/admin/pending-accounts`, { headers }),
     getApprovedAccounts: () => axios.get(`${API_BASE_URL}/admin/approved-accounts`, { headers }),
@@ -17,6 +18,10 @@ export const createApiClient = (token) => {
     getUnemployed:  () => axios.get(`${API_BASE_URL}/admin/unemployed-alumni-data`, { headers }),
     sendSms:(id) => 
         axios.post(`${API_BASE_URL}/admin/send-sms-unemployed/${id}`, { headers }),
+    
+    //api for user
+    addCareer:(id, newJob) => 
+        axios.post(`${API_BASE_URL}/add-career/${id}`, {newJob}, { headers }),
   };
 };
 
