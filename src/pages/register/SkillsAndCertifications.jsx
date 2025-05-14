@@ -1,25 +1,88 @@
 /* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ProgressBar from "../user/Components/ProgressBar";
 
 
-const SkillsAndCertifications = ({ userData,
+const SkillsAndCertifications = ({
+    userData,
     handleChange,
-    techSkills,
-    addTechnicalSkill,
-    removeTechnicalSkill,
-    loadingTech,
-    softSkills,
-    addSoftSkill,
-    removeSoftSkill,
-    loadingSoft,
     errors,
-    currentStepIndex, totalSteps
-}) => {
+    currentStepIndex,
+    totalSteps,
+    onSkillsUpdate // Add this new prop
 
+}) => {
+    const [softSkills, setSoftSkills] = useState([]);
+    const [loadingSoft, setLoadingSoftSkills] = useState(true);
+    const [techSkills, setTechSkills] = useState([]);
+    const [loadingTech, setLoadingTechSkills] = useState(true);
+
+    const addTechnicalSkill = (skill) => {
+        if (skill && !userData.technical_skills_logs.includes(skill)) {
+            const updatedSkills = [...userData.technical_skills_logs, skill];
+            onSkillsUpdate('technical_skills_logs', updatedSkills);
+        }
+    };
+
+    const removeTechnicalSkill = (skill) => {
+        const updatedSkills = userData.technical_skills_logs.filter(s => s !== skill);
+        onSkillsUpdate('technical_skills_logs', updatedSkills);
+    };
+
+    const addSoftSkill = (skill) => {
+        if (skill && !userData.soft_skills_logs.includes(skill)) {
+            const updatedSkills = [...userData.soft_skills_logs, skill];
+            onSkillsUpdate('soft_skills_logs', updatedSkills);
+        }
+    };
+
+    const removeSoftSkill = (skill) => {
+        const updatedSkills = userData.soft_skills_logs.filter(s => s !== skill);
+        onSkillsUpdate('soft_skills_logs', updatedSkills);
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/soft-skills", {
+                    headers: {
+                        Accept: "application/json",
+                    },
+                });
+                setSoftSkills(response.data.data);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error("Error fetching soft skills:", error);
+            } finally {
+                setLoadingSoftSkills(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/technical-skills", {
+                    headers: {
+                        Accept: "application/json",
+                    },
+                });
+                setTechSkills(response.data.data);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error("Error fetching technical skills:", error);
+            } finally {
+                setLoadingTechSkills(false);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <motion.div
@@ -50,8 +113,6 @@ const SkillsAndCertifications = ({ userData,
                         />
                         {errors.cert_serial_no && <p className="text-red-500 text-xs mt-1">{errors.cert_serial_no}</p>}
                     </div>
-
-                    {/* Institution Name */}
                     <div>
                         <label htmlFor="cert_name" className="block text-sm font-medium text-gray-700">
                             Certificate Name
@@ -108,8 +169,6 @@ const SkillsAndCertifications = ({ userData,
                         </div>
                         {errors.cert_file && <p className="text-red-500 text-xs mt-1">{errors.cert_file}</p>}
                     </div>
-
-
                     <div>
                         <label htmlFor="cert_awarded" className="block text-sm font-medium text-gray-700">
                             Certification awarded
@@ -135,8 +194,6 @@ const SkillsAndCertifications = ({ userData,
                 {/* Technical Skills Selection */}
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold">Technical Skills</h3>
-
-                    {/* Loading State */}
                     {loadingTech ? (
                         <p>Loading skills...</p>
                     ) : (
@@ -152,13 +209,8 @@ const SkillsAndCertifications = ({ userData,
                                     </option>
                                 ))}
                             </select>
-
-
-                            {/* Display Selected Skills */}
                             {userData.technical_skills_logs.map((skillId, index) => {
-                                // Convert IDs to the same type to avoid mismatches
                                 const skill = techSkills.find(s => Number(s.id) === Number(skillId));
-
                                 return (
                                     <div key={index} className="flex items-center gap-2 mt-2">
                                         <span className="p-2 bg-gray-200 rounded-md">{skill ? skill.tch_skill_name : "Unknown Skill"}</span>
@@ -172,24 +224,19 @@ const SkillsAndCertifications = ({ userData,
                                     </div>
                                 );
                             })}
-
-
                         </>
                     )}
                 </div>
 
                 {/* soft skills */}
-                {/* Technical Skills Selection */}
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold">Soft Skills</h3>
-
-                    {/* Loading State */}
                     {loadingSoft ? (
                         <p>Loading skills...</p>
                     ) : (
                         <>
                             <select
-                                onChange={(e) => addSoftSkill(Number(e.target.value))} // Store ID, not name
+                                onChange={(e) => addSoftSkill(Number(e.target.value))}
                                 className="w-full p-2 border rounded-md mt-2"
                             >
                                 <option value="">Select a skill</option>
@@ -199,12 +246,8 @@ const SkillsAndCertifications = ({ userData,
                                     </option>
                                 ))}
                             </select>
-
-                            {/* Display Selected Skills */}
                             {userData.soft_skills_logs.map((skillId, index) => {
-                                // Convert IDs to the same type to avoid mismatches
                                 const skill = softSkills.find(s => Number(s.id) === Number(skillId));
-
                                 return (
                                     <div key={index} className="flex items-center gap-2 mt-2">
                                         <span className="p-2 bg-gray-200 rounded-md">{skill ? skill.sft_skill_name : "Unknown Skill"}</span>
