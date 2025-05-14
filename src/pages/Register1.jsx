@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import {  useState } from "react";
+import { useState } from "react";
 import Navbar from "../components/layouts/Navbar";
 import PersonalInfoStep from "./register/PersonalInfoStep";
 import AddressInfoStep from "./register/AddressInfoStep";
@@ -39,6 +39,9 @@ const MultiStepForm = () => {
         //technical skills logs
         technical_skills_logs: [], // Store selected skills
         soft_skills_logs: [], // Store selected skills
+        custom_tech_skills: [],
+        custom_soft_skills: [],
+
         //employment status
         emp_status: "",
         //employment details
@@ -69,45 +72,60 @@ const MultiStepForm = () => {
     };
 
     const handleSubmit = async () => {
-        setLoading(true); // Show loading indicator
+        setLoading(true);
         try {
             const formData = new FormData();
 
+            // Handle all regular fields including array fields
             Object.entries(userData).forEach(([key, value]) => {
-                // Ensure technical_skills_logs and soft_skills_logs are arrays
+                // Handle array fields (technical_skills_logs and soft_skills_logs)
                 if (key === "technical_skills_logs" || key === "soft_skills_logs") {
                     if (Array.isArray(value)) {
-                        value.forEach((item) => formData.append(`${key}[]`, item)); // Append each value in the array
-                    } else if (typeof value === "string") {
-                        value.split(",").forEach((item) => formData.append(`${key}[]`, item.trim()));
+                        value.forEach((item) => formData.append(`${key}[]`, item));
+                    } else if (value) { // Handle case where it might be a single value
+                        formData.append(`${key}[]`, value);
                     }
-                } else {
+                }
+                // Handle file uploads
+                else if (key === "cert_file" && value instanceof File) {
+                    formData.append(key, value);
+                }
+                // Skip custom skills here - we'll handle them separately
+                else if (key !== "custom_tech_skills" && key !== "custom_soft_skills") {
                     formData.append(key, value);
                 }
             });
-            // Log properly formatted data
-            const jsonObject = {};
-            formData.forEach((value, key) => {
-                if (jsonObject[key]) {
-                    jsonObject[key] = [].concat(jsonObject[key], value); // Convert to an array
-                } else {
-                    jsonObject[key] = value;
-                }
-            });
-            console.log("Data to be sent to the server:", JSON.stringify(jsonObject, null, 2));
+
+            // Handle custom skills by converting them to JSON strings
+            if (userData.custom_tech_skills?.length > 0) {
+                formData.append('custom_tech_skills', JSON.stringify(userData.custom_tech_skills));
+            }
+            if (userData.custom_soft_skills?.length > 0) {
+                formData.append('custom_soft_skills', JSON.stringify(userData.custom_soft_skills));
+            }
+
+            // Log properly formatted data for debugging
+            const logData = {
+                ...userData,
+                cert_file: userData.cert_file?.name || 'No file',
+                custom_tech_skills: userData.custom_tech_skills,
+                custom_soft_skills: userData.custom_soft_skills
+            };
+            console.log("Data to be sent to the server:", logData);
+
             const response = await fetch("http://127.0.0.1:8000/api/register-alumni-dummy", {
                 method: "POST",
                 headers: {
-                    "Accept": "application/json", 
+                    "Accept": "application/json",
                 },
-                body: formData, 
+                body: formData,
             });
-            const text = await response.text(); 
+
+            const text = await response.text();
             try {
                 const data = JSON.parse(text);
                 console.log("Server Response:", data);
                 alert("Registration Successful!");
-                navigate("/"); 
             } catch (err) {
                 console.error("Unexpected response format:", text);
                 alert("Unexpected response from server.");
@@ -119,6 +137,7 @@ const MultiStepForm = () => {
             setLoading(false);
         }
     };
+
     const validateStep = () => {
         let newErrors = {};
         const phoneRegex = /^(09|\+639)\d{9}$/;

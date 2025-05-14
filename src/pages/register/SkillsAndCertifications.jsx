@@ -7,20 +7,22 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ProgressBar from "../user/Components/ProgressBar";
 
-
 const SkillsAndCertifications = ({
     userData,
     handleChange,
     errors,
     currentStepIndex,
     totalSteps,
-    onSkillsUpdate // Add this new prop
-
+    onSkillsUpdate
 }) => {
     const [softSkills, setSoftSkills] = useState([]);
     const [loadingSoft, setLoadingSoftSkills] = useState(true);
     const [techSkills, setTechSkills] = useState([]);
     const [loadingTech, setLoadingTechSkills] = useState(true);
+    const [showCustomTechInput, setShowCustomTechInput] = useState(false);
+    const [customTechSkill, setCustomTechSkill] = useState("");
+    const [showCustomSoftInput, setShowCustomSoftInput] = useState(false);
+    const [customSoftSkill, setCustomSoftSkill] = useState("");
 
     const addTechnicalSkill = (skill) => {
         if (skill && !userData.technical_skills_logs.includes(skill)) {
@@ -46,6 +48,62 @@ const SkillsAndCertifications = ({
         onSkillsUpdate('soft_skills_logs', updatedSkills);
     };
 
+    const handleTechSkillSelect = (e) => {
+        const value = e.target.value;
+        if (value === "other") {
+            setShowCustomTechInput(true);
+        } else if (value) {
+            setShowCustomTechInput(false);
+            addTechnicalSkill(Number(value));
+        }
+    };
+
+    const handleSoftSkillSelect = (e) => {
+        const value = e.target.value;
+        if (value === "other") {
+            setShowCustomSoftInput(true);
+        } else if (value) {
+            setShowCustomSoftInput(false);
+            addSoftSkill(Number(value));
+        }
+    };
+
+    const addCustomTechSkill = () => {
+        if (customTechSkill.trim()) {
+            const newSkill = {
+                id: Date.now(), // Temporary ID
+                skill_name: customTechSkill.trim()
+            };
+            const updatedSkills = [...userData.custom_tech_skills, newSkill];
+            onSkillsUpdate('custom_tech_skills', updatedSkills);
+            setCustomTechSkill("");
+            setShowCustomTechInput(false);
+        }
+    };
+
+    const removeCustomTechSkill = (id) => {
+        const updatedSkills = userData.custom_tech_skills.filter(s => s.id !== id);
+        onSkillsUpdate('custom_tech_skills', updatedSkills);
+    };
+
+    const addCustomSoftSkill = () => {
+        if (customSoftSkill.trim()) {
+            const newSkill = {
+                id: Date.now(), // Temporary ID
+                skill_name: customSoftSkill.trim()
+            };
+            const updatedSkills = [...userData.custom_soft_skills, newSkill];
+            onSkillsUpdate('custom_soft_skills', updatedSkills);
+            setCustomSoftSkill("");
+            setShowCustomSoftInput(false);
+        }
+    };
+
+    const removeCustomSoftSkill = (id) => {
+        const updatedSkills = userData.custom_soft_skills.filter(s => s.id !== id);
+        onSkillsUpdate('custom_soft_skills', updatedSkills);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -55,7 +113,6 @@ const SkillsAndCertifications = ({
                     },
                 });
                 setSoftSkills(response.data.data);
-                console.log(response.data.data);
             } catch (error) {
                 console.error("Error fetching soft skills:", error);
             } finally {
@@ -74,7 +131,6 @@ const SkillsAndCertifications = ({
                     },
                 });
                 setTechSkills(response.data.data);
-                console.log(response.data.data);
             } catch (error) {
                 console.error("Error fetching technical skills:", error);
             } finally {
@@ -189,8 +245,8 @@ const SkillsAndCertifications = ({
                         />
                         {errors.cert_awarded && <p className="text-red-500 text-xs mt-1">{errors.cert_awarded}</p>}
                     </div>
-
                 </div>
+
                 {/* Technical Skills Selection */}
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold">Technical Skills</h3>
@@ -199,16 +255,46 @@ const SkillsAndCertifications = ({
                     ) : (
                         <>
                             <select
-                                onChange={(e) => addTechnicalSkill(Number(e.target.value))} // Store ID, not name
+                                onChange={handleTechSkillSelect}
                                 className="w-full p-2 border rounded-md mt-2"
+                                value=""
                             >
                                 <option value="">Select a skill</option>
                                 {techSkills.map((skill) => (
-                                    <option key={skill.id} value={skill.id}> {/* Store ID here */}
+                                    <option key={skill.id} value={skill.id}>
                                         {skill.tch_skill_name}
                                     </option>
                                 ))}
+                                <option value="other">Other (Not listed)</option>
                             </select>
+
+                            {showCustomTechInput && (
+                                <div className="flex gap-2 mt-2">
+                                    <input
+                                        type="text"
+                                        value={customTechSkill}
+                                        onChange={(e) => setCustomTechSkill(e.target.value)}
+                                        placeholder="Enter your technical skill"
+                                        className="flex-1 p-2 border rounded-md"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={addCustomTechSkill}
+                                        className="px-3 py-2 bg-green-500 text-white rounded"
+                                    >
+                                        Add
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowCustomTechInput(false)}
+                                        className="px-3 py-2 bg-gray-500 text-white rounded"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Display selected predefined technical skills */}
                             {userData.technical_skills_logs.map((skillId, index) => {
                                 const skill = techSkills.find(s => Number(s.id) === Number(skillId));
                                 return (
@@ -224,11 +310,25 @@ const SkillsAndCertifications = ({
                                     </div>
                                 );
                             })}
+
+                            {/* Display custom technical skills */}
+                            {userData.custom_tech_skills.map((skill, index) => (
+                                <div key={index} className="flex items-center gap-2 mt-2">
+                                    <span className="p-2 bg-gray-200 rounded-md">{skill.skill_name}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => removeCustomTechSkill(skill.id)}
+                                        className="px-3 py-2 bg-red-500 text-white rounded"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
                         </>
                     )}
                 </div>
 
-                {/* soft skills */}
+                {/* Soft Skills Selection */}
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold">Soft Skills</h3>
                     {loadingSoft ? (
@@ -236,8 +336,9 @@ const SkillsAndCertifications = ({
                     ) : (
                         <>
                             <select
-                                onChange={(e) => addSoftSkill(Number(e.target.value))}
+                                onChange={handleSoftSkillSelect}
                                 className="w-full p-2 border rounded-md mt-2"
+                                value=""
                             >
                                 <option value="">Select a skill</option>
                                 {softSkills.map((skill) => (
@@ -245,7 +346,36 @@ const SkillsAndCertifications = ({
                                         {skill.sft_skill_name}
                                     </option>
                                 ))}
+                                <option value="other">Other (Not listed)</option>
                             </select>
+
+                            {showCustomSoftInput && (
+                                <div className="flex gap-2 mt-2">
+                                    <input
+                                        type="text"
+                                        value={customSoftSkill}
+                                        onChange={(e) => setCustomSoftSkill(e.target.value)}
+                                        placeholder="Enter your soft skill"
+                                        className="flex-1 p-2 border rounded-md"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={addCustomSoftSkill}
+                                        className="px-3 py-2 bg-green-500 text-white rounded"
+                                    >
+                                        Add
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowCustomSoftInput(false)}
+                                        className="px-3 py-2 bg-gray-500 text-white rounded"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Display selected predefined soft skills */}
                             {userData.soft_skills_logs.map((skillId, index) => {
                                 const skill = softSkills.find(s => Number(s.id) === Number(skillId));
                                 return (
@@ -261,6 +391,20 @@ const SkillsAndCertifications = ({
                                     </div>
                                 );
                             })}
+
+                            {/* Display custom soft skills */}
+                            {userData.custom_soft_skills.map((skill, index) => (
+                                <div key={index} className="flex items-center gap-2 mt-2">
+                                    <span className="p-2 bg-gray-200 rounded-md">{skill.skill_name}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => removeCustomSoftSkill(skill.id)}
+                                        className="px-3 py-2 bg-red-500 text-white rounded"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
                         </>
                     )}
                 </div>
