@@ -98,16 +98,16 @@ const MultiStepForm = () => {
             const response = await fetch("http://127.0.0.1:8000/api/register-alumni-dummy", {
                 method: "POST",
                 headers: {
-                    "Accept": "application/json", // Ensure Laravel accepts JSON responses
+                    "Accept": "application/json", 
                 },
-                body: formData, // Send FormData
+                body: formData, 
             });
-            const text = await response.text(); // Read response as text first
+            const text = await response.text(); 
             try {
                 const data = JSON.parse(text);
                 console.log("Server Response:", data);
                 alert("Registration Successful!");
-                navigate("/"); // Redirect after success
+                navigate("/"); 
             } catch (err) {
                 console.error("Unexpected response format:", text);
                 alert("Unexpected response from server.");
