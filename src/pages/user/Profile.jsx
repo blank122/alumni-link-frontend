@@ -45,59 +45,96 @@ const Profile = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
             {/* Profile Card */}
-            <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-6xl mx-auto mt-10 transition duration-300 ease-in-out">
-                <div className="flex items-center gap-3 mb-6">
-                    <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-                        <span className="text-2xl">ℹ️</span>
-                        General Information
-                    </h2>
-                </div>
-
-                <div className="flex items-center gap-6 mb-6">
-                    <div className="w-20 h-20 bg-blue-500 text-white rounded-full flex items-center justify-center text-3xl font-bold shadow-md">
-                        {alumni.alm_first_name[0]}{alumni.alm_last_name[0]}
-                    </div>
-                    <div>
-                        <h1 className="text-2xl font-semibold text-gray-800">
-                            {alumni.alm_first_name} {alumni.alm_last_name}
-                        </h1>
-                        <p className="mt-2 text-gray-700">
-                            <strong>Employment Status:</strong>{' '}
-                            {
-                                employment_status?.emp_info_status === '0' ? 'Unemployed' :
-                                    employment_status?.emp_info_status === '1' ? 'Freelancer' :
-                                        employment_status?.emp_info_status === '2' ? 'Employed' :
-                                            'Not specified'
-                            }
-                        </p>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 mt-10 w-full max-w-6xl mx-auto px-4 overflow-hidden">
+                {/* Header */}
+                <div className="border-b border-gray-200 px-6 py-4">
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
+                            <div className="bg-blue-50 p-2 rounded-full">
+                                <span className="text-blue-600">ℹ️</span>
+                            </div>
+                            General Information
+                        </h2>
+                        <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            Edit
+                        </button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-gray-50 p-4 rounded-lg flex items-center gap-3">
-                        <FaUser className="text-blue-500 text-xl" />
-                        <p className="text-gray-800">
-                            <span className="font-medium">Gender:</span> {alumni.alm_gender}
-                        </p>
+                {/* Profile Section */}
+                <div className="p-6">
+                    <div className="flex items-start gap-6">
+                        <div className="w-24 h-24 bg-blue-500 text-white rounded-full flex items-center justify-center text-4xl font-bold shadow-inner">
+                            {alumni.alm_first_name[0]}{alumni.alm_last_name[0]}
+                        </div>
+
+                        <div className="flex-1">
+                            <h1 className="text-2xl font-semibold text-gray-800 mb-1">
+                                {alumni.alm_first_name} {alumni.alm_last_name}
+                            </h1>
+
+                            <div className="flex items-center gap-2 mb-4">
+                                <span className={`inline-block w-3 h-3 rounded-full ${employment_status?.emp_info_status === '0' ? 'bg-red-500' :
+                                        employment_status?.emp_info_status === '1' ? 'bg-yellow-500' :
+                                            employment_status?.emp_info_status === '2' ? 'bg-green-500' :
+                                                'bg-gray-500'
+                                    }`}></span>
+                                <p className="text-gray-600">
+                                    {
+                                        employment_status?.emp_info_status === '0' ? 'Currently unemployed' :
+                                            employment_status?.emp_info_status === '1' ? 'Freelancing' :
+                                                employment_status?.emp_info_status === '2' ? 'Currently employed' :
+                                                    'Employment status not specified'
+                                    }
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="bg-gray-50 p-4 rounded-lg flex items-center gap-3">
-                        <FaPhone className="text-blue-500 text-xl" />
-                        <p className="text-gray-800">
-                            <span className="font-medium">Contact:</span> {alumni.alm_contact_number}
-                        </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-lg flex items-center gap-3">
-                        <FaEnvelope className="text-blue-500 text-xl" />
-                        <p className="text-gray-800">
-                            <span className="font-medium">Email:</span> {data.email}
-                        </p>
-                    </div>
-                    <div
-                        className="bg-gray-50 p-4 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-gray-100 transition"
-                        onClick={() => setChangePassword(true)}
-                    >
-                        <FaLock className="text-blue-500 text-xl" />
-                        <p className="text-gray-800 font-medium">Change Password</p>
+
+                    {/* Details Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <div className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div className="bg-blue-50 p-2 rounded-full mt-1">
+                                <FaUser className="text-blue-600 text-lg" />
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500">Gender</p>
+                                <p className="text-gray-800 font-medium">{alumni.alm_gender || 'Not specified'}</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div className="bg-blue-50 p-2 rounded-full mt-1">
+                                <FaPhone className="text-blue-600 text-lg" />
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500">Contact</p>
+                                <p className="text-gray-800 font-medium">{alumni.alm_contact_number || 'Not provided'}</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div className="bg-blue-50 p-2 rounded-full mt-1">
+                                <FaEnvelope className="text-blue-600 text-lg" />
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500">Email</p>
+                                <p className="text-gray-800 font-medium">{data.email}</p>
+                            </div>
+                        </div>
+
+                        <div
+                            className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+                            onClick={() => setChangePassword(true)}
+                        >
+                            <div className="bg-blue-50 p-2 rounded-full mt-1">
+                                <FaLock className="text-blue-600 text-lg" />
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500">Password</p>
+                                <p className="text-blue-600 font-medium">Change password</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -185,7 +222,6 @@ const Profile = () => {
                         >
                             <FaPlus />
                         </button>
-
                         <EmploymentModal
                             isOpen={showModal}
                             onClose={() => setShowModal(false)}
@@ -230,8 +266,6 @@ const Profile = () => {
                     )}
                 </div>
             </div>
-
-
 
             {/* change password modal */}
             {changePassword && (
