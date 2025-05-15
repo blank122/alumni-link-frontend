@@ -13,6 +13,7 @@ const Profile = () => {
     const [changePassword, setChangePassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showAddressModal, setShowAddressModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,6 +25,7 @@ const Profile = () => {
                     },
                 });
                 setData(response.data.data);
+                console.log(response.data.data);
             } catch (error) {
                 console.error("Error fetching user profile:", error);
             } finally {
@@ -75,9 +77,9 @@ const Profile = () => {
 
                             <div className="flex items-center gap-2 mb-4">
                                 <span className={`inline-block w-3 h-3 rounded-full ${employment_status?.emp_info_status === '0' ? 'bg-red-500' :
-                                        employment_status?.emp_info_status === '1' ? 'bg-yellow-500' :
-                                            employment_status?.emp_info_status === '2' ? 'bg-green-500' :
-                                                'bg-gray-500'
+                                    employment_status?.emp_info_status === '1' ? 'bg-yellow-500' :
+                                        employment_status?.emp_info_status === '2' ? 'bg-green-500' :
+                                            'bg-gray-500'
                                     }`}></span>
                                 <p className="text-gray-600">
                                     {
@@ -231,7 +233,7 @@ const Profile = () => {
                     {employment_history && employment_history.length > 0 ? (
                         <div className="space-y-4">
                             {employment_history.map((job) => (
-                                <div key={job.id} className="pb-4 border-b border-gray-100 last:border-0 last:pb-0">
+                                <div key={job.id} className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group">
                                     <div className="flex gap-4">
                                         <div className="mt-1">
                                             <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
@@ -239,15 +241,26 @@ const Profile = () => {
                                             </div>
                                         </div>
                                         <div className="flex-1">
-                                            <h3 className="font-semibold text-gray-800">{job.job_title}</h3>
-                                            <p className="text-gray-600">{job.company_name}</p>
-                                            <p className="text-sm text-gray-500">
-                                                {formatDate(job.start_date)} - {job.end_date ? formatDate(job.end_date) : "Present"}
-                                            </p>
-                                            <p className="text-sm text-gray-500 mt-1">
-                                                <FaMapMarkerAlt className="inline mr-1" />
-                                                {job.employment_address?.full_address || "Location not specified"}
-                                            </p>
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-800">{job.job_title}</h3>
+                                                    <p className="text-gray-600">{job.company_name}</p>
+                                                    <p className="text-sm text-gray-500">
+                                                        {formatDate(job.start_date)} - {job.end_date ? formatDate(job.end_date) : "Present"}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500 mt-1">
+                                                        <FaMapMarkerAlt className="inline mr-1" />
+                                                        {job.employment_address?.full_address || "Location not specified"}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleEditJob(job)} // You'll need to implement this function
+                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    title="Edit experience"
+                                                >
+                                                    <FaEdit />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
