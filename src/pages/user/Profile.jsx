@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
-import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLock, FaPlus } from "react-icons/fa";
+import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLock, FaPlus, FaEdit } from "react-icons/fa";
 import EmploymentModal from "./Components/EmploymentModal";
 import AddressModal from "./Components/AddressModal";
 import formatDate from "../../utils/helper";
@@ -102,7 +102,6 @@ const Profile = () => {
                 </div>
             </div>
 
-
             {alumni_education && (
                 <div className="mt-10 w-full max-w-6xl mx-auto px-4">
                     <div className="bg-white shadow-xl rounded-2xl p-8 transition duration-300 ease-in-out">
@@ -126,34 +125,47 @@ const Profile = () => {
                     </div>
                 </div>
             )}
-            {/* Address */}
+
             {address && (
                 <div className="mt-10 w-full max-w-6xl mx-auto px-4">
-                    <div className="bg-white shadow-xl rounded-2xl p-8 transition duration-300 ease-in-out">
-                        <h2 className="text-2xl font-bold flex items-center gap-3 text-gray-800 mb-4">
-                            <FaMapMarkerAlt className="text-blue-600 text-2xl" />
-                            Address
+                    <div className="bg-white rounded-lg shadow-sm transition-all duration-300 hover:shadow-md border border-gray-100 overflow-hidden">
+                        <div className="p-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <div className="flex items-center space-x-3">
+                                    <div className="bg-blue-50 p-3 rounded-full">
+                                        <FaMapMarkerAlt className="text-blue-600 text-xl" />
+                                    </div>
+                                    <h2 className="text-xl font-semibold text-gray-800">Address</h2>
+                                </div>
+                                <button
+                                    onClick={() => setShowAddressModal(true)}
+                                    className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition-colors duration-200"
+                                    aria-label="Add address"
+                                >
+                                    <FaEdit className="text-lg" />
+                                </button>
+                            </div>
 
-                            <button
-                                onClick={() => setShowAddressModal(true)}
-                                className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                            >
+                            <div className="pl-14"> {/* Matches the icon + title alignment */}
+                                <div className="flex flex-col space-y-3">
+                                    <div className="flex items-start">
+                                        <span className="text-gray-500 font-medium min-w-[80px]">Location:</span>
+                                        <span className="text-gray-800">{address.full_address}</span>
+                                    </div>
 
-                                <FaPlus />
-                            </button>
-
-                            <AddressModal
-                                isOpen={showAddressModal}
-                                onClose={() => setShowAddressModal(false)}
-                            />
-                        </h2>
-
-                        <div className="space-y-2">
-                            <p className="text-gray-800">
-                                <span className="font-medium">Location:</span> {address.full_address}
-                            </p>
-
+                                    {/* LinkedIn-style additional details (example) */}
+                                    <div className="flex items-start">
+                                        <span className="text-gray-500 font-medium min-w-[80px]">Type:</span>
+                                        <span className="text-gray-800">Primary</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <AddressModal
+                            isOpen={showAddressModal}
+                            onClose={() => setShowAddressModal(false)}
+                        />
                     </div>
                 </div>
             )}
