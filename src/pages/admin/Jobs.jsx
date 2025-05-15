@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
+import formatDate from "../../utils/helper";
 
 const Jobs = () => {
     const { user, token } = useAuth();
@@ -119,7 +120,8 @@ const Jobs = () => {
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 text-gray-700">
-                                                {new Date(item.created_at).toLocaleDateString()}
+                                                 {formatDate(item.created_at)} 
+                                               
                                             </td>
                                         </tr>
                                     ))

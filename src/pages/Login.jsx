@@ -10,14 +10,11 @@ const Login = () => {
     const { login } = useAuth();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-
     const navigate = useNavigate();
-
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
         setLoading(true);
-
         try {
             // Pass email and password as an object
             const data = await login({ email, password });
@@ -39,7 +36,6 @@ const Login = () => {
             setLoading(false);
         }
     };
-
 
     return (
         <div>
@@ -108,18 +104,6 @@ const Login = () => {
                         <span className="px-2 text-gray-500">or</span>
                         <hr className="flex-grow border-t border-gray-300" />
                     </div>
-
-                    <button
-                        className="flex items-center justify-center gap-2 w-full p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                        disabled={loading}
-                    >
-                        <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-                            alt="Google logo"
-                            className="w-5 h-5"
-                        />
-                        Sign in with Google
-                    </button>
 
                     <p className="text-center text-sm text-gray-700 mt-6">
                         Don’t have an account?{' '}

@@ -47,13 +47,10 @@ const Forums = () => {
 
     const handleCreatePost = async (e) => {
         e.preventDefault();
-
         const formData = new FormData();
         formData.append("title", forumTitle);
         formData.append("description", forumDescription);
         formData.append("account_id", user.id);
-
-
         try {
             const response = await axios.post("http://127.0.0.1:8000/api/forums", formData, {
                 headers: {
@@ -61,7 +58,6 @@ const Forums = () => {
                     "Content-Type": "multipart/form-data",
                 },
             });
-
             if (response.status === 201) {
                 alert("Forum created successfully!");
                 setShowModal(false);
@@ -96,7 +92,6 @@ const Forums = () => {
                             const initials =
                                 (firstName.charAt(0) || "").toUpperCase() + (lastName.charAt(0) || "").toUpperCase();
                             const fullName = `${firstName} ${lastName}`.trim(); // Ensure proper spacing
-
                             return (
                                 <div
                                     key={forum.id}
@@ -115,13 +110,11 @@ const Forums = () => {
                                             </p>
                                         </div>
                                     </div>
-
                                     {/* Content */} 
                                     <div className="mt-3">
                                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">{forum.frm_title}</h3>
                                         <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{forum.frm_description}</p>
                                     </div>
-
                                     {/* Actions */}
                                     <div className="flex items-center justify-between mt-4 text-gray-500 dark:text-gray-400 text-sm">
                                         {/* <button className="flex items-center space-x-1 hover:text-blue-500">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
+import formatDate from "../../utils/helper";
 
 
 const Jobs = () => {
@@ -9,9 +10,8 @@ const Jobs = () => {
     const [jobs, setJobPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedPost, setSelectedPost] = useState(null);
-
     useEffect(() => {
-        if ( !token) return;
+        if (!token) return;
 
         const fetchData = async () => {
             try {
@@ -85,7 +85,8 @@ const Jobs = () => {
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">{selectedPost.job_title}</h2>
                         <p className="mt-2 text-gray-700 dark:text-gray-400">{selectedPost.job_details}</p>
                         <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                            Job Posted Date: {new Date(selectedPost.created_at).toLocaleDateString()}
+                            Job Posted Date:{formatDate(selectedPost.created_at)}
+
                         </p>
                         <button
                             className="mt-4 w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
