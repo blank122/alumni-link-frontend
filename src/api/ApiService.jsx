@@ -13,15 +13,20 @@ export const createApiClient = (token) => {
     getAlumni: () => axios.get(`${API_BASE_URL}/admin/get-alumni`, { headers }),
     getPendingAccounts: () => axios.get(`${API_BASE_URL}/admin/pending-accounts`, { headers }),
     getApprovedAccounts: () => axios.get(`${API_BASE_URL}/admin/approved-accounts`, { headers }),
-    updateAccountStatus: (id, status) => 
+    updateAccountStatus: (id, status) =>
       axios.put(`${API_BASE_URL}/admin/approval-email/${id}`, { status }, { headers }),
-    getUnemployed:  () => axios.get(`${API_BASE_URL}/admin/unemployed-alumni-data`, { headers }),
-    sendSms:(id) => 
-        axios.post(`${API_BASE_URL}/admin/send-sms-unemployed/${id}`, { headers }),
-    
+    getUnemployed: () => axios.get(`${API_BASE_URL}/admin/unemployed-alumni-data`, { headers }),
+    sendSms: (id) =>
+      axios.post(`${API_BASE_URL}/admin/send-sms-unemployed/${id}`, { headers }),
+
     //api for user
-    addCareer:(id, newJob) => 
-        axios.post(`${API_BASE_URL}/add-career/${id}`, {newJob}, { headers }),
+    addCareer: (id, newJob) =>
+      axios.post(`${API_BASE_URL}/add-career/${id}`, { newJob }, { headers }),
+
+    //fetched technical skills
+    getTechSkills: () => axios.get(`${API_BASE_URL}/technical-skills`, { headers }),
+    getSoftSkills: () => axios.get(`${API_BASE_URL}/soft-skills`, { headers }),
+
   };
 };
 

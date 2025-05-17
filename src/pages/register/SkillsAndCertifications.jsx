@@ -6,6 +6,8 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ProgressBar from "../user/Components/ProgressBar";
+import { fetchTechnicalSkills, fetchSoftSkills } from '../../hooks/SkillsAndCourses';
+import createApiClient from '../../api/ApiService';
 
 const SkillsAndCertifications = ({
     userData,
