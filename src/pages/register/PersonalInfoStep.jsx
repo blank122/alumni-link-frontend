@@ -68,6 +68,7 @@ const PersonalInfoStep = ({ userData, handleChange, errors, currentStepIndex, to
                         type="text"
                         name="alm_contact_number"
                         placeholder="Contact Number"
+                        maxLength={11}
                         onChange={handleChange}
                         value={userData.alm_contact_number}
                         className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.01] placeholder-gray-400"
