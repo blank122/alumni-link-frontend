@@ -4,9 +4,13 @@ import { FaUserTimes, FaSms, FaEnvelope } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
 import StatsCard from "../../components/StatsCard";
 import { useAlumniUnemployedCoursesData } from "../../hooks/AlumniData";
+import { useState } from "react";
+
 const UnemploymentUpdates = () => {
     const { token } = useAuth();
     const { data, dataLoading } = useAlumniUnemployedCoursesData(token);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [actionType, setActionType] = useState(''); // "sms" or "email"
 
 
 
@@ -38,7 +42,10 @@ const UnemploymentUpdates = () => {
                 <div className="flex gap-3">
                     <button
                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow"
-                        onClick={() => console.log("Sending SMS updates...")}
+                        onClick={() => {
+                            setActionType('sms');
+                            setIsModalOpen(true);
+                        }}
                     >
                         <FaSms />
                         Send SMS Updates
@@ -46,7 +53,10 @@ const UnemploymentUpdates = () => {
 
                     <button
                         className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow"
-                        onClick={() => console.log("Sending Email updates...")}
+                        onClick={() => {
+                            setActionType('email');
+                            setIsModalOpen(true);
+                        }}
                     >
                         <FaEnvelope />
                         Send Email Updates
@@ -84,7 +94,40 @@ const UnemploymentUpdates = () => {
             </div>
 
             {/* might add a table here later */}
+
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+                        <h2 className="text-lg font-semibold mb-4">Confirm Action</h2>
+                        <p className="mb-6">
+                            Are you sure you want to send {actionType === 'sms' ? 'SMS' : 'Email'} updates to all alumni?
+                        </p>
+                        <div className="flex justify-end gap-4">
+                            <button
+                                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded"
+                                onClick={() => setIsModalOpen(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className={`px-4 py-2 ${actionType === 'sms' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'
+                                    } text-white rounded`}
+                                onClick={() => {
+                                    // Add your send logic here
+                                    console.log(`Confirmed ${actionType.toUpperCase()} sending...`);
+                                    setIsModalOpen(false);
+                                }}
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
+
+
     );
 };
 
