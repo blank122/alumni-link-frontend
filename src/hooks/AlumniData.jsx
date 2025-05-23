@@ -8,7 +8,7 @@ export const useAlumniData = (token) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!token) return;
-      
+
       try {
         const api = createApiClient(token);
         const response = await api.getAlumni();
@@ -35,7 +35,7 @@ export const useAccountCounts = (token) => {
   useEffect(() => {
     const fetchPending = async () => {
       if (!token) return;
-      
+
       try {
         const api = createApiClient(token);
         const response = await api.getPendingAccounts();
@@ -49,7 +49,7 @@ export const useAccountCounts = (token) => {
 
     const fetchApproved = async () => {
       if (!token) return;
-      
+
       try {
         const api = createApiClient(token);
         const response = await api.getApprovedAccounts();
@@ -69,27 +69,54 @@ export const useAccountCounts = (token) => {
 };
 
 export const useUnemployedData = (token) => {
-    const [account, setAccount] = useState([]);
-    const [loading, setLoading] = useState(true);
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        if (!token) return;
-        
-        try {
-          const api = createApiClient(token);
-          const response = await api.getUnemployed();
-          console.log("fetched data", response);
-          setAccount(response.data.data);
-        } catch (error) {
-          console.error("Error fetching alumni data:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchData();
-    }, [token]);
-  
-    return { account, loading };
-  };
+  const [account, setAccount] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) return;
+
+      try {
+        const api = createApiClient(token);
+        const response = await api.getUnemployed();
+        console.log("fetched data", response);
+        setAccount(response.data.data);
+      } catch (error) {
+        console.error("Error fetching alumni data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  return { account, loading };
+};
+
+
+export const useAlumniUnemployedCoursesData = (token) => {
+  const [data, setData] = useState(null); // initialize as null, not []
+  const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) return;
+
+      try {
+        const api = createApiClient(token);
+        const response = await api.getAlumniCourseUnemployed();
+        console.log("fetched data", response.data); // should show unemployed, employed, courses
+        setData(response.data); // ✅ fixed this line
+      } catch (error) {
+        console.error("Error fetching alumni data:", error);
+      } finally {
+        setLoadingData(false);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  return { data, loadingData };
+};

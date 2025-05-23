@@ -26,6 +26,7 @@ export const createApiClient = (token) => {
     //fetched technical skills
     getTechSkills: () => axios.get(`${API_BASE_URL}/technical-skills`, { headers }),
     getSoftSkills: () => axios.get(`${API_BASE_URL}/soft-skills`, { headers }),
+    getAlumniCourseUnemployed: () => axios.get(`${API_BASE_URL}/alumni-course-unemployed`, { headers }),
 
   };
 };
