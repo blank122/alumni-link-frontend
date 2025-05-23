@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 import { FaUserCheck, FaUserClock, FaCheckCircle, FaGlobe, FaBriefcase, FaUserTie, FaUsers, FaUserTimes } from "react-icons/fa";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from "recharts";
 
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import GraduatesLineChart from "../../components/GraduatesLineChart";
 
 const StatisticalReports = () => {
     const { token } = useAuth();
@@ -29,6 +30,10 @@ const StatisticalReports = () => {
 
     const [AlumniUnemploymentDemograph, setAlumniUnemploymentDemograph] = useState([]);
     const [LoadingUnemploymentDemograph, setLoadingUnemploymentDemograph] = useState(true);
+    const [GraduatesDemograph, setGraduatesDemograph] = useState([]);
+    const [LoadingGraduates, setLoadingGraduates] = useState(true);
+
+
 
     useEffect(() => {
         const fetchUnemployedData = async () => {
@@ -209,6 +214,29 @@ const StatisticalReports = () => {
         }
     }, [token]);
 
+    // graduates demograph
+    useEffect(() => {
+        const fetchGraduatesDemograph = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/graduates-per-year", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                setGraduatesDemograph(response.data.data);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoadingGraduates(false);
+            }
+        };
+
+        if (token) {
+            fetchGraduatesDemograph();
+        }
+    }, [token]);
 
 
 
@@ -321,32 +349,6 @@ const StatisticalReports = () => {
                     </div>
                 </motion.div>
 
-
-                <motion.div
-                    className="p-8 bg-purple-200 shadow-lg rounded-xl flex flex-col items-center w-full max-w-md"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex items-center space-x-4">
-                        {/* Icon */}
-                        <div className="text-4xl text-gray-700">
-                            <FaUserClock />
-                        </div>
-
-
-                        {/* Text Content */}
-                        <div>
-                            <p className="text-gray-800 text-lg">Pending Accounts</p>
-                            {LoadingPending ? (
-                                <p className="text-gray-500">Loading...</p>
-                            ) : (
-                                <p className="text-3xl font-extrabold text-gray-900">{PendingCount ?? 0}</p>
-                            )}
-                        </div>
-                    </div>
-                </motion.div>
-
                 {/* Approved Accounts Alumni Card */}
                 <motion.div
                     className="p-4 bg-blue-200 shadow-lg rounded-xl flex items-center w-full max-w-md"
@@ -407,6 +409,9 @@ const StatisticalReports = () => {
                 {/* Employment Distribution */}
                 <div className="bg-white p-6 shadow-lg rounded-lg">
                     <h2 className="text-xl font-semibold text-gray-700 mb-4">Employment Distribution</h2>
+                    <p className="text-sm text-gray-500 mb-4">
+                        Shows the current employment status breakdown of alumni. Hover over segments to see exact percentages.
+                    </p>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
                             <Pie data={employmentData} dataKey="value" nameKey="name" outerRadius={100}>
@@ -415,6 +420,15 @@ const StatisticalReports = () => {
                                 ))}
                             </Pie>
                             <Tooltip />
+                            <Legend
+                                layout="horizontal"
+                                verticalAlign="bottom"
+                                align="center"
+                                formatter={(value, entry, index) => {
+                                    // Customize the legend text if needed
+                                    return <span className="text-sm text-gray-600">{value}</span>;
+                                }}
+                            />
                         </PieChart>
                     </ResponsiveContainer>
                 </div>
@@ -440,6 +454,9 @@ const StatisticalReports = () => {
             {/* Job Seeker Status Over Time */}
             <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Unemployed Overtime</h2>
+                <p className="text-sm text-gray-500 mb-4">
+                    Displays monthly trends in alumni unemployment. The green line shows fluctuations in job seekers among alumni.
+                </p>
                 <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={AlumniUnemploymentDemograph}>
                         <XAxis dataKey="month" />
@@ -450,6 +467,20 @@ const StatisticalReports = () => {
                 </ResponsiveContainer>
             </div>
 
+            {/* graduate per academic schoolyear */}
+
+            {LoadingGraduates ? (
+                <p>Loading graduates data...</p>
+            ) : (
+                <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
+                    <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Graduates Overtime</h2>
+                    <p className="text-sm text-gray-500 mb-4">
+                        This chart illustrates the number of alumni who graduated each year. It provides a historical overview of graduation trends and helps identify periods of growth or decline in alumni graduation rates.
+                    </p>
+                    <GraduatesLineChart data={GraduatesDemograph} />
+
+                </div>
+            )}
 
 
         </div>

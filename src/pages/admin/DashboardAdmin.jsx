@@ -304,7 +304,8 @@ const DashboardAdmin = () => {
                                     // Customize the legend text if needed
                                     return <span className="text-sm text-gray-600">{value}</span>;
                                 }}
-                            />                        </PieChart>
+                            />
+                        </PieChart>
                     </ResponsiveContainer>
                 </div>
 
