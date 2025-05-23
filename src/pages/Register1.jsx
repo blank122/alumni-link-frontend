@@ -125,6 +125,7 @@ const MultiStepForm = () => {
             try {
                 const data = JSON.parse(text);
                 console.log("Server Response:", data);
+                navigate('/')
                 alert("Registration Successful!");
             } catch (err) {
                 console.error("Unexpected response format:", text);
