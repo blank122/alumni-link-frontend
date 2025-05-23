@@ -12,6 +12,7 @@ const UnemploymentUpdates = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [actionType, setActionType] = useState(''); // "sms" or "email"
 
+    const [isLoading, setIsLoading] = useState(false);
 
 
     if (dataLoading) return <p>Loading...</p>;
@@ -112,13 +113,42 @@ const UnemploymentUpdates = () => {
                             <button
                                 className={`px-4 py-2 ${actionType === 'sms' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'
                                     } text-white rounded`}
-                                onClick={() => {
-                                    // Add your send logic here
-                                    console.log(`Confirmed ${actionType.toUpperCase()} sending...`);
-                                    setIsModalOpen(false);
+                                onClick={async () => {
+                                    setIsLoading(true);
+
+                                    try {
+                                        const response = await fetch('http://127.0.0.1:8000/api/unemployed-updates', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                // Add any additional headers like authorization if needed
+                                                // 'Authorization': 'Bearer your-token',
+                                            },
+                                            body: JSON.stringify({
+                                                actionType: actionType, // sending the action type (sms or email)
+                                                // add any other required data here
+                                            }),
+                                        });
+
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+
+                                        const data = await response.json();
+                                        console.log('Success:', data);
+                                        alert('Send Email update successfully');
+                                        setIsModalOpen(false);
+                                        // Optionally show a success message to the user
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                        // Optionally show an error message to the user
+                                    }
+                                    finally {
+                                        setIsLoading(false);
+                                    }
                                 }}
                             >
-                                Confirm
+                                {isLoading ? 'Sending...' : 'Confirm'}
                             </button>
                         </div>
                     </div>
