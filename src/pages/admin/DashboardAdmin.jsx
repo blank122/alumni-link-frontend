@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 import { FaUserCheck, FaUserClock, FaCheckCircle, FaGlobe, FaBriefcase, FaUserTie, FaUsers, FaUserTimes } from "react-icons/fa";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from "recharts";
 
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
@@ -285,6 +285,9 @@ const DashboardAdmin = () => {
                 {/* Employment Distribution */}
                 <div className="bg-white p-6 shadow-lg rounded-lg">
                     <h2 className="text-xl font-semibold text-gray-700 mb-4">Employment Distribution</h2>
+                    <p className="text-sm text-gray-500 mb-4">
+                        Shows the current employment status breakdown of alumni. Hover over segments to see exact percentages.
+                    </p>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
                             <Pie data={employmentData} dataKey="value" nameKey="name" outerRadius={100}>
@@ -293,13 +296,24 @@ const DashboardAdmin = () => {
                                 ))}
                             </Pie>
                             <Tooltip />
-                        </PieChart>
+                            <Legend
+                                layout="horizontal"
+                                verticalAlign="bottom"
+                                align="center"
+                                formatter={(value, entry, index) => {
+                                    // Customize the legend text if needed
+                                    return <span className="text-sm text-gray-600">{value}</span>;
+                                }}
+                            />                        </PieChart>
                     </ResponsiveContainer>
                 </div>
 
                 {/* Alumni Registration Over Time */}
                 <div className="bg-white p-6 shadow-lg rounded-lg">
                     <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Registration Over Time</h2>
+                    <p className="text-sm text-gray-500 mb-4">
+                        Tracks the number of new alumni registrations by month. Helps identify growth trends and peak registration periods.
+                    </p>
                     {LoadingDemograph ? (
                         <p>Loading...</p>
                     ) : (
@@ -318,6 +332,9 @@ const DashboardAdmin = () => {
             {/* Job Seeker Status Over Time */}
             <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Unemployed Overtime</h2>
+                <p className="text-sm text-gray-500 mb-4">
+                    Displays monthly trends in alumni unemployment. The green line shows fluctuations in job seekers among alumni.
+                </p>
                 <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={AlumniUnemploymentDemograph}>
                         <XAxis dataKey="month" />
