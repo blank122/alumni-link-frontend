@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
-import { FaUserTimes , FaUserTie, FaUsers, FaUserGraduate } from "react-icons/fa";
+import { FaUserTimes, FaSms, FaEnvelope } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
 import StatsCard from "../../components/StatsCard";
 import { useAlumniUnemployedCoursesData } from "../../hooks/AlumniData";
@@ -32,7 +32,27 @@ const UnemploymentUpdates = () => {
 
     return (
         <div className="flex flex-col h-screen p-6">
-            <h1 className="text-2xl font-bold">Unemployment Updates</h1>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <h1 className="text-2xl font-bold">Unemployment Updates</h1>
+
+                <div className="flex gap-3">
+                    <button
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow"
+                        onClick={() => console.log("Sending SMS updates...")}
+                    >
+                        <FaSms />
+                        Send SMS Updates
+                    </button>
+
+                    <button
+                        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow"
+                        onClick={() => console.log("Sending Email updates...")}
+                    >
+                        <FaEnvelope />
+                        Send Email Updates
+                    </button>
+                </div>
+            </div>
 
             {/* Unemployment Card */}
             <motion.div
@@ -59,7 +79,6 @@ const UnemploymentUpdates = () => {
                         />
                     );
                 })}
-
 
 
             </div>
