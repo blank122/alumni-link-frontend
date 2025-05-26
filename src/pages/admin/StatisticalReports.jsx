@@ -7,6 +7,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import GraduatesLineChart from "../../components/GraduatesLineChart";
+import { useClusteringData } from '../../hooks/ClusteringData';
+import ClusterChart from "../../components/ClusterChart";
 
 const StatisticalReports = () => {
     const { token } = useAuth();
@@ -33,6 +35,8 @@ const StatisticalReports = () => {
     const [GraduatesDemograph, setGraduatesDemograph] = useState([]);
     const [LoadingGraduates, setLoadingGraduates] = useState(true);
 
+    //clustering data  
+    const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
 
 
     useEffect(() => {
@@ -478,6 +482,19 @@ const StatisticalReports = () => {
                         This chart illustrates the number of alumni who graduated each year. It provides a historical overview of graduation trends and helps identify periods of growth or decline in alumni graduation rates.
                     </p>
                     <GraduatesLineChart data={GraduatesDemograph} />
+
+                </div>
+            )}
+
+            {loadingAnalysis ? (
+                <p>Loading Clustering analysis data...</p>
+            ) : (
+                <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
+                    <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Clustering Analysis</h2>
+                    <p className="text-sm text-gray-500 mb-4">
+                        This chart displays the results of a clustering algorithm (hierarchical clustering) used to group alumni into distinct clusters based on shared attributes such as employment status, job location, or related metrics.
+                        Each bar represents the number of alumni within a specific cluster, helping to uncover hidden patterns and similarities among different graduate profiles.                    </p>
+                    <ClusterChart data={analysis} />
 
                 </div>
             )}

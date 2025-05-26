@@ -28,6 +28,9 @@ export const createApiClient = (token) => {
     getSoftSkills: () => axios.get(`${API_BASE_URL}/soft-skills`, { headers }),
     getAlumniCourseUnemployed: () => axios.get(`${API_BASE_URL}/alumni-course-unemployed`, { headers }),
 
+    //get clustered data kmeans
+    getClusteredAnalysis: () => axios.get(`${API_BASE_URL}/kmeans-analysis`, { headers }),
+
   };
 };
 
