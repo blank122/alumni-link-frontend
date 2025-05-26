@@ -506,8 +506,10 @@ const StatisticalReports = () => {
                 <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
                     <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Work Location Analysis</h2>
                     <p className="text-sm text-gray-500 mb-4">
-                        This chart displays the results of a clustering algorithm (hierarchical clustering) used to group alumni into distinct clusters based on shared attributes such as employment status, job location, or related metrics.
-                        Each bar represents the number of alumni within a specific cluster, helping to uncover hidden patterns and similarities among different graduate profiles.                    </p>
+                        This chart visualizes the results of a location-based clustering algorithm (K-Means) that groups alumni according to their current work locations.
+                        Alumni are categorized into two distinct clusters: those working within the Philippines and those working abroad.
+                        This analysis helps highlight the geographic distribution of alumni employment, offering valuable insights into graduate mobility and potential global career reach.
+                    </p>
                     <ClusterChart data={locationAnalysis} clusteringType="kmeans-location" />
 
                 </div>
