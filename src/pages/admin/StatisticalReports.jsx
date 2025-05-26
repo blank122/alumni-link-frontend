@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
-import { motion } from "framer-motion";
-import { FaUserCheck, FaUserClock, FaCheckCircle, FaGlobe, FaBriefcase, FaUserTie, FaUsers, FaUserTimes } from "react-icons/fa";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from "recharts";
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import GraduatesLineChart from "../../components/GraduatesLineChart";
-import { useClusteringData, useClusteredLocation, useClusteredCertifications } from '../../hooks/ClusteringData';
+import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredCertificationsEmployment } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
+import CertificationClusters from "./CertificationClusters";
+
 
 const StatisticalReports = () => {
     const { token } = useAuth();
- 
+
     const [AlumniUnemploymentDemograph, setAlumniUnemploymentDemograph] = useState([]);
     const [LoadingUnemploymentDemograph, setLoadingUnemploymentDemograph] = useState(true);
     const [GraduatesDemograph, setGraduatesDemograph] = useState([]);
@@ -22,6 +22,7 @@ const StatisticalReports = () => {
     const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
     const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
     const { data: certAnalysis, loadingData: loadingCert } = useClusteredCertifications(token);
+    const { data: certEmploymentAnalysis, loadingData: loadingCertEmployment } = useClusteredCertificationsEmployment(token);
 
 
     useEffect(() => {
@@ -164,6 +165,8 @@ const StatisticalReports = () => {
 
                 </div>
             )}
+            {/* certificaiton clusters in relation with employment */}
+            <CertificationClusters clusters={certEmploymentAnalysis} loading={loadingCertEmployment} />
 
         </div>
     );
