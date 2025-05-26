@@ -7,7 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import GraduatesLineChart from "../../components/GraduatesLineChart";
-import { useClusteringData, useClusteredLocation } from '../../hooks/ClusteringData';
+import { useClusteringData, useClusteredLocation, useClusteredCertifications } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
 
 const StatisticalReports = () => {
@@ -38,6 +38,7 @@ const StatisticalReports = () => {
     //clustering data  
     const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
     const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
+    const { data: certAnalysis, loadingData: loadingCert } = useClusteredCertifications(token);
 
 
     useEffect(() => {
@@ -515,6 +516,21 @@ const StatisticalReports = () => {
                 </div>
             )}
 
+
+            {loadingCert ? (
+                <p>Loading Clustering analysis data...</p>
+            ) : (
+                <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
+                    <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Work Location Analysis</h2>
+                    <p className="text-sm text-gray-500 mb-4">
+                        This chart visualizes the results of a location-based clustering algorithm (K-Means) that groups alumni according to their current work locations.
+                        Alumni are categorized into two distinct clusters: those working within the Philippines and those working abroad.
+                        This analysis helps highlight the geographic distribution of alumni employment, offering valuable insights into graduate mobility and potential global career reach.
+                    </p>
+                    <ClusterChart data={certAnalysis} clusteringType="kmeans-certificate" />
+
+                </div>
+            )}
 
         </div>
     );

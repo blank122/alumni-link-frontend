@@ -32,12 +32,29 @@ const getClusterLabel = (clusteringType, clusterNumber) => {
         }
     }
 
+
+    if (clusteringType === "kmeans-certificate") {
+        switch (clusterNumber) {
+            case 0:
+                return "Cluster A: Highly Certified Professionals";
+            case 1:
+                return "Cluster B: Early-Career Alumni";
+            case 2:
+                return "Cluster C: Experienced but Less Certified";
+
+            default:
+                return `Cluster ${clusterNumber}`;
+        }
+    }
+
     // Fallback for unknown types
     return `Cluster ${clusterNumber}`;
 };
 
 const ClusterChart = ({ data, clusteringType = "kmeans-profile" }) => {
-    if (!Array.isArray(data)) {
+    const clusteredData = Array.isArray(data) ? data : data?.clustered_data || [];
+
+    if (!clusteredData.length) {
         return <p>No clustering data available.</p>;
     }
 

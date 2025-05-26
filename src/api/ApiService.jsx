@@ -31,6 +31,7 @@ export const createApiClient = (token) => {
     //get clustered data kmeans
     getClusteredAnalysis: () => axios.get(`${API_BASE_URL}/kmeans-analysis`, { headers }),
     getClusteredLocation: () => axios.get(`${API_BASE_URL}/kmeans-location`, { headers }),
+    getClusteredCertifications: () => axios.get(`${API_BASE_URL}/kmeans-certifications`, { headers }),
 
   };
 };
