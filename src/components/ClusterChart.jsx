@@ -5,8 +5,25 @@ import {
     YAxis,
     Tooltip,
     CartesianGrid,
-    ResponsiveContainer
+    ResponsiveContainer,
+    Legend
 } from "recharts";
+
+// Color mapping for clusters (you can customize these)
+const CLUSTER_COLORS = {
+    // For kmeans-certificate
+    "Cluster A: Highly Certified Professionals": "#4f46e5",  // Indigo
+    "Cluster B: Early-Career Alumni": "#10b981",           // Emerald
+    "Cluster C: Experienced but Less Certified": "#f59e0b", // Amber
+    
+    // For kmeans-profile (optional)
+    "Cluster A: Young Graduates with Bachelor's": "#3b82f6", // Blue
+    "Cluster B: Experienced Graduates with Master's": "#ef4444", // Red
+    
+    // For kmeans-location (optional)
+    "Cluster A: Working in the Philippines": "#06b6d4",     // Cyan
+    "Cluster B: Working Abroad": "#8b5cf6",                // Violet
+};
 
 // Dynamic label generator based on clustering type
 const getClusterLabel = (clusteringType, clusterNumber) => {
@@ -32,7 +49,6 @@ const getClusterLabel = (clusteringType, clusterNumber) => {
         }
     }
 
-
     if (clusteringType === "kmeans-certificate") {
         switch (clusterNumber) {
             case 0:
@@ -41,13 +57,11 @@ const getClusterLabel = (clusteringType, clusterNumber) => {
                 return "Cluster B: Early-Career Alumni";
             case 2:
                 return "Cluster C: Experienced but Less Certified";
-
             default:
                 return `Cluster ${clusterNumber}`;
         }
     }
 
-    // Fallback for unknown types
     return `Cluster ${clusterNumber}`;
 };
 
@@ -59,16 +73,17 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile" }) => {
     }
 
     // Group data by readable cluster labels
-    const clusterCount = data.reduce((acc, curr) => {
+    const clusterCount = clusteredData.reduce((acc, curr) => {
         const label = getClusterLabel(clusteringType, curr.kmeans_cluster);
         acc[label] = (acc[label] || 0) + 1;
         return acc;
     }, {});
 
-    // Convert to chart-friendly format
+    // Convert to chart-friendly format with colors
     const chartData = Object.entries(clusterCount).map(([name, count]) => ({
         name,
         count,
+        fill: CLUSTER_COLORS[name] || "#8884d8" // Fallback color
     }));
 
     return (
@@ -78,7 +93,22 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile" }) => {
                 <XAxis dataKey="name" />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="count" fill="#8884d8" />
+                <Legend />
+                <Bar 
+                    dataKey="count" 
+                    name="Number of Alumni"
+                    fill="#8884d8" // This will be overridden by individual fills
+                >
+                    {chartData.map((entry, index) => (
+                        <Bar 
+                            key={`bar-${index}`}
+                            dataKey="count"
+                            name={entry.name}
+                            fill={entry.fill}
+                            stackId="a"
+                        />
+                    ))}
+                </Bar>
             </BarChart>
         </ResponsiveContainer>
     );
