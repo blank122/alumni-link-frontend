@@ -1,7 +1,18 @@
-import React from "react";
 import {
     BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer
 } from "recharts";
+
+const getClusterLabel = (clusterNumber) => {
+    switch (clusterNumber) {
+        case 0:
+            return "Cluster A: Young Graduates with Bachelor's";
+        case 1:
+            return "Cluster B: Experienced Graduates with Master's";
+        default:
+            return `Cluster ${clusterNumber}`;
+    }
+};
+
 
 const ClusterChart = ({ data }) => {
     if (!Array.isArray(data)) {
@@ -9,8 +20,8 @@ const ClusterChart = ({ data }) => {
     }
 
     const clusterCount = data.reduce((acc, curr) => {
-        const cluster = `Cluster ${curr.kmeans_cluster}`;
-        acc[cluster] = (acc[cluster] || 0) + 1;
+        const label = getClusterLabel(curr.kmeans_cluster);
+        acc[label] = (acc[label] || 0) + 1;
         return acc;
     }, {});
 
