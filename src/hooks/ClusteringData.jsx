@@ -38,7 +38,7 @@ export const useClusteredLocation = (token) => {
 
       try {
         const api = createApiClient(token);
-        const response = await api.getClusteredAnalysis();
+        const response = await api.getClusteredLocation();
         console.log("fetched data", response.data); // should show unemployed, employed, courses
         setData(response.data); // ✅ fixed this line
       } catch (error) {

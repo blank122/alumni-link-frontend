@@ -7,7 +7,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import GraduatesLineChart from "../../components/GraduatesLineChart";
-import { useClusteringData } from '../../hooks/ClusteringData';
+import { useClusteringData, useClusteredLocation } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
 
 const StatisticalReports = () => {
@@ -37,6 +37,7 @@ const StatisticalReports = () => {
 
     //clustering data  
     const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
+    const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
 
 
     useEffect(() => {
@@ -494,7 +495,20 @@ const StatisticalReports = () => {
                     <p className="text-sm text-gray-500 mb-4">
                         This chart displays the results of a clustering algorithm (hierarchical clustering) used to group alumni into distinct clusters based on shared attributes such as employment status, job location, or related metrics.
                         Each bar represents the number of alumni within a specific cluster, helping to uncover hidden patterns and similarities among different graduate profiles.                    </p>
-                    <ClusterChart data={analysis} />
+                    <ClusterChart data={analysis} clusteringType="kmeans-profile" />
+
+                </div>
+            )}
+
+            {loadingLocation ? (
+                <p>Loading Clustering analysis data...</p>
+            ) : (
+                <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
+                    <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Work Location Analysis</h2>
+                    <p className="text-sm text-gray-500 mb-4">
+                        This chart displays the results of a clustering algorithm (hierarchical clustering) used to group alumni into distinct clusters based on shared attributes such as employment status, job location, or related metrics.
+                        Each bar represents the number of alumni within a specific cluster, helping to uncover hidden patterns and similarities among different graduate profiles.                    </p>
+                    <ClusterChart data={locationAnalysis} clusteringType="kmeans-location" />
 
                 </div>
             )}
