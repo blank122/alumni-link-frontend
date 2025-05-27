@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import GraduatesLineChart from "../../components/GraduatesLineChart";
 import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredCertificationsEmployment } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
-import CertificationClusters from "./CertificationClusters";
+import CertificationClusters from "./CertificationClusterChart";
 
 
 const StatisticalReports = () => {
