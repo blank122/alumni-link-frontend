@@ -166,7 +166,7 @@ const StatisticalReports = () => {
                 </div>
             )}
             {/* certificaiton clusters in relation with employment */}
-            <CertificationClusters clusters={certEmploymentAnalysis} loading={loadingCertEmployment} />
+            <CertificationClusters />
 
         </div>
     );
