@@ -14,7 +14,13 @@ const ManageMap = () => {
     const [zoom, setZoom] = useState(11);
     const [searchTerm, setSearchTerm] = useState('');
     const [showSearchResults, setShowSearchResults] = useState(false);
-    const [bounds, setBounds] = useState(null);
+    // const [bounds, setBounds] = useState(null);
+    const [bounds, setBounds] = useState({
+        west: -180,
+        south: -90,
+        east: 180,
+        north: 90
+    });
     const superclusterRef = useRef();
 
     // Initialize supercluster
@@ -97,15 +103,19 @@ const ManageMap = () => {
         return superclusterRef.current.getClusters([bounds.west, bounds.south, bounds.east, bounds.north], zoom);
     }, [points, zoom, bounds]);
 
-    const handleBoundsChange = ({ bounds, center, zoom }) => {
+    const handleBoundsChange = ({ bounds: mapBounds, center, zoom }) => {
         setCenter(center);
         setZoom(zoom);
-        setBounds({
-            west: bounds[0][0],
-            south: bounds[0][1],
-            east: bounds[1][0],
-            north: bounds[1][1]
-        });
+
+        // Safely handle bounds
+        if (mapBounds && mapBounds[0] && mapBounds[1]) {
+            setBounds({
+                west: mapBounds[0][0],
+                south: mapBounds[0][1],
+                east: mapBounds[1][0],
+                north: mapBounds[1][1]
+            });
+        }
     };
 
     // Rest of your component (search, etc.) remains the same...
