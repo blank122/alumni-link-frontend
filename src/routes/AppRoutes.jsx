@@ -5,7 +5,7 @@ import Announcement from "../pages/admin/Announcement";
 import Events from "../pages/admin/Events";
 import AlumniList from "../pages/admin/AlumniList";
 import CourseList from "../pages/admin/CourseList";
-import ManageMap from "../pages/admin/ManageMap";
+import ManageMap from "../pages/admin/ManageMap1";
 import AlumniGISMap from "../pages/admin/AlumniGISMap";
 
 import ManageFeedback from "../pages/admin/ManageFeedback";
@@ -41,7 +41,6 @@ import UserFeedback from "../pages/user/Feedback";
 import UserHelp from "../pages/user/Help";
 
 import Unauthorized from "../pages/errors/Unauthorized";
-import SmsPage from "../pages/admin/SmsPage";
 import Updates from "../pages/admin/UnemploymentUpdates";
 
 const AppRoutes = () => {
