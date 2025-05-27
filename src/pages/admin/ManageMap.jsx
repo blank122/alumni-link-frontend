@@ -17,54 +17,71 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
   return R * c;
 };
 
-const createClusters = (markers, zoom, clusterRadius = 30) => {
-  if (zoom > 10) return markers.map(marker => ({ ...marker, isCluster: false }));
+const createClusters = (markers, zoom, clusterRadius = 50000) => { // Default radius in meters
+  // Don't cluster at high zoom levels
+  if (zoom > 12) {
+    return markers.map(marker => ({
+      ...marker,
+      isCluster: false,
+      size: 1
+    }));
+  }
 
+  // Adjust cluster radius based on zoom level
+  const dynamicRadius = clusterRadius / Math.pow(2, zoom);
   const clusters = [];
   const processed = new Set();
-  const dynamicRadius = clusterRadius / Math.pow(2, zoom - 1);
+
   markers.forEach((marker, index) => {
     if (processed.has(index)) return;
 
-    const cluster = { ...marker };
+    // Find all unprocessed markers within the dynamicRadius
     const nearbyIndices = [];
-
     markers.forEach((otherMarker, otherIndex) => {
       if (index === otherIndex || processed.has(otherIndex)) return;
+
       const distance = getDistance(
         marker.coordinates[0], marker.coordinates[1],
         otherMarker.coordinates[0], otherMarker.coordinates[1]
-      );
-      if (distance * 1000 <= dynamicRadius) { // Convert km to meters
+      ) * 1000; // Convert to meters
+
+      if (distance <= dynamicRadius) {
         nearbyIndices.push(otherIndex);
       }
     });
 
-    // If there are nearby markers, create a cluster
     if (nearbyIndices.length > 0) {
-      const allMarkers = [marker, ...nearbyIndices.map(i => markers[i])];
+      // Create a cluster
+      const clusterMarkers = [marker, ...nearbyIndices.map(i => markers[i])];
+      const totalEmployees = clusterMarkers.reduce((sum, m) => sum + m.employees.length, 0);
 
-      // Calculate average position for the cluster
-      const avgLat = allMarkers.reduce((sum, m) => sum + m.coordinates[0], 0) / allMarkers.length;
-      const avgLon = allMarkers.reduce((sum, m) => sum + m.coordinates[1], 0) / allMarkers.length;
+      // Calculate average position
+      const totalLat = clusterMarkers.reduce((sum, m) => sum + m.coordinates[0], 0);
+      const totalLon = clusterMarkers.reduce((sum, m) => sum + m.coordinates[1], 0);
+      const avgLat = totalLat / clusterMarkers.length;
+      const avgLon = totalLon / clusterMarkers.length;
 
-      // Combine all employees from the cluster
-      const allEmployees = allMarkers.flatMap(m => m.employees);
+      clusters.push({
+        coordinates: [avgLat, avgLon],
+        employees: clusterMarkers.flatMap(m => m.employees),
+        isCluster: true,
+        size: clusterMarkers.length,
+        company_name: `${clusterMarkers.length} Companies`,
+        originalCompanies: clusterMarkers
+      });
 
-      cluster.coordinates = [avgLat, avgLon];
-      cluster.employees = allEmployees;
-      cluster.isCluster = true;
-      cluster.size = allMarkers.length;
-
-      // Mark all clustered markers as processed
+      // Mark all as processed
       nearbyIndices.forEach(i => processed.add(i));
+      processed.add(index);
     } else {
-      cluster.isCluster = false;
-      cluster.size = 1;
+      // Single marker (not clustered)
+      clusters.push({
+        ...marker,
+        isCluster: false,
+        size: 1
+      });
+      processed.add(index);
     }
-
-    clusters.push(cluster);
-    processed.add(index);
   });
 
   return clusters;
