@@ -1,91 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Map, Marker, Overlay } from 'pigeon-maps';
+import Supercluster from 'supercluster';
 import axios from 'axios';
 import { useAuth } from "../../contexts/AuthContext";
 import { FiSearch, FiX, FiUsers, FiMapPin, FiBriefcase } from 'react-icons/fi';
-
-// Helper function to calculate distance between coordinates
-const getDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Earth's radius in km
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-};
-
-const createClusters = (markers, zoom, clusterRadius = 50000) => { // Default radius in meters
-  // Don't cluster at high zoom levels
-  if (zoom > 12) {
-    return markers.map(marker => ({
-      ...marker,
-      isCluster: false,
-      size: 1
-    }));
-  }
-
-  // Adjust cluster radius based on zoom level
-  const dynamicRadius = clusterRadius / Math.pow(2, zoom);
-  const clusters = [];
-  const processed = new Set();
-
-  markers.forEach((marker, index) => {
-    if (processed.has(index)) return;
-
-    // Find all unprocessed markers within the dynamicRadius
-    const nearbyIndices = [];
-    markers.forEach((otherMarker, otherIndex) => {
-      if (index === otherIndex || processed.has(otherIndex)) return;
-
-      const distance = getDistance(
-        marker.coordinates[0], marker.coordinates[1],
-        otherMarker.coordinates[0], otherMarker.coordinates[1]
-      ) * 1000; // Convert to meters
-
-      if (distance <= dynamicRadius) {
-        nearbyIndices.push(otherIndex);
-      }
-    });
-
-    if (nearbyIndices.length > 0) {
-      // Create a cluster
-      const clusterMarkers = [marker, ...nearbyIndices.map(i => markers[i])];
-      const totalEmployees = clusterMarkers.reduce((sum, m) => sum + m.employees.length, 0);
-
-      // Calculate average position
-      const totalLat = clusterMarkers.reduce((sum, m) => sum + m.coordinates[0], 0);
-      const totalLon = clusterMarkers.reduce((sum, m) => sum + m.coordinates[1], 0);
-      const avgLat = totalLat / clusterMarkers.length;
-      const avgLon = totalLon / clusterMarkers.length;
-
-      clusters.push({
-        coordinates: [avgLat, avgLon],
-        employees: clusterMarkers.flatMap(m => m.employees),
-        isCluster: true,
-        size: clusterMarkers.length,
-        company_name: `${clusterMarkers.length} Companies`,
-        originalCompanies: clusterMarkers
-      });
-
-      // Mark all as processed
-      nearbyIndices.forEach(i => processed.add(i));
-      processed.add(index);
-    } else {
-      // Single marker (not clustered)
-      clusters.push({
-        ...marker,
-        isCluster: false,
-        size: 1
-      });
-      processed.add(index);
-    }
-  });
-
-  return clusters;
-};
 
 const ManageMap = () => {
   const { token } = useAuth();
@@ -96,7 +14,26 @@ const ManageMap = () => {
   const [zoom, setZoom] = useState(11);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [bounds, setBounds] = useState({
+    west: -180,
+    south: -90,
+    east: 180,
+    north: 90
+  });
+  const superclusterRef = useRef();
 
+  // Initialize supercluster
+  useEffect(() => {
+    superclusterRef.current = new Supercluster({
+      radius: 60,
+      maxZoom: 17,
+      minZoom: 3,
+      extent: 256,
+      nodeSize: 64
+    });
+  }, []);
+
+  // Fetch data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -106,9 +43,7 @@ const ManageMap = () => {
             Accept: "application/json",
           },
         });
-
         setAccounts(response.data.data);
-        console.log('Total records received:', response.data.data.length);
       } catch (error) {
         console.error("Error fetching user locations:", error);
       } finally {
@@ -116,50 +51,25 @@ const ManageMap = () => {
       }
     };
 
-    if (token) {
-      fetchData();
-    }
+    if (token) fetchData();
   }, [token]);
 
-  const filteredAccounts = useMemo(() => {
-    if (!searchTerm) return accounts;
-
-    const term = searchTerm.toLowerCase();
-    return accounts.filter(account => {
-      const fullName = `${account.alumni?.alm_first_name || ''} ${account.alumni?.alm_last_name || ''}`.toLowerCase();
-      const companyName = account.alumni?.employment_history?.[0]?.company_name?.toLowerCase() || '';
-
-      return fullName.includes(term) || companyName.includes(term);
-    });
-  }, [accounts, searchTerm]);
-
+  // Group data by company (same as your original implementation)
   const groupedByCompany = useMemo(() => {
-    return filteredAccounts.reduce((acc, user) => {
+    return accounts.reduce((acc, user) => {
       try {
-        if (!user.alumni) {
-          console.log('Skipping user - no alumni data:', user);
-          return acc;
-        }
+        if (!user.alumni) return acc;
 
         const employment = user.alumni?.employment_history?.[0];
-        if (!employment) {
-          console.log('Skipping user - no employment history:', user.alumni);
-          return acc;
-        }
+        if (!employment) return acc;
 
         const address = employment?.employment_address;
-        if (!address) {
-          console.log('Skipping employment - no address:', employment);
-          return acc;
-        }
+        if (!address) return acc;
 
         const lat = parseFloat(address.emp_add_lat);
         const lng = parseFloat(address.emp_add_long);
 
-        if (isNaN(lat) || isNaN(lng)) {
-          console.log('Skipping - invalid coordinates:', address);
-          return acc;
-        }
+        if (isNaN(lat) || isNaN(lng)) return acc;
 
         const key = employment.company_name || 'Unknown Company';
         if (!acc[key]) {
@@ -180,15 +90,66 @@ const ManageMap = () => {
 
       return acc;
     }, {});
-  }, [filteredAccounts]);
+  }, [accounts]);
 
-  const markers = Object.values(groupedByCompany);
-  const clusters = createClusters(markers, zoom);
+  // Prepare data for clustering
+  const points = useMemo(() => {
+    return Object.values(groupedByCompany).map(company => ({
+      type: 'Feature',
+      properties: {
+        cluster: false,
+        ...company,
+        point_count: company.employees.length
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [company.coordinates[1], company.coordinates[0]] // [lng, lat]
+      }
+    }));
+  }, [groupedByCompany]);
 
-  const handleBoundsChange = ({ center, zoom }) => {
+  // Update clusters when data or view changes
+  const clusters = useMemo(() => {
+    if (!superclusterRef.current || !bounds || points.length === 0) return [];
+    
+    try {
+      superclusterRef.current.load(points);
+      return superclusterRef.current.getClusters(
+        [bounds.west, bounds.south, bounds.east, bounds.north], 
+        Math.floor(zoom)
+      );
+    } catch (error) {
+      console.error("Error calculating clusters:", error);
+      return [];
+    }
+  }, [points, zoom, bounds]);
+
+  const handleBoundsChange = ({ bounds: mapBounds, center, zoom }) => {
     setCenter(center);
     setZoom(zoom);
+    
+    if (mapBounds && mapBounds[0] && mapBounds[1]) {
+      setBounds({
+        west: mapBounds[0][0],
+        south: mapBounds[0][1],
+        east: mapBounds[1][0],
+        north: mapBounds[1][1]
+      });
+    }
   };
+
+  // Filter accounts based on search term
+  const filteredAccounts = useMemo(() => {
+    if (!searchTerm) return accounts;
+
+    const term = searchTerm.toLowerCase();
+    return accounts.filter(account => {
+      const fullName = `${account.alumni?.alm_first_name || ''} ${account.alumni?.alm_last_name || ''}`.toLowerCase();
+      const companyName = account.alumni?.employment_history?.[0]?.company_name?.toLowerCase() || '';
+
+      return fullName.includes(term) || companyName.includes(term);
+    });
+  }, [accounts, searchTerm]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -233,7 +194,6 @@ const ManageMap = () => {
           </button>
         </form>
 
-        {/* Search Results Info */}
         {showSearchResults && searchTerm && (
           <div className="mt-2 p-2 bg-gray-50 rounded">
             <p className="m-0 text-sm flex items-center">
@@ -242,7 +202,7 @@ const ManageMap = () => {
             </p>
             <p className="mt-1 text-sm flex items-center">
               <FiBriefcase className="mr-1" />
-              <strong>{markers.length}</strong> {markers.length === 1 ? 'company' : 'companies'} displayed
+              <strong>{Object.keys(groupedByCompany).length}</strong> {Object.keys(groupedByCompany).length === 1 ? 'company' : 'companies'} displayed
             </p>
           </div>
         )}
@@ -254,46 +214,73 @@ const ManageMap = () => {
         height={600}
         onBoundsChanged={handleBoundsChange}
       >
-        {clusters.map((cluster, idx) => (
-          <Marker
-            key={idx}
-            width={cluster.isCluster ? 40 + Math.min(cluster.size, 10) * 3 : 30}
-            anchor={cluster.coordinates}
-            onClick={() => setSelectedCompany({
-              ...cluster,
-              // For clusters, we'll add the original companies information
-              originalCompanies: cluster.isCluster
-                ? markers.filter(m =>
-                  getDistance(
-                    m.coordinates[0], m.coordinates[1],
-                    cluster.coordinates[0], cluster.coordinates[1]
-                  ) * 1000 <= (30 / Math.pow(2, zoom - 1))
-                )
-                : [cluster]
-            })}
-            color={cluster.isCluster ? '#FF5722' : '#3388ff'}
-          >
-            {cluster.isCluster ? (
-              <div className={`
-        bg-[#FF5722] rounded-full w-full h-full
-        flex justify-center items-center text-white
-        font-bold text-sm border-2 border-white
-        cursor-pointer pointer-events-auto
-      `}>
-                {cluster.size}
-              </div>
-            ) : (
-              <div className={`
-                  bg-[#3388ff] rounded-full w-full h-full
+        {clusters.map((cluster, idx) => {
+          const [longitude, latitude] = cluster.geometry.coordinates;
+          const {
+            cluster: isCluster,
+            point_count: pointCount,
+            ...properties
+          } = cluster.properties;
+
+          if (isCluster) {
+            return (
+              <Marker
+                key={`cluster-${cluster.id}`}
+                anchor={[latitude, longitude]}
+                onClick={() => {
+                  // Get all companies in this cluster
+                  const clusterCompanies = superclusterRef.current
+                    .getLeaves(cluster.id, Infinity)
+                    .map(leaf => leaf.properties);
+                  
+                  setSelectedCompany({
+                    coordinates: [latitude, longitude],
+                    isCluster: true,
+                    size: pointCount,
+                    employees: clusterCompanies.flatMap(c => c.employees),
+                    originalCompanies: clusterCompanies,
+                    company_name: `${pointCount} Companies`
+                  });
+                }}
+              >
+                <div className={`
+                  bg-[#FF5722] rounded-full 
                   flex justify-center items-center text-white
-                  font-bold text-[30px] border-2 border-white
+                  font-bold text-sm border-2 border-white
                   cursor-pointer pointer-events-auto
+                  ${pointCount < 10 ? 'w-10 h-10' : 
+                    pointCount < 50 ? 'w-12 h-12' : 
+                    'w-14 h-14'}
                 `}>
-                <FiMapPin />
+                  {pointCount}
+                </div>
+              </Marker>
+            );
+          }
+
+          // Single company marker
+          return (
+            <Marker
+              key={`company-${properties.company_name}-${idx}`}
+              anchor={[latitude, longitude]}
+              onClick={() => setSelectedCompany({
+                ...properties,
+                coordinates: [latitude, longitude],
+                isCluster: false,
+                size: 1
+              })}
+            >
+              <div className={`
+                bg-[#3388ff] rounded-full w-8 h-8
+                flex justify-center items-center text-white
+                font-bold text-[20px] border-2 border-white
+                cursor-pointer pointer-events-auto
+              `}>
+                <FiBriefcase />
               </div>
-            )}
-          </Marker>
-        ))}
+            </Marker>
+          );
+        })}
 
         {selectedCompany && (
           <Overlay anchor={selectedCompany.coordinates} offset={[120, 30]}>

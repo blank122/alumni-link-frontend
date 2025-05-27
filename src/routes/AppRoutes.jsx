@@ -5,7 +5,7 @@ import Announcement from "../pages/admin/Announcement";
 import Events from "../pages/admin/Events";
 import AlumniList from "../pages/admin/AlumniList";
 import CourseList from "../pages/admin/CourseList";
-import ManageMap from "../pages/admin/ManageMap1";
+import ManageMap from "../pages/admin/ManageMap";
 import AlumniGISMap from "../pages/admin/AlumniGISMap";
 
 import ManageFeedback from "../pages/admin/ManageFeedback";
