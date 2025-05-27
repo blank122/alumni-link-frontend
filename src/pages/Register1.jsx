@@ -12,6 +12,7 @@ import AccountInfoStep from "./register/AccountInfoStep";
 import ReviewStep from "./register/ReviewStep";
 import { useNavigate } from "react-router-dom";
 import SkillsAndCertifications from "./register/SkillsAndCertifications";
+import DataPrivacyModal from "../components/DataPrivacy";
 
 const MultiStepForm = () => {
     const [step, setStep] = useState(1);
@@ -60,6 +61,8 @@ const MultiStepForm = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate(); // Hook for redirection
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+    const [hasAgreedToPrivacy, setHasAgreedToPrivacy] = useState(false);
 
     const handleChange = (e) => {
         const { name, type } = e.target;
@@ -204,7 +207,6 @@ const MultiStepForm = () => {
         }
     };
 
-
     const prevStep = () => {
         if (step === 8 && (userData.emp_status === "0" || userData.emp_status === "1")) {
             setStep(5); // Jump back to Step 4 if employment was skipped
@@ -222,6 +224,7 @@ const MultiStepForm = () => {
         }
         return [...commonSteps, ...employedSteps, ...finalSteps];
     };
+
     const visibleSteps = getVisibleSteps();
     const currentStepIndex = visibleSteps.indexOf(step) + 1;
     const totalSteps = visibleSteps.length;
@@ -272,14 +275,33 @@ const MultiStepForm = () => {
                             Next
                         </button>
                     ) : (
-                        <button
-                            onClick={handleSubmit}
-                            className="px-4 py-2 bg-green-500 text-white rounded flex items-center"
-                            disabled={loading}
-                        >
-                            {loading && <span className="loader mr-2"></span>}
-                            {loading ? "Submitting..." : "Submit"}
-                        </button>
+                        <>
+                            <button
+                                onClick={() => {
+                                    if (hasAgreedToPrivacy) {
+                                        handleSubmit();
+                                    } else {
+                                        alert("You must agree to the Data Privacy Policy before submitting.");
+                                        setShowPrivacyModal(true);
+                                    }
+                                }}
+                                className="px-4 py-2 bg-green-500 text-white rounded flex items-center"
+                                disabled={loading}
+                            >
+                                {loading && <span className="loader mr-2"></span>}
+                                {loading ? "Submitting..." : "Submit"}
+                            </button>
+
+                            <DataPrivacyModal
+                                isOpen={showPrivacyModal}
+                                onAgree={() => {
+                                    setHasAgreedToPrivacy(true);
+                                    setShowPrivacyModal(false);
+                                    handleSubmit(); // Now proceed
+                                }}
+                                onCancel={() => setShowPrivacyModal(false)}
+                            />
+                        </>
                     )}
                 </div>
             </div>
