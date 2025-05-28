@@ -54,9 +54,22 @@ const ManageMap = () => {
     if (token) fetchData();
   }, [token]);
 
-  // Group data by company (same as your original implementation)
+  // Filter accounts based on search term (original implementation)
+  const filteredAccounts = useMemo(() => {
+    if (!searchTerm) return accounts;
+
+    const term = searchTerm.toLowerCase();
+    return accounts.filter(account => {
+      const fullName = `${account.alumni?.alm_first_name || ''} ${account.alumni?.alm_last_name || ''}`.toLowerCase();
+      const companyName = account.alumni?.employment_history?.[0]?.company_name?.toLowerCase() || '';
+
+      return fullName.includes(term) || companyName.includes(term);
+    });
+  }, [accounts, searchTerm]);
+
+  // Group data by company (modified to use filtered accounts)
   const groupedByCompany = useMemo(() => {
-    return accounts.reduce((acc, user) => {
+    return filteredAccounts.reduce((acc, user) => {
       try {
         if (!user.alumni) return acc;
 
@@ -83,6 +96,7 @@ const ManageMap = () => {
         acc[key].employees.push({
           name: `${user.alumni.alm_first_name} ${user.alumni.alm_last_name}`,
           job_title: employment.job_title,
+          accountId: user.id // Keep reference to original account
         });
       } catch (error) {
         console.error('Error processing user:', user, error);
@@ -90,7 +104,7 @@ const ManageMap = () => {
 
       return acc;
     }, {});
-  }, [accounts]);
+  }, [filteredAccounts]);
 
   // Prepare data for clustering
   const points = useMemo(() => {
@@ -138,19 +152,6 @@ const ManageMap = () => {
     }
   };
 
-  // Filter accounts based on search term
-  const filteredAccounts = useMemo(() => {
-    if (!searchTerm) return accounts;
-
-    const term = searchTerm.toLowerCase();
-    return accounts.filter(account => {
-      const fullName = `${account.alumni?.alm_first_name || ''} ${account.alumni?.alm_last_name || ''}`.toLowerCase();
-      const companyName = account.alumni?.employment_history?.[0]?.company_name?.toLowerCase() || '';
-
-      return fullName.includes(term) || companyName.includes(term);
-    });
-  }, [accounts, searchTerm]);
-
   const handleSearch = (e) => {
     e.preventDefault();
     setShowSearchResults(true);
@@ -163,7 +164,7 @@ const ManageMap = () => {
 
   return (
     <div style={{ height: '100vh', position: 'relative' }}>
-      {/* Search Bar */}
+      {/* Search Bar - Original implementation */}
       <div className="absolute top-5 left-5 z-[1000] bg-white rounded-lg p-3 shadow-md w-[300px]">
         <form onSubmit={handleSearch} className="flex items-center">
           <div className="relative flex-1">
