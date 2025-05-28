@@ -17,8 +17,10 @@ const CLUSTER_COLORS = {
     "Cluster C: Experienced but Less Certified": "#f59e0b", // Amber
 
     // For kmeans-profile (optional)
-    "Cluster A: Young Graduates with Bachelor's": "#3b82f6", // Blue
-    "Cluster B: Experienced Graduates with Master's": "#ef4444", // Red
+    "Experienced Alumni (5+ work experienced years)": "#4f46e5",  // Indigo
+    "Masters Degree Holder": "#10b981",           // Emerald
+    "Early Career Alumni (<1 work experienced year)": "#f59e0b", // Amber
+    "Mid-Level Alumni (2-5 years)": "#06b6d4",     // Cyan
 
     // For kmeans-location (optional)
     "Cluster A: Working in the Philippines": "#06b6d4",     // Cyan
