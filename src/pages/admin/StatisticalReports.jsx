@@ -22,7 +22,6 @@ const StatisticalReports = () => {
     const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
     const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
     const { data: certAnalysis, loadingData: loadingCert } = useClusteredCertifications(token);
-    const { data: certEmploymentAnalysis, loadingData: loadingCertEmployment } = useClusteredCertificationsEmployment(token);
 
 
     useEffect(() => {

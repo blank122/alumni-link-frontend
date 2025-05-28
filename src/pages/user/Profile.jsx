@@ -57,9 +57,9 @@ const Profile = () => {
                             </div>
                             General Information
                         </h2>
-                        <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        {/* <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
                             Edit
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@ const Profile = () => {
                             </div>
                         </div>
 
-                        <div
+                        {/* <div
                             className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
                             onClick={() => setChangePassword(true)}
                         >
@@ -136,7 +136,7 @@ const Profile = () => {
                                 <p className="text-sm text-gray-500">Password</p>
                                 <p className="text-blue-600 font-medium">Change password</p>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

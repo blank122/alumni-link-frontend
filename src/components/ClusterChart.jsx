@@ -15,11 +15,11 @@ const CLUSTER_COLORS = {
     "Cluster A: Highly Certified Professionals": "#4f46e5",  // Indigo
     "Cluster B: Early-Career Alumni": "#10b981",           // Emerald
     "Cluster C: Experienced but Less Certified": "#f59e0b", // Amber
-    
+
     // For kmeans-profile (optional)
     "Cluster A: Young Graduates with Bachelor's": "#3b82f6", // Blue
     "Cluster B: Experienced Graduates with Master's": "#ef4444", // Red
-    
+
     // For kmeans-location (optional)
     "Cluster A: Working in the Philippines": "#06b6d4",     // Cyan
     "Cluster B: Working Abroad": "#8b5cf6",                // Violet
@@ -30,9 +30,13 @@ const getClusterLabel = (clusteringType, clusterNumber) => {
     if (clusteringType === "kmeans-profile") {
         switch (clusterNumber) {
             case 0:
-                return "Cluster A: Young Graduates with Bachelor's";
+                return "Experienced Alumni (5+ work experienced years)";
             case 1:
-                return "Cluster B: Experienced Graduates with Master's";
+                return "Masters Degree Holder";
+            case 2:
+                return "Early Career Alumni (<1 work experienced year)";
+            case 3:
+                return "Mid-Level Alumni (2-5 years)";
             default:
                 return `Cluster ${clusterNumber}`;
         }
@@ -94,13 +98,13 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile" }) => {
                 <YAxis allowDecimals={false} />
                 <Tooltip />
                 <Legend />
-                <Bar 
-                    dataKey="count" 
+                <Bar
+                    dataKey="count"
                     name="Number of Alumni"
                     fill="#8884d8" // This will be overridden by individual fills
                 >
                     {chartData.map((entry, index) => (
-                        <Bar 
+                        <Bar
                             key={`bar-${index}`}
                             dataKey="count"
                             name={entry.name}
