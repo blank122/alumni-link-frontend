@@ -14,7 +14,6 @@ const StatisticalReports = () => {
     const { token } = useAuth();
 
     const [AlumniUnemploymentDemograph, setAlumniUnemploymentDemograph] = useState([]);
-    const [LoadingUnemploymentDemograph, setLoadingUnemploymentDemograph] = useState(true);
     const [GraduatesDemograph, setGraduatesDemograph] = useState([]);
     const [LoadingGraduates, setLoadingGraduates] = useState(true);
 
@@ -22,29 +21,6 @@ const StatisticalReports = () => {
     const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
     const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
     const { data: certAnalysis, loadingData: loadingCert } = useClusteredCertifications(token);
-
-
-    useEffect(() => {
-        const fetchUnemploymentDemograph = async () => {
-            try {
-                const response = await axios.get("http://127.0.0.1:8000/api/admin/unemployment", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
-                });
-                setAlumniUnemploymentDemograph(response.data.data);
-            } catch (error) {
-                console.error("Error fetching alumni data:", error);
-            } finally {
-                setLoadingUnemploymentDemograph(false);
-            }
-        };
-
-        if (token) {
-            fetchUnemploymentDemograph();
-        }
-    }, [token]);
 
     // graduates demograph
     useEffect(() => {
@@ -78,21 +54,6 @@ const StatisticalReports = () => {
             <h1 className="text-2xl font-bold">Statistical Reports</h1>
 
             {/* Job Seeker Status Over Time */}
-            <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">Unemployed Overtime</h2>
-                <p className="text-sm text-gray-500 mb-4">
-                    Displays monthly trends in alumni unemployment. The green line shows fluctuations in job seekers among alumni.
-                </p>
-                <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={AlumniUnemploymentDemograph}>
-                        <XAxis dataKey="month" />
-                        <YAxis />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="count" stroke="#10b981" strokeWidth={3} />
-                    </LineChart>
-                </ResponsiveContainer>
-            </div>
-
             {/* graduate per academic schoolyear */}
 
             {LoadingGraduates ? (
@@ -104,7 +65,6 @@ const StatisticalReports = () => {
                         This chart illustrates the number of alumni who graduated each year. It provides a historical overview of graduation trends and helps identify periods of growth or decline in alumni graduation rates.
                     </p>
                     <GraduatesLineChart data={GraduatesDemograph} />
-
                 </div>
             )}
 
