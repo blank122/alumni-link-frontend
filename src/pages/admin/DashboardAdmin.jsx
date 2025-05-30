@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useState } from "react";
 import useDashboardAnalytics from "../../hooks/DashboardAnalytics";
 import StatsCard from "../../components/StatsCard";
-import { FaCheckCircle, FaUserTimes } from "react-icons/fa";
+import { FaCheckCircle, FaUserTimes, FaBriefcase, FaLaptopCode } from "react-icons/fa";
 import DashboardCharts from "../../components/DashboardChart";
 const DashboardAdmin = () => {
     const { token } = useAuth();
@@ -16,6 +16,11 @@ const DashboardAdmin = () => {
 
     const registered = data?.summary?.registeredAccounts || 0;
     const approved = data?.summary?.approvedAccounts || 0;
+    const pending = data?.summary?.pendingAccounts || 0;
+    const employed = data?.summary?.employedAccounts || 0;
+    const freelance = data?.summary?.freelanceAccounts || 0;
+    const unemployed = data?.summary?.unemployedAccounts || 0;
+
     const monthlyData = data?.monthly || [];
 
 
@@ -63,22 +68,48 @@ const DashboardAdmin = () => {
                     title="Registered Accounts"
                     value={registered}
                     isLoading={loading}
-                    bgColor="bg-red-200"
+                    bgColor="bg-red-100 text-red-700"
                 />
                 <StatsCard
                     icon={FaCheckCircle}
                     title="Approved Accounts"
                     value={approved}
                     isLoading={loading}
-                    bgColor="bg-blue-200"
+                    bgColor="bg-blue-100 text-blue-700"
                 />
                 <StatsCard
                     icon={FaUserTimes}
                     title="Total Unemployed"
                     value={monthlyData.reduce((acc, item) => acc + (item.unemployed || 0), 0)}
                     isLoading={loading}
+                    bgColor="bg-orange-100 text-orange-700"
+                />
+
+                <StatsCard
+                    icon={FaBriefcase}
+                    title="Employed"
+                    value={employed}
+                    isLoading={loading}
+                    bgColor="bg-green-100 text-green-700"
+                />
+
+                <StatsCard
+                    icon={FaLaptopCode}
+                    title="Freelance"
+                    value={freelance}
+                    isLoading={loading}
+                    bgColor="bg-blue-100 text-blue-700"
+                />
+
+                <StatsCard
+                    icon={FaUserTimes}
+                    title="Pending"
+                    value={pending}
+                    isLoading={loading}
                     bgColor="bg-orange-200"
                 />
+
+
             </div>
 
             <DashboardCharts data={monthlyData} />
