@@ -72,8 +72,15 @@ const DashboardAdmin = () => {
         label,
     }));
 
+    const [selectedTechSkills, setSelectedTechSkills] = useState([]);
+    const [selectedSoftSkills, setSelectedSoftSkills] = useState([]);
+    const [selectedCourses, setSelectedCourses] = useState([]);
 
-    const { data, loading, error } = useDashboardAnalytics(token, fromDate, toDate);
+    const { data, loading, error } =
+        useDashboardAnalytics(token, fromDate, toDate,
+            selectedTechSkills.map(skill => skill.value),
+            selectedSoftSkills.map(skill => skill.value),
+            selectedCourses.map(course => course.value));
 
     const registered = data?.summary?.registeredAccounts || 0;
     const approved = data?.summary?.approvedAccounts || 0;
@@ -85,9 +92,7 @@ const DashboardAdmin = () => {
     const monthlyData = data?.monthly || [];
 
     // State for multi-select
-    const [selectedTechSkills, setSelectedTechSkills] = useState([]);
-    const [selectedSoftSkills, setSelectedSoftSkills] = useState([]);
-    const [selectedCourses, setSelectedCourses] = useState([]);
+
 
     return (
         <div className="flex flex-col h-screen p-6">
