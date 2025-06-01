@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useDashboardAnalytics = (
+//admin dashboard analytics
+export const useDashboardAnalytics = (
     token,
     from = null,
     to = null,
@@ -62,4 +63,4 @@ const useDashboardAnalytics = (
     return { data, loading, error };
 };
 
-export default useDashboardAnalytics;
+
