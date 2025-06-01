@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import ChartLoading from "../components/ChartLoading";
 
 const StatsCard = ({ icon: Icon, title, value, isLoading, bgColor = 'bg-gray-300' }) => (
   <motion.div
@@ -14,7 +15,7 @@ const StatsCard = ({ icon: Icon, title, value, isLoading, bgColor = 'bg-gray-300
       <div>
         <p className="text-gray-800 text-lg">{title}</p>
         {isLoading ? (
-          <p className="text-gray-500">Loading...</p>
+          <ChartLoading message="Loading Data..." />
         ) : (
           <p className="text-3xl font-extrabold text-gray-900">{value ?? 0}</p>
         )}

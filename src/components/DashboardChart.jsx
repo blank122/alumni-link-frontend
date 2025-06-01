@@ -7,7 +7,10 @@ import {
   CartesianGrid
 } from 'recharts';
 
-const DashboardCharts = ({ data }) => {
+import ChartLoading from "../components/ChartLoading";
+
+
+const DashboardCharts = ({ data, loading }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
 
@@ -19,16 +22,21 @@ const DashboardCharts = ({ data }) => {
         <p className="text-sm text-gray-500 mb-4">
           Tracks monthly alumni registrations.
         </p>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="registrations" fill="#4F46E5" name="Registrations" />
-          </BarChart>
-        </ResponsiveContainer>
+        {loading ? (
+          <ChartLoading message="Loading clustering analysis chart..." />
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="registrations" fill="#4F46E5" name="Registrations" />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+
       </div>
 
       {/* Unemployed Chart */}
@@ -39,22 +47,27 @@ const DashboardCharts = ({ data }) => {
         <p className="text-sm text-gray-500 mb-4">
           Monthly unemployment trend among alumni.
         </p>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="unemployed"
-              stroke="#EF4444"
-              strokeWidth={2}
-              name="Unemployed"
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {loading ? (
+          <ChartLoading message="Loading clustering analysis chart..." />
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="unemployed"
+                stroke="#EF4444"
+                strokeWidth={2}
+                name="Unemployed"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+
       </div>
 
     </div>

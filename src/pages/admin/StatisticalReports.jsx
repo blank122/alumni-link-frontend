@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import GraduatesLineChart from "../../components/GraduatesLineChart";
-import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredCertificationsEmployment } from '../../hooks/ClusteringData';
+import { useClusteringData, useClusteredLocation, useClusteredCertifications } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
 import CertificationClusters from "./CertificationClusterChart";
 import ChartLoading from "../../components/ChartLoading";
