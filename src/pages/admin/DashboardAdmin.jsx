@@ -2,10 +2,12 @@
 import { motion } from "framer-motion";
 import { useAuth } from "../../contexts/AuthContext";
 import { useState } from "react";
-import useDashboardAnalytics from "../../hooks/DashboardAnalytics";
+import {useDashboardAnalytics} from "../../hooks/DashboardAnalytics";
 import StatsCard from "../../components/StatsCard";
 import { FaCheckCircle, FaUserTimes, FaBriefcase, FaLaptopCode } from "react-icons/fa";
 import DashboardCharts from "../../components/DashboardChart";
+import EmploymentPieChart from "../../components/EmploymentPieChart";
+
 import Select from 'react-select';
 
 const DashboardAdmin = () => {
@@ -220,6 +222,7 @@ const DashboardAdmin = () => {
             </div>
 
             <DashboardCharts data={monthlyData} />
+            <EmploymentPieChart data={data} />
 
         </div>
     );

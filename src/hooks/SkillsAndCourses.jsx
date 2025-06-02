@@ -71,7 +71,7 @@ export const fetchCourses = (token) => {
     };
 
     fetchData();
-  }, [token]);s
+  }, [token]);
 
   return { softSkills, loadingSoft };
 };
