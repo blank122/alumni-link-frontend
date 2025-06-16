@@ -125,11 +125,11 @@ const ManageMap = () => {
   // Update clusters when data or view changes
   const clusters = useMemo(() => {
     if (!superclusterRef.current || !bounds || points.length === 0) return [];
-    
+
     try {
       superclusterRef.current.load(points);
       return superclusterRef.current.getClusters(
-        [bounds.west, bounds.south, bounds.east, bounds.north], 
+        [bounds.west, bounds.south, bounds.east, bounds.north],
         Math.floor(zoom)
       );
     } catch (error) {
@@ -141,7 +141,7 @@ const ManageMap = () => {
   const handleBoundsChange = ({ bounds: mapBounds, center, zoom }) => {
     setCenter(center);
     setZoom(zoom);
-    
+
     if (mapBounds && mapBounds[0] && mapBounds[1]) {
       setBounds({
         west: mapBounds[0][0],
@@ -161,6 +161,48 @@ const ManageMap = () => {
     setSearchTerm('');
     setShowSearchResults(false);
   };
+
+  const clusterAnalysis = useMemo(() => {
+    return clusters.map(cluster => {
+      const {
+        cluster: isCluster,
+        point_count: pointCount,
+        ...properties
+      } = cluster.properties;
+
+      const coordinates = cluster.geometry?.coordinates;
+      if (!coordinates || coordinates.length < 2) {
+        console.warn('Missing coordinates for cluster:', cluster);
+        return null;
+      }
+
+      if (!isCluster) {
+        return {
+          type: 'company',
+          company_name: properties.company_name,
+          employee_count: properties.employees?.length || 0,
+          coordinates: [coordinates[1], coordinates[0]] // [lat, lng]
+        };
+      }
+
+      const clusterCompanies = superclusterRef.current
+        ?.getLeaves(cluster.id, Infinity)
+        .map(leaf => leaf.properties) || [];
+
+      const totalEmployees = clusterCompanies.reduce(
+        (acc, comp) => acc + (comp.employees?.length || 0),
+        0
+      );
+
+      return {
+        type: 'cluster',
+        cluster_size: pointCount,
+        employee_count: totalEmployees,
+        coordinates: [coordinates[1], coordinates[0]] // [lat, lng]
+      };
+    }).filter(Boolean); // remove any nulls
+  }, [clusters]);
+
 
   return (
     <div style={{ height: '100vh', position: 'relative' }}>
@@ -233,7 +275,7 @@ const ManageMap = () => {
                   const clusterCompanies = superclusterRef.current
                     .getLeaves(cluster.id, Infinity)
                     .map(leaf => leaf.properties);
-                  
+
                   setSelectedCompany({
                     coordinates: [latitude, longitude],
                     isCluster: true,
@@ -249,9 +291,9 @@ const ManageMap = () => {
                   flex justify-center items-center text-white
                   font-bold text-sm border-2 border-white
                   cursor-pointer pointer-events-auto
-                  ${pointCount < 10 ? 'w-10 h-10' : 
-                    pointCount < 50 ? 'w-12 h-12' : 
-                    'w-14 h-14'}
+                  ${pointCount < 10 ? 'w-10 h-10' :
+                    pointCount < 50 ? 'w-12 h-12' :
+                      'w-14 h-14'}
                 `}>
                   {pointCount}
                 </div>
@@ -360,6 +402,28 @@ const ManageMap = () => {
           </Overlay>
         )}
       </Map>
+
+      <div>
+        <div className=" bg-white rounded-lg p-4 shadow-md w-8xl max-h-[90vh] overflow-y-auto">
+          <h4 className="text-lg font-semibold mb-3">Cluster-Based Alumni Summary</h4>
+          {clusterAnalysis.length === 0 ? (
+            <p className="text-sm text-gray-500">No clusters available.</p>
+          ) : (
+            clusterAnalysis.map((item, index) => (
+              <div key={index} className="mb-3 border-b pb-2 text-sm">
+                <p>
+                  <strong>{item.type === 'cluster' ? `Cluster of ${item.cluster_size} companies` : item.company_name}</strong>
+                </p>
+                <p>
+                  📍 <strong>Coords:</strong> {item.coordinates[0].toFixed(2)}, {item.coordinates[1].toFixed(2)}
+                </p>
+                <p>👥 <strong>Employees:</strong> {item.employee_count}</p>
+              </div>
+            ))
+          )}
+        </div>
+
+      </div>
     </div>
   );
 };
