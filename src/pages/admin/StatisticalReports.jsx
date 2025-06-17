@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import GraduatesLineChart from "../../components/GraduatesLineChart";
-import { useClusteringData, useClusteredLocation, useClusteredCertifications } from '../../hooks/ClusteringData';
+import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredRegionalEmployment } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
 import CertificationClusters from "./CertificationClusterChart";
 import ChartLoading from "../../components/ChartLoading";
@@ -21,6 +21,7 @@ const StatisticalReports = () => {
     const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
     const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
     const { data: certAnalysis, loadingData: loadingCert } = useClusteredCertifications(token);
+    const { data: regionalEmploymentAnalysis, loadingData: loadingRegional } = useClusteredRegionalEmployment(token);
 
     // graduates demograph
     useEffect(() => {
@@ -77,7 +78,7 @@ const StatisticalReports = () => {
                 {loadingAnalysis ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={analysis} clusteringType="kmeans-profile" chartType="line"/>
+                    <ClusterChart data={analysis} clusteringType="kmeans-profile" chartType="line" />
                 )}
 
             </div>
@@ -92,11 +93,47 @@ const StatisticalReports = () => {
                 {loadingLocation ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={locationAnalysis} clusteringType="kmeans-location" chartType="pie"/>
+                    <ClusterChart data={locationAnalysis} clusteringType="kmeans-location" chartType="pie" />
                 )}
 
             </div>
 
+
+            <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                    Regional Clustering of Employed Alumni
+                </h2>
+                <p className="text-sm text-gray-500 mb-4">
+                    This clustering analysis groups alumni based on the number of those who are currently employed in each region. It provides insights into employment distribution across geographic areas, highlighting where alumni are most likely to be working.
+                </p>
+                <ul className="text-sm text-gray-500 mb-4 list-disc pl-5">
+                    <li>
+                        <span className="font-medium">Cluster A: NCR</span>
+                    </li>
+                    <li>
+                        <span className="font-medium">Cluster B: Luzon</span> – Recent graduates with fewer certifications/skills, likely in entry-level roles or still building their professional profiles.
+                    </li>
+                    <li>
+                        <span className="font-medium">Cluster C: Visayas</span>
+                    </li>
+                    <li>
+                        <span className="font-medium">Cluster D: Mindanao</span>
+                    </li>
+                    <li>
+                        <span className="font-medium">Cluster E: Outside Philippines</span>
+                    </li>
+                </ul>
+                <p className="text-sm text-gray-500">
+                    This analysis helps visualize where graduates are gaining employment and may guide regional career support or alumni engagement strategies.
+                </p>
+
+                {loadingRegional ? (
+                    <ChartLoading message="Loading clustering analysis chart..." />
+                ) : (
+                    <ClusterChart data={regionalEmploymentAnalysis} clusteringType="kmeans-ph-regions" chartType="pie" />
+                )}
+
+            </div>
 
             <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Certifications, Technical Skills and Soft Skills Analysis</h2>

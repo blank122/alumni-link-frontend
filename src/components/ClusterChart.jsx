@@ -25,6 +25,11 @@ const CLUSTER_COLORS = {
     "Mid-Level Alumni (2-5 years)": "#06b6d4",
     "Cluster A: Working Abroad": "#06b6d4",
     "Cluster B: Working in the Philippines": "#8b5cf6",
+    "Cluster A: NCR": "#1f77b4",       // Blue
+    "Cluster B: Luzon": "#ff7f0e",     // Orange
+    "Cluster C: Visayas": "#2ca02c",   // Green
+    "Cluster D: Mindanao": "#d62728",  // Red
+    "Cluster E: Outside Philippines": "#9467bd", // Purple
 };
 
 // Label generator
@@ -47,6 +52,14 @@ const getClusterLabel = (clusteringType, clusterNumber) => {
                 "Cluster A: Highly Certified Professionals",
                 "Cluster B: Early-Career Alumni",
                 "Cluster C: Experienced but Less Certified"
+            ][clusterNumber] ?? `Cluster ${clusterNumber}`;
+        case "kmeans-ph-regions":
+            return [
+                "Cluster A: NCR",
+                "Cluster B: Luzon",
+                "Cluster C: Visayas",
+                "Cluster D: Mindanao",
+                "Cluster E: Outside Philippines"
             ][clusterNumber] ?? `Cluster ${clusterNumber}`;
         default:
             return `Cluster ${clusterNumber}`;
