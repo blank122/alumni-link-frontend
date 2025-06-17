@@ -77,7 +77,7 @@ const StatisticalReports = () => {
                 {loadingAnalysis ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={analysis} clusteringType="kmeans-profile" />
+                    <ClusterChart data={analysis} clusteringType="kmeans-profile" chartType="line"/>
                 )}
 
             </div>
@@ -92,7 +92,7 @@ const StatisticalReports = () => {
                 {loadingLocation ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={locationAnalysis} clusteringType="kmeans-location" />
+                    <ClusterChart data={locationAnalysis} clusteringType="kmeans-location" chartType="pie"/>
                 )}
 
             </div>
@@ -122,7 +122,7 @@ const StatisticalReports = () => {
                 {loadingCert ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={certAnalysis} clusteringType="kmeans-certificate" />
+                    <ClusterChart data={certAnalysis} clusteringType="kmeans-certificate" chartType="pie" />
                 )}
 
             </div>
