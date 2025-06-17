@@ -73,16 +73,29 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
         return <p>No clustering data available.</p>;
     }
 
+    // Calculate cluster counts
     const clusterCount = clusteredData.reduce((acc, curr) => {
         const label = getClusterLabel(clusteringType, curr.kmeans_cluster);
         acc[label] = (acc[label] || 0) + 1;
         return acc;
     }, {});
 
-    const chartData = Object.entries(clusterCount).map(([name, count]) => ({
-        name,
-        count,
-        fill: CLUSTER_COLORS[name] || "#8884d8"
+    // Sort clusters by count (descending)
+    const sortedClusters = Object.entries(clusterCount)
+        .sort((a, b) => b[1] - a[1])
+        .map(([name, count]) => ({
+            name,
+            count,
+            fill: CLUSTER_COLORS[name] || "#8884d8"
+        }));
+
+    // For line chart - create data points sorted by count
+    const lineChartData = sortedClusters.map((cluster, index) => ({
+        ...cluster,
+        // Use index as x-axis value to maintain order
+        rank: index + 1,
+        // Add percentage if needed
+        percentage: (cluster.count / clusteredData.length * 100).toFixed(1) + '%'
     }));
 
     const renderChart = () => {
@@ -91,18 +104,24 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                 return (
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
-                            <Tooltip />
+                            <Tooltip 
+                                formatter={(value, name, props) => [
+                                    value, 
+                                    `${name} (${props.payload.percentage || 
+                                        (value/clusteredData.length*100).toFixed(1)+'%'})`
+                                ]}
+                            />
                             <Legend />
                             <Pie
-                                data={chartData}
+                                data={sortedClusters}
                                 dataKey="count"
                                 nameKey="name"
                                 cx="50%"
                                 cy="50%"
                                 outerRadius={100}
-                                label
+                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
                             >
-                                {chartData.map((entry, index) => (
+                                {sortedClusters.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.fill} />
                                 ))}
                             </Pie>
@@ -112,13 +131,50 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
             case "line":
                 return (
                     <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={chartData}>
+                        <LineChart data={lineChartData}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
+                            <XAxis 
+                                dataKey="name" 
+                                tick={{ angle: -45, textAnchor: 'end' }}
+                                height={70}
+                            />
                             <YAxis allowDecimals={false} />
-                            <Tooltip />
+                            <Tooltip 
+                                formatter={(value, name, props) => [
+                                    value, 
+                                    `${props.payload.name} (Rank ${props.payload.rank})`
+                                ]}
+                                labelFormatter={() => "Cluster"}
+                            />
                             <Legend />
-                            <Line type="monotone" dataKey="count" stroke="#8884d8" />
+                            <Line
+                                type="monotone"
+                                dataKey="count"
+                                stroke="#8884d8"
+                                strokeWidth={2}
+                                dot={({ payload }) => (
+                                    <circle
+                                        cx={payload.cx}
+                                        cy={payload.cy}
+                                        r={6}
+                                        fill={CLUSTER_COLORS[payload.name] || "#8884d8"}
+                                        stroke="#fff"
+                                        strokeWidth={2}
+                                    />
+                                )}
+                                activeDot={{ r: 8 }}
+                                label={({ x, y, value }) => (
+                                    <text
+                                        x={x}
+                                        y={y - 10}
+                                        fill={CLUSTER_COLORS[lineChartData.find(d => d.count === value)?.name] || "#8884d8"}
+                                        textAnchor="middle"
+                                        fontSize={12}
+                                    >
+                                        {value}
+                                    </text>
+                                )}
+                            />
                         </LineChart>
                     </ResponsiveContainer>
                 );
@@ -126,14 +182,23 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
             default:
                 return (
                     <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={chartData}>
+                        <BarChart data={sortedClusters}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
+                            <XAxis 
+                                dataKey="name" 
+                                tick={{ angle: -45, textAnchor: 'end' }}
+                                height={70}
+                            />
                             <YAxis allowDecimals={false} />
-                            <Tooltip />
+                            <Tooltip 
+                                formatter={(value, name, props) => [
+                                    value, 
+                                    `${props.payload.name} (${(value/clusteredData.length*100).toFixed(1)}%)`
+                                ]}
+                            />
                             <Legend />
                             <Bar dataKey="count" name="Number of Alumni">
-                                {chartData.map((entry, index) => (
+                                {sortedClusters.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.fill} />
                                 ))}
                             </Bar>

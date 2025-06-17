@@ -130,7 +130,7 @@ const StatisticalReports = () => {
                 {loadingRegional ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={regionalEmploymentAnalysis} clusteringType="kmeans-ph-regions" chartType="pie" />
+                    <ClusterChart data={regionalEmploymentAnalysis} clusteringType="kmeans-ph-regions" chartType="line" />
                 )}
 
             </div>
