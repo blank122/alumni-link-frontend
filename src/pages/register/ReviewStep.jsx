@@ -141,16 +141,27 @@ const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
                         <p className="text-sm text-gray-500 font-medium">Technical Skills</p>
                     </div>
                     <div className="space-y-3">
-                        {userData.technical_skills_logs.length > 0 ? (
+                        {(userData.technical_skills_logs.length > 0 || userData.custom_tech_skills.length > 0) ? (
                             <ul className="list-disc list-inside text-gray-800">
+                                {/* Predefined technical skills */}
                                 {userData.technical_skills_logs.map((skill, index) => (
-                                    <li key={index}>
+                                    <li key={`tech-predef-${index}`}>
                                         {technicalSkills[skill] || "Unknown Skill"}
                                     </li>
                                 ))}
+
+                                {/* Custom technical skills */}
+                                {userData.custom_tech_skills.map((customSkill, index) => (
+                                    <li key={`tech-custom-${index}`}>
+                                        {customSkill.skill_name}
+                                    </li>
+                                ))}
                             </ul>
-                        ) : <p className="text-gray-800 font-medium">N/A</p>}
+                        ) : (
+                            <p className="text-gray-800 font-medium">N/A</p>
+                        )}
                     </div>
+
                     <div className="flex items-center mb-3">
                         <div className="bg-green-100 p-2 rounded-lg mr-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -160,16 +171,27 @@ const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
                         <p className="text-sm text-gray-500 font-medium">Soft Skills</p>
                     </div>
                     <div className="space-y-3">
-                        {userData.soft_skills_logs.length > 0 ? (
+                        {(userData.soft_skills_logs.length > 0 || userData.custom_soft_skills.length > 0) ? (
                             <ul className="list-disc list-inside text-gray-800">
+                                {/* Predefined soft skills */}
                                 {userData.soft_skills_logs.map((skill, index) => (
-                                    <li key={index}>
+                                    <li key={`soft-predef-${index}`}>
                                         {softSkills[skill] || "Unknown Skill"}
                                     </li>
                                 ))}
+
+                                {/* Custom soft skills */}
+                                {userData.custom_soft_skills.map((customSkill, index) => (
+                                    <li key={`soft-custom-${index}`}>
+                                        {customSkill.skill_name}
+                                    </li>
+                                ))}
                             </ul>
-                        ) : <p className="text-sm text-gray-500 font-medium">N/A</p>}
+                        ) : (
+                            <p className="text-sm text-gray-500 font-medium">N/A</p>
+                        )}
                     </div>
+
                 </div>
 
             </div>
