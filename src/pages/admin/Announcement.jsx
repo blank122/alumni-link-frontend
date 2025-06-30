@@ -16,12 +16,13 @@ const Announcements = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/admin/announcements", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
-                });
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/admin/announcements`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    });
                 setAnnouncementsPosts(response.data.data);
             } catch (error) {
                 console.error("Error fetching announcements:", error);
@@ -46,12 +47,17 @@ const Announcements = () => {
         if (annImage) formData.append("ann_image", annImage);
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/admin/announcements", formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_BASE_URL}/api/admin/announcements`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
 
             if (response.status === 201) {
                 window.location.reload(); // Reload the page after successful action
@@ -106,7 +112,8 @@ const Announcements = () => {
                                             <td className="px-6 py-4">
                                                 {item.ann_image ? (
                                                     <img
-                                                        src={`http://127.0.0.1:8000/storage/announcements/${item.ann_image}`}
+                                                        src={`${import.meta.env.VITE_API_BASE_URL}/storage/announcements/${item.ann_image}`
+                                                        }
                                                         alt="Announcement Post"
                                                         className="w-20 h-20 object-cover rounded-md shadow-sm"
                                                     />

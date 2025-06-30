@@ -27,12 +27,13 @@ const StatisticalReports = () => {
     useEffect(() => {
         const fetchGraduatesDemograph = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/graduates-per-year", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
-                });
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/graduates-per-year`
+                    , {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    });
                 setGraduatesDemograph(response.data.data);
                 console.log(response.data.data);
             } catch (error) {

@@ -51,7 +51,8 @@ const Events = () => {
         if (eventImage) formData.append("event_image", eventImage);
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/admin/events", formData, {
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/admin/events`
+                , formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
@@ -115,8 +116,9 @@ const Events = () => {
                                             <td className="px-6 py-4 text-gray-700">{item.event_date || "N/A"}</td>
                                             <td className="px-6 py-4">
                                                 {item.event_image ? (
+                                                    
                                                     <img
-                                                        src={`http://127.0.0.1:8000/storage/event_images/${item.event_image}`}
+                                                        src={`${import.meta.env.VITE_API_BASE_URL}/storage/event_images/${item.event_image}`}
                                                         alt="Job Post"
                                                         className="w-20 h-20 object-cover rounded-md shadow-sm"
                                                     />

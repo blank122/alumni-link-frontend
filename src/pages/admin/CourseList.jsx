@@ -12,16 +12,16 @@ const CourseList = () => {
 
     // Define colors for each course
     const colors = useMemo(() => ["#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#FFAA33"], []);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/admin/courses_population", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
-                });
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/admin/courses_population`
+                    , {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    });
 
                 // Convert object to array for Recharts
                 const formattedData = Object.entries(response.data.data).map(([key, value], index) => ({

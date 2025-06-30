@@ -39,7 +39,7 @@ export const useDashboardAnalytics = (
                 console.log("Fetching with params:", params);
 
                 const response = await axios.get(
-                    "http://localhost:8000/api/dashboard-analytics",
+                    `${import.meta.env.VITE_API_BASE_URL}/api/dashboard-analytics`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

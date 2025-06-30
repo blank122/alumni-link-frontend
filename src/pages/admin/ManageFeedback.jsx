@@ -12,13 +12,15 @@ const ManageFeedback = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            `${import.meta.env.VITE_API_BASE_URL}/api/admin/feedbacks`
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/admin/feedbacks", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
-                });
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/admin/feedbacks`
+                    , {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    });
                 setData(response.data.data);
                 setFilteredData(response.data.data);
             } catch (error) {

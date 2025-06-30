@@ -117,18 +117,19 @@ const UnemploymentUpdates = () => {
                                     setIsLoading(true);
 
                                     try {
-                                        const response = await fetch('http://127.0.0.1:8000/api/unemployed-updates', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                // Add any additional headers like authorization if needed
-                                                // 'Authorization': 'Bearer your-token',
-                                            },
-                                            body: JSON.stringify({
-                                                actionType: actionType, // sending the action type (sms or email)
-                                                // add any other required data here
-                                            }),
-                                        });
+                                        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/unemployed-updates`
+                                            , {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    // Add any additional headers like authorization if needed
+                                                    // 'Authorization': 'Bearer your-token',
+                                                },
+                                                body: JSON.stringify({
+                                                    actionType: actionType, // sending the action type (sms or email)
+                                                    // add any other required data here
+                                                }),
+                                            });
 
                                         if (!response.ok) {
                                             throw new Error('Network response was not ok');

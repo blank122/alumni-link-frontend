@@ -18,7 +18,7 @@ const Jobs = () => {
     useEffect(() => {
         const fetchJobPost = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/admin/jobs", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/admin/jobs`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -49,7 +49,8 @@ const Jobs = () => {
         if (jobImage) formData.append("job_image", jobImage);
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/admin/jobs", formData, {
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/admin/jobs`
+                , formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
@@ -111,7 +112,7 @@ const Jobs = () => {
                                             <td className="px-6 py-4">
                                                 {item.job_image ? (
                                                     <img
-                                                        src={`http://127.0.0.1:8000/storage/job_posts/${item.job_image}`}
+                                                        src={`${import.meta.env.VITE_API_BASE_URL}/storage/job_posts/${item.job_image}`}
                                                         alt="Job Post"
                                                         className="w-20 h-20 object-cover rounded-md shadow-sm"
                                                     />
@@ -120,8 +121,8 @@ const Jobs = () => {
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 text-gray-700">
-                                                 {formatDate(item.created_at)} 
-                                               
+                                                {formatDate(item.created_at)}
+
                                             </td>
                                         </tr>
                                     ))

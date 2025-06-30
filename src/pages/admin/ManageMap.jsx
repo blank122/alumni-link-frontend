@@ -37,12 +37,13 @@ const ManageMap = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/clustering-data", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        });
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/clustering-data`
+          , {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          });
         setAccounts(response.data.data);
       } catch (error) {
         console.error("Error fetching user locations:", error);

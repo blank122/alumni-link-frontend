@@ -10,7 +10,7 @@ const CertificationClusterChart = () => {
 
   useEffect(() => {
     // Replace with your actual Laravel API endpoint
-    axios.get('http://127.0.0.1:8000/api/clustered-certification-employment')
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/clustered-certification-employment`)
       .then(response => {
         setData(response.data.summary); // Assumes response has { summary: [...] }
       })
