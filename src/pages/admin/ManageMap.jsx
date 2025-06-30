@@ -37,7 +37,7 @@ const ManageMap = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/clustering-data`
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/clustering-data`
           , {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -15,7 +15,7 @@ const CourseList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/admin/courses_population`
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/courses_population`
                     , {
                         headers: {
                             Authorization: `Bearer ${token}`,
