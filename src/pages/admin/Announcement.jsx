@@ -16,7 +16,7 @@ const Announcements = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/admin/announcements`,
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/announcements`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ const Announcements = () => {
 
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_BASE_URL}/api/admin/announcements`,
+                `${import.meta.env.VITE_API_BASE_URL}/admin/announcements`,
                 formData,
                 {
                     headers: {
@@ -112,8 +112,7 @@ const Announcements = () => {
                                             <td className="px-6 py-4">
                                                 {item.ann_image ? (
                                                     <img
-                                                        src={`${import.meta.env.VITE_API_BASE_URL}/storage/announcements/${item.ann_image}`
-                                                        }
+                                                        src={`${import.meta.env.VITE_API_BASE_URL}/storage/announcements/${item.ann_image}`}
                                                         alt="Announcement Post"
                                                         className="w-20 h-20 object-cover rounded-md shadow-sm"
                                                     />

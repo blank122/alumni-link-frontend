@@ -72,15 +72,17 @@ const EmploymentModal = ({ isOpen, onClose }) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/add-career/${user.alumni_id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify(newJob),
-            });
+
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/add-career/${user.alumni_id}`
+                , {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(newJob),
+                });
 
             const result = await response.json();
             console.log("Server response:", result);

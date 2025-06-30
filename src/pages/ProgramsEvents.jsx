@@ -15,11 +15,12 @@ const ProgramsEvents = () => {
         let ignore = false;
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/program-events", {
-                    headers: {
-                        Accept: "application/json",
-                    },
-                });
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/program-events`
+                    , {
+                        headers: {
+                            Accept: "application/json",
+                        },
+                    });
                 if (!ignore) {
                     setPosts(response.data.data);
                     console.log(response.data.data);

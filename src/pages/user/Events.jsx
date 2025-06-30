@@ -13,7 +13,7 @@ const Events = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/user-events", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/user-events`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -43,7 +43,9 @@ const Events = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {posts.map((post) => (
                         <div key={post.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-                            <img className="w-full h-60 object-cover" src={`http://127.0.0.1:8000/storage/event_images/${post.event_image}`} alt="Job Post" />
+                            <img className="w-full h-60 object-cover"
+                                src={`${import.meta.env.VITE_API_BASE_URL}/storage/event_images/${post.event_image}`}
+                                alt="Job Post" />
 
                             <div className="p-6">
                                 <h5 className="text-xl font-semibold text-gray-900 dark:text-white">{post.event_title}</h5>
@@ -75,14 +77,16 @@ const Events = () => {
 
             {/* Modal */}
             {selectedEvent && (
-               <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg w-full max-w-lg p-6">
                         <button
                             className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                             onClick={() => setSelectedEvent(null)}>
                             ✖
                         </button>
-                        <img className="w-full h-60 object-cover rounded-md" src={`http://127.0.0.1:8000/storage/event_images/${selectedEvent.event_image}`} alt={selectedEvent.event_title} />
+                        <img className="w-full h-60 object-cover rounded-md"
+                            src={`${import.meta.env.VITE_API_BASE_URL}/storage/event_images/${selectedEvent.event_image}`}
+                            alt={selectedEvent.event_title} />
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">{selectedEvent.event_title}</h2>
                         <p className="mt-2 text-gray-700 dark:text-gray-400">{selectedEvent.event_details}</p>
                         <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">

@@ -14,7 +14,7 @@ const ManageFeedback = () => {
         const fetchData = async () => {
             `${import.meta.env.VITE_API_BASE_URL}/api/admin/feedbacks`
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/admin/feedbacks`
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/feedbacks`
                     , {
                         headers: {
                             Authorization: `Bearer ${token}`,

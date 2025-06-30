@@ -16,11 +16,12 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/home-events", {
-                    headers: {
-                        Accept: "application/json",
-                    },
-                });
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/home-events`
+                    , {
+                        headers: {
+                            Accept: "application/json",
+                        },
+                    });
                 setPosts(response.data.data);
                 console.log(response.data.data);
             } catch (error) {

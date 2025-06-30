@@ -13,7 +13,7 @@ const DashboardUser = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/latest-jobs", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/latest-jobs`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -36,7 +36,7 @@ const DashboardUser = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/latest-announcements", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/latest-announcement`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -70,7 +70,9 @@ const DashboardUser = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {jobs.map((job) => (
                         <div key={job.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-                            <img className="w-full h-60 object-cover" src={`http://127.0.0.1:8000/storage/job_posts/${job.job_image}`} alt="Job Post" />
+                            <img className="w-full h-60 object-cover" 
+                            src={`${import.meta.env.VITE_API_BASE_URL}/storage/job_posts/${job.job_image}`}
+                            alt="Job Post" />
 
                             <div className="p-6">
                                 <h5 className="text-xl font-semibold text-gray-900 dark:text-white">{job.job_title}</h5>

@@ -18,7 +18,7 @@ const Events = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/admin/events", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/events`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -51,7 +51,7 @@ const Events = () => {
         if (eventImage) formData.append("event_image", eventImage);
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/admin/events`
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/admin/events`
                 , formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,

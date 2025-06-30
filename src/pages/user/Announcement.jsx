@@ -12,7 +12,7 @@ const Announcements = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/user-announcements", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/announcements`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -43,7 +43,9 @@ const Announcements = () => {
                     {announcements.map((announcement) => (
                         <div key={announcement.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                             <a href="#">
-                                <img className="w-full h-60 object-cover" src={`http://127.0.0.1:8000/storage/announcements/${announcement.ann_image}`} alt="Announcement" />
+                                <img className="w-full h-60 object-cover" 
+                                src={`${import.meta.env.VITE_API_BASE_URL}/storage/announcements/${announcement.ann_image}`}
+                                 alt="Announcement" />
                             </a>
                             <div className="p-5">
                                 <a href="#">

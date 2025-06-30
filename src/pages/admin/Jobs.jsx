@@ -18,7 +18,7 @@ const Jobs = () => {
     useEffect(() => {
         const fetchJobPost = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/admin/jobs`, {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/jobs`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -49,7 +49,7 @@ const Jobs = () => {
         if (jobImage) formData.append("job_image", jobImage);
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/admin/jobs`
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/admin/jobs`
                 , formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,

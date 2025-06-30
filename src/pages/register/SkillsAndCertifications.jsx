@@ -109,11 +109,12 @@ const SkillsAndCertifications = ({
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/soft-skills", {
-                    headers: {
-                        Accept: "application/json",
-                    },
-                });
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/soft-skills`
+                    , {
+                        headers: {
+                            Accept: "application/json",
+                        },
+                    });
                 setSoftSkills(response.data.data);
             } catch (error) {
                 console.error("Error fetching soft skills:", error);
