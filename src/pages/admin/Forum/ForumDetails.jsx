@@ -18,7 +18,7 @@ const ForumDetails = () => {
     useEffect(() => {
         const fetchForumDetails = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/forums/${id}`);
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/forums/${id}`);
                 setForum(response.data.data);
             } catch (error) {
                 console.error("Error fetching forum:", error);
@@ -38,7 +38,7 @@ const ForumDetails = () => {
         formData.append("account_id", user.id);
 
         try {
-            const response = await axios.post(`${API_BASE_URL}/forums/${id}/threads`, formData, {
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/forums/${id}/threads`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
