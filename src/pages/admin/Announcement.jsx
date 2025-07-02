@@ -16,7 +16,7 @@ const Announcements = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/admin/announcements`,
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/announcements`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ const Announcements = () => {
 
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_BASE_URL}/admin/announcements`,
+                `${import.meta.env.VITE_API_BASE_URL}/announcements`,
                 formData,
                 {
                     headers: {
