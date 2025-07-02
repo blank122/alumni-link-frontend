@@ -216,7 +216,7 @@ const Events = () => {
                                             <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8H4z"></path>
                                         </svg>
                                     ) : (
-                                        "Sign in"
+                                        "Post"
                                     )}
                                 </button>
                             </div>
