@@ -104,11 +104,11 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                 return (
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
-                            <Tooltip 
+                            <Tooltip
                                 formatter={(value, name, props) => [
-                                    value, 
-                                    `${name} (${props.payload.percentage || 
-                                        (value/clusteredData.length*100).toFixed(1)+'%'})`
+                                    value,
+                                    `${name} (${props.payload.percentage ||
+                                    (value / clusteredData.length * 100).toFixed(1) + '%'})`
                                 ]}
                             />
                             <Legend />
@@ -133,15 +133,15 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={lineChartData}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis 
-                                dataKey="name" 
+                            <XAxis
+                                dataKey="name"
                                 tick={{ angle: -45, textAnchor: 'end' }}
                                 height={70}
                             />
                             <YAxis allowDecimals={false} />
-                            <Tooltip 
+                            <Tooltip
                                 formatter={(value, name, props) => [
-                                    value, 
+                                    value,
                                     `${props.payload.name} (Rank ${props.payload.rank})`
                                 ]}
                                 labelFormatter={() => "Cluster"}
@@ -184,16 +184,20 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                     <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={sortedClusters}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis 
-                                dataKey="name" 
-                                tick={{ angle: -45, textAnchor: 'end' }}
-                                height={70}
+                            <XAxis
+                                dataKey="name"
+                                // set angle to 0 for horizontal text
+                                tick={{ angle: 0, textAnchor: 'middle' }}
+                                // force every label to show
+                                interval={0}
+                                // shrink height since you don’t need extra room for rotation
+                                height={50}
                             />
                             <YAxis allowDecimals={false} />
-                            <Tooltip 
+                            <Tooltip
                                 formatter={(value, name, props) => [
-                                    value, 
-                                    `${props.payload.name} (${(value/clusteredData.length*100).toFixed(1)}%)`
+                                    value,
+                                    `${props.payload.name} (${(value / clusteredData.length * 100).toFixed(1)}%)`
                                 ]}
                             />
                             <Legend />
@@ -204,6 +208,7 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                             </Bar>
                         </BarChart>
                     </ResponsiveContainer>
+
                 );
         }
     };
