@@ -85,22 +85,6 @@ const StatisticalReports = () => {
             </div>
 
             <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Work Location Analysis</h2>
-                <p className="text-sm text-gray-500 mb-4">
-                    This chart visualizes the results of a location-based clustering algorithm (hierarchical clustering algorithm) that groups alumni according to their current work locations.
-                    Alumni are categorized into two distinct clusters: those working within the Philippines and those working abroad.
-                    This analysis helps highlight the geographic distribution of alumni employment, offering valuable insights into graduate mobility and potential global career reach.
-                </p>
-                {loadingLocation ? (
-                    <ChartLoading message="Loading clustering analysis chart..." />
-                ) : (
-                    <ClusterChart data={locationAnalysis} clusteringType="kmeans-location" chartType="pie" />
-                )}
-
-            </div>
-
-
-            <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">
                     Regional Clustering of Employed Alumni
                 </h2>
@@ -112,7 +96,7 @@ const StatisticalReports = () => {
                         <span className="font-medium">Cluster A: NCR</span>
                     </li>
                     <li>
-                        <span className="font-medium">Cluster B: Luzon</span> – Recent graduates with fewer certifications/skills, likely in entry-level roles or still building their professional profiles.
+                        <span className="font-medium">Cluster B: Luzon</span> 
                     </li>
                     <li>
                         <span className="font-medium">Cluster C: Visayas</span>
