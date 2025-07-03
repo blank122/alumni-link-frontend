@@ -36,7 +36,7 @@ const DashboardUser = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/latest-announcement`, {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/latest-announcements`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
