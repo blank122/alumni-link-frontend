@@ -117,7 +117,7 @@ const UnemploymentUpdates = () => {
                                     setIsLoading(true);
 
                                     try {
-                                        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/unemployed-updates`
+                                        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/unemployed-updates`
                                             , {
                                                 method: 'POST',
                                                 headers: {
