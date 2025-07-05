@@ -85,7 +85,7 @@ const Events = () => {
                             ✖
                         </button>
                         <img className="w-full h-60 object-cover rounded-md"
-                            src={`${import.meta.env.VITE_STORAGE_BASE_URL}/storage/event_images/${selectedEvent.event_image}`}
+                            src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/event_images/${selectedEvent.event_image}`}
                             alt={selectedEvent.event_title} />
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">{selectedEvent.event_title}</h2>
                         <p className="mt-2 text-gray-700 dark:text-gray-400">{selectedEvent.event_details}</p>

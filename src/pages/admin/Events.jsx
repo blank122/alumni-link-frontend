@@ -118,7 +118,7 @@ const Events = () => {
                                                 {item.event_image ? (
                                                     
                                                     <img
-                                                        src={`${import.meta.env.VITE_STORAGE_BASE_URL}/storage/event_images/${item.event_image}`}
+                                                        src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/event_images/${item.event_image}`}
                                                         alt="Job Post"
                                                         className="w-20 h-20 object-cover rounded-md shadow-sm"
                                                     />

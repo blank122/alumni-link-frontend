@@ -112,7 +112,7 @@ const Jobs = () => {
                                             <td className="px-6 py-4">
                                                 {item.job_image ? (
                                                     <img
-                                                        src={`${import.meta.env.VITE_STORAGE_BASE_URL}/storage/job_posts/${item.job_image}`}
+                                                        src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/job_posts/${item.job_image}`}
                                                         alt="Job Post"
                                                         className="w-20 h-20 object-cover rounded-md shadow-sm"
                                                     />

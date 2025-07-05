@@ -44,7 +44,7 @@ const Announcements = () => {
                         <div key={announcement.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                             <a href="#">
                                 <img className="w-full h-60 object-cover" 
-                                src={`${import.meta.env.VITE_STORAGE_BASE_URL}/storage/announcements/${announcement.ann_image}`}
+                                src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/announcements/${announcement.ann_image}`}
                                  alt="Announcement" />
                             </a>
                             <div className="p-5">

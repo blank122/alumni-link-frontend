@@ -46,7 +46,7 @@ const Jobs = () => {
                     {jobs.map((job) => (
                         <div key={job.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                             <img className="w-full h-60 object-cover"
-                                src={`${import.meta.env.VITE_STORAGE_BASE_URL}/storage/job_posts/${job.job_image}`}
+                                src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/job_posts/${job.job_image}`}
 
                                 alt="Job Post" />
 
