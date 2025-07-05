@@ -112,7 +112,7 @@ const Announcements = () => {
                                             <td className="px-6 py-4">
                                                 {item.ann_image ? (
                                                     <img
-                                                        src={`${import.meta.env.VITE_API_BASE_URL}/storage/announcements/${item.ann_image}`}
+                                                        src={`${import.meta.env.VITE_STORAGE_BASE_URL}/storage/announcements/${item.ann_image}`}
                                                         alt="Announcement Post"
                                                         className="w-20 h-20 object-cover rounded-md shadow-sm"
                                                     />

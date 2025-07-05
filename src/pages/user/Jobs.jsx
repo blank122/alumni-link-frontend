@@ -46,7 +46,7 @@ const Jobs = () => {
                     {jobs.map((job) => (
                         <div key={job.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                             <img className="w-full h-60 object-cover"
-                                src={`${import.meta.env.VITE_API_BASE_URL}/storage/job_posts/${job.job_image}`}
+                                src={`${import.meta.env.VITE_STORAGE_BASE_URL}/storage/job_posts/${job.job_image}`}
 
                                 alt="Job Post" />
 
@@ -85,7 +85,7 @@ const Jobs = () => {
                             ✖
                         </button>
                         <img className="w-full h-60 object-cover"
-                            src={`${import.meta.env.VITE_API_BASE_URL}/storage/job_posts/${selectedPost.job_image}`}
+                            src={`${import.meta.env.VITE_STORAGE_BASE_URL}/storage/job_posts/${selectedPost.job_image}`}
                             alt="Job Post" />
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">{selectedPost.job_title}</h2>
                         <p className="mt-2 text-gray-700 dark:text-gray-400">{selectedPost.job_details}</p>
