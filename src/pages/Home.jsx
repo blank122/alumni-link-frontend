@@ -89,7 +89,7 @@ const Home = () => {
 
                             return (
                                 <div key={index} className="relative w-xl bg-white shadow-lg rounded-lg overflow-hidden">
-                                    <img src={`http://127.0.0.1:8000/storage/event_images/${event.event_image}` || UmLogo} alt={event.event_title} className="w-full h-48 object-cover" />
+                                    <img src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/event_images/${event.event_image}` || UmLogo} alt={event.event_title} className="w-full h-48 object-cover" />
                                     <div className="absolute top-3 left-3 bg-yellow-400 text-black p-2 text-sm font-bold rounded">
                                         <span className="block text-xl">{day}</span>
                                         <span className="block">{month}</span>
