@@ -1,155 +1,152 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
-import { motion } from 'framer-motion';
-import { 
-  FaUserTimes, FaBriefcase, FaCheckCircle 
-} from 'react-icons/fa';
-import StatsCard from '../../components/StatsCard';
-import { useAlumniData, useAccountCounts } from '../../hooks/AlumniData';
-import createApiClient from '../../api/ApiService';
 
-const AdminAccounts = () => {
-  const { token } = useAuth();
-  const { account, loading } = useAlumniData(token);
-  const { 
-    pendingCount, 
-    approvedCount, 
-    loadingPending, 
-    loadingApproved 
-  } = useAccountCounts(token);
-  
-  const [loadingAction, setLoadingAction] = useState(null);
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  const handleAction = async (id, actionType) => {
-    const confirmation = window.confirm(`Are you sure you want to ${actionType} this account?`);
-    if (!confirmation) return;
+const AdminAccountPage = () => {
+  const [form, setForm] = useState({
+    alm_first_name: "",
+    alm_last_name: "",
+    alm_gender: "",
+    alm_contact_number: "",
+    email: "",
+    password: "",
+  });
 
-    setLoadingAction(id);
+  const [loading, setLoading] = useState(false);
+  const [admins, setAdmins] = useState([]);
+  const {  token } = useAuth();
 
+  const headers = {
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
+  const fetchAdmins = async () => {
     try {
-      const api = createApiClient(token);
-      const status = actionType === "Approve" ? "2" : "0";
-      await api.updateAccountStatus(id, status);
-      
-      alert(`${actionType} action successful!`);
-      window.location.reload();
-    } catch (error) {
-      alert(`Failed to ${actionType} the account.`);
-      console.error("Error:", error);
+      const res = await axios.get(`${API_BASE_URL}/admin/admin-accounts`, { headers });
+      setAdmins(res.data.data || res.data || []);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to fetch admin accounts");
+    }
+  };
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    for (const key in form) {
+      if (!form[key]) {
+        toast.error("Please fill out all fields");
+        return;
+      }
+    }
+
+    setLoading(true);
+    try {
+      await axios.post(`${API_BASE_URL}/admin/admin-accounts`, form, { headers });
+      toast.success("Admin account created! Check your email for processing status.");
+      setForm({
+        alm_first_name: "",
+        alm_last_name: "",
+        alm_gender: "",
+        alm_contact_number: "",
+        email: "",
+        password: "",
+      });
+      fetchAdmins();
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.error || "Error creating admin");
     } finally {
-      setLoadingAction(null);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen p-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        <StatsCard 
-          icon={FaUserTimes}
-          title="Pending Accounts"
-          value={pendingCount}
-          isLoading={loadingPending}
-          bgColor="bg-gray-300"
-        />
-        
-        <StatsCard 
-          icon={FaBriefcase}
-          title="Approved Accounts"
-          value={approvedCount}
-          isLoading={loadingApproved}
-          bgColor="bg-orange-200"
-        />
-      </div>
+    <div className="container mx-auto py-8 grid gap-8 md:grid-cols-2">
+      {/* Form */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full"
+      >
+        <div className="shadow-xl border rounded-lg p-6">
+          <h2 className="text-xl font-bold mb-4">Create Admin Account</h2>
+          <form onSubmit={handleSubmit} className="grid gap-4">
+            {[
+              { id: "alm_first_name", label: "First Name" },
+              { id: "alm_last_name", label: "Last Name" },
+              { id: "alm_gender", label: "Gender" },
+              { id: "alm_contact_number", label: "Contact Number" },
+              { id: "email", label: "Email", type: "email" },
+              { id: "password", label: "Password", type: "password" },
+            ].map(({ id, label, type = "text" }) => (
+              <div key={id} className="grid gap-2">
+                <label htmlFor={id} className="text-sm font-medium">
+                  {label}
+                </label>
+                <input
+                  id={id}
+                  name={id}
+                  type={type}
+                  value={form[id]}
+                  onChange={handleChange}
+                  required
+                  className="border rounded p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            ))}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            >
+              {loading ? "Creating..." : "Create Account"}
+            </button>
+          </form>
+        </div>
+      </motion.div>
 
-      <AlumniTable 
-        accounts={account} 
-        loading={loading} 
-        loadingAction={loadingAction}
-        onAction={handleAction}
-      />
+      {/* Existing Admins */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full"
+      >
+        <div className="shadow-xl border rounded-lg p-6 h-full">
+          <h2 className="text-xl font-bold mb-4">Existing Admin Accounts</h2>
+          <div className="space-y-2 max-h-[600px] overflow-auto">
+            {admins.length === 0 ? (
+              <p className="text-sm text-gray-500">No admin accounts yet.</p>
+            ) : (
+              admins.map((admin) => (
+                <div key={admin.id} className="border p-2 rounded-lg">
+                  <p className="font-medium">
+                    {admin.alm_first_name} {admin.alm_last_name}
+                  </p>
+                  <p className="text-sm text-gray-600">{admin.email}</p>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
-};
+}
 
-const AlumniTable = ({ accounts, loading, loadingAction, onAction }) => (
-  <motion.div
-    className="mt-6 p-4 bg-white shadow-md rounded-lg"
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5 }}
-  >
-    <h2 className="text-2xl font-semibold text-gray-700 mb-4">Alumni Accounts Data</h2>
-    {loading ? (
-      <p className="text-gray-500">Loading alumni data...</p>
-    ) : (
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-white shadow-lg rounded-lg">
-          <thead className="bg-blue-600 text-white">
-            <tr>
-              <th className="px-6 py-3 text-left">Registration Date</th>
-              <th className="px-6 py-3 text-left">Name</th>
-              <th className="px-6 py-3 text-left">Email</th>
-              <th className="px-6 py-3 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {accounts.length > 0 ? (
-              accounts.map((item) => (
-                <AlumniTableRow 
-                  key={item.id}
-                  item={item}
-                 
-                />
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="text-center p-4 text-gray-500">
-                  No Account data found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    )}
-  </motion.div>
-);
 
-const AlumniTableRow = ({ item }) => {
-  const statusText = item.status === 1 ? "Pending" : "Rejected";
-  
-  return (
-    <tr className="border-b bg-gray-100 hover:bg-gray-200 transition">
-      <td className="px-6 py-4 text-gray-700">
-        {new Date(item.created_at).toLocaleDateString()}
-      </td>
-      <td className="px-6 py-4 text-gray-700">
-        {item.alumni?.alm_first_name || "N/A"} {item.alumni?.alm_last_name || "N/A"}
-      </td>
-      <td className="px-6 py-4 text-gray-700">{item.email || "N/A"}</td>
-      <td className="px-6 py-4 text-gray-700">{statusText}</td>
-     
-    </tr>
-  );
-};
-
-const ActionButton = ({ actionType, itemId, isProcessing, onClick, color, className = '' }) => {
-  const colorClasses = {
-    green: 'bg-green-500 hover:bg-green-600',
-    red: 'bg-red-500 hover:bg-red-600',
-  };
-  
-  return (
-    <button
-      onClick={() => onClick(itemId, actionType)}
-      className={`px-4 py-2 text-white rounded-md transition ${className} ${
-        isProcessing ? "bg-gray-400 cursor-not-allowed" : colorClasses[color]
-      }`}
-      disabled={isProcessing}
-    >
-      {isProcessing ? "Processing..." : actionType}
-    </button>
-  );
-};
-
-export default AdminAccounts;
+export default AdminAccountPage;

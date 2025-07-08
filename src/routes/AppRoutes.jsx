@@ -42,7 +42,7 @@ import UserHelp from "../pages/user/Help";
 
 import Unauthorized from "../pages/errors/Unauthorized";
 import Updates from "../pages/admin/UnemploymentUpdates";
-
+import AdminAccounts from "../pages/admin/AdminAccounts";
 const AppRoutes = () => {
     return (
         <Routes>
@@ -66,9 +66,11 @@ const AppRoutes = () => {
                     <Route path="announcement" element={<Announcement />} />
                     <Route path="events" element={<Events />} />
                     <Route path="forums" element={<AdminForums />} />
-                    <Route path="forums/:id" element={<AdminForumDetails />} />                    
+                    <Route path="forums/:id" element={<AdminForumDetails />} />
                     <Route path="course-list" element={<CourseList />} />
                     <Route path="alumni-list" element={<AlumniList />} />
+                    <Route path="admin-list" element={<AdminAccounts />} />
+
                     <Route path="manage-map" element={<ManageMap />} />
                     <Route path="alumni-map" element={<AlumniGISMap />} />
                     <Route path="manage-feedback" element={<ManageFeedback />} />

@@ -28,7 +28,7 @@ const AdminLayout = ({ children }) => {
                         <div className="flex items-center space-x-4 p-4">
                             <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center text-1xl font-bold">
                                 {user.alumni.alm_first_name[0]}{user.alumni.alm_last_name[0]}
-                            </div>                        
+                            </div>
                             {user ? (
                                 <div>
                                     <p>{user.alumni.alm_first_name} {user.alumni.alm_last_name}</p>
@@ -50,6 +50,8 @@ const AdminLayout = ({ children }) => {
                                 { path: "/admin/forums", label: "Forums", icon: "💬" },
                                 { path: "/admin/course-list", label: "Course List", icon: "📚" },
                                 { path: "/admin/alumni-list", label: "Alumni List", icon: "🎓" },
+                                { path: "/admin/admin-list", label: "Admin ", icon: "🎓" },
+
                                 { path: "/admin/manage-map", label: "Manage Map", icon: "🗺️" },
                                 { path: "/admin/manage-feedback", label: "Feedback", icon: "📝" },
                                 { path: "/admin/statistical-reports", label: "Statistical Reports", icon: "📊" },
