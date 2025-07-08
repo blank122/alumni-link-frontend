@@ -94,7 +94,6 @@ export const useUnemployedData = (token) => {
   return { account, loading };
 };
 
-
 export const useAlumniUnemployedCoursesData = (token) => {
   const [data, setData] = useState(null); // initialize as null, not []
   const [loadingData, setLoadingData] = useState(true);
@@ -119,4 +118,30 @@ export const useAlumniUnemployedCoursesData = (token) => {
   }, [token]);
 
   return { data, loadingData };
+};
+
+export const useAdminAccounts = (token) => {
+  const [account, setAccount] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) return;
+
+      try {
+        const api = createApiClient(token);
+        const response = await api.getUnemployed();
+        console.log("fetched data", response);
+        setAccount(response.data.data);
+      } catch (error) {
+        console.error("Error fetching alumni data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  return { account, loading };
 };

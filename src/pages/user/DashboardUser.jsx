@@ -70,9 +70,9 @@ const DashboardUser = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {jobs.map((job) => (
                         <div key={job.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-                            <img className="w-full h-60 object-cover" 
-                            src={`${import.meta.env.VITE_API_BASE_URL}/storage/job_posts/${job.job_image}`}
-                            alt="Job Post" />
+                            <img className="w-full h-60 object-cover"
+                                src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/job_posts/${job.job_image}`}
+                                alt="Job Post" />
 
                             <div className="p-6">
                                 <h5 className="text-xl font-semibold text-gray-900 dark:text-white">{job.job_title}</h5>
@@ -109,7 +109,9 @@ const DashboardUser = () => {
                     {announcements.map((announcement) => (
                         <div key={announcement.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700 mb-4">
                             <a href="#">
-                                <img className="w-full h-60 object-cover" src={`http://127.0.0.1:8000/storage/announcements/${announcement.ann_image}`} alt="Announcement" />
+                                <img className="w-full h-60 object-cover"
+                                    src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/announcements/${announcement.ann_image}`}
+                                    alt="Announcement" />
                             </a>
                             <div className="p-5">
                                 <a href="#">
@@ -137,7 +139,9 @@ const DashboardUser = () => {
                             onClick={() => setSelectedPost(null)}>
                             ✖
                         </button>
-                        <img className="w-full h-60 object-cover" src={`http://127.0.0.1:8000/storage/job_posts/${selectedPost.job_image}`} alt="Job Post" />
+                        <img className="w-full h-60 object-cover"
+                            src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/job_posts/${selectedPost.job_image}`}
+                            alt="Job Post" />
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">{selectedPost.job_title}</h2>
                         <p className="mt-2 text-gray-700 dark:text-gray-400">{selectedPost.job_details}</p>
                         <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
