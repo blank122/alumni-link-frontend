@@ -75,7 +75,22 @@ const StatisticalReports = () => {
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Clustering Analysis</h2>
                 <p className="text-sm text-gray-500 mb-4">
                     This chart displays the results of a clustering algorithm (hierarchical clustering) used to group alumni into distinct clusters based on shared attributes such as employment status, job location, or related metrics.
-                    Each bar represents the number of alumni within a specific cluster, helping to uncover hidden patterns and similarities among different graduate profiles.                    </p>
+                    Each bar represents the number of alumni within a specific cluster, helping to uncover hidden patterns and similarities among different graduate profiles.
+                </p>
+                <ul className="text-sm text-gray-500 mb-4 list-disc pl-5">
+                    <li>
+                        <span className="font-medium">Mid-Level Aumni </span>
+                    </li>
+                    <li>
+                        <span className="font-medium">Early Career Alumni</span>
+                    </li>
+                    <li>
+                        <span className="font-medium">Experienced Alumni</span>
+                    </li>
+                    <li>
+                        <span className="font-medium">Has Masters Degree</span>
+                    </li>
+                </ul>
                 {loadingAnalysis ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
@@ -96,7 +111,7 @@ const StatisticalReports = () => {
                         <span className="font-medium">Cluster A: NCR</span>
                     </li>
                     <li>
-                        <span className="font-medium">Cluster B: Luzon</span> 
+                        <span className="font-medium">Cluster B: Luzon</span>
                     </li>
                     <li>
                         <span className="font-medium">Cluster C: Visayas</span>
