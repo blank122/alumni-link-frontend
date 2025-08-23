@@ -44,7 +44,7 @@ const Events = () => {
                     {posts.map((post) => (
                         <div key={post.id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden dark:bg-gray-800 dark:border-gray-700">
                             <img className="w-full h-60 object-cover"
-                                src={`${import.meta.env.VITE_API_BASE_URL}/storage/event_images/${post.event_image}`}
+                                src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/event_images/${post.event_image}`}
                                 alt="Job Post" />
 
                             <div className="p-6">
