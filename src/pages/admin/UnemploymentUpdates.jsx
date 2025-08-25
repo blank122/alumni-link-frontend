@@ -5,15 +5,40 @@ import { useAuth } from "../../contexts/AuthContext";
 import StatsCard from "../../components/StatsCard";
 import { useAlumniUnemployedCoursesData } from "../../hooks/AlumniData";
 import { useState } from "react";
+import axios from "axios";
 
 const UnemploymentUpdates = () => {
     const { token } = useAuth();
     const { data, dataLoading } = useAlumniUnemployedCoursesData(token);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [actionType, setActionType] = useState(''); // "sms" or "email"
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const [phoneNumber, setPhoneNumber] = useState("");
+
+    const handleSend = async () => {
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_BASE_URL}/send-updates/${phoneNumber}`
+            );
+
+            console.log("API Response:", response.data);
+
+            alert(response.data.message); // show success/fail message
+            setIsOpen(false); // close modal
+        } catch (error) {
+            if (error.response) {
+                // Server responded with an error
+                console.error("Error:", error.response.data);
+                alert(error.response.data.error || "Failed to send SMS.");
+            } else {
+                console.error("Request failed:", error.message);
+                alert("Something went wrong.");
+            }
+        }
+    };
 
     if (dataLoading) return <p>Loading...</p>;
 
@@ -65,8 +90,7 @@ const UnemploymentUpdates = () => {
                     <button
                         className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow"
                         onClick={() => {
-                            setActionType('email');
-                            setIsModalOpen(true);
+                            setIsOpen(true)
                         }}
                     >
                         <FaSms />
@@ -160,6 +184,38 @@ const UnemploymentUpdates = () => {
                                 }}
                             >
                                 {isLoading ? 'Sending...' : 'Confirm'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal */}
+            {isOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-2xl shadow-lg w-96">
+                        <h2 className="text-lg font-semibold mb-4">Send SMS</h2>
+
+                        <input
+                            type="text"
+                            placeholder="Enter phone number"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4 focus:outline-none focus:ring focus:ring-green-500"
+                        />
+
+                        <div className="flex justify-end gap-2">
+                            <button
+                                className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                                onClick={handleSend}
+                            >
+                                Send
                             </button>
                         </div>
                     </div>
