@@ -79,16 +79,16 @@ const StatisticalReports = () => {
                 </p>
                 <ul className="text-sm text-gray-500 mb-4 list-disc pl-5">
                     <li>
-                        <span className="font-medium">Mid-Level Aumni </span>
+                        <span className="font-medium">Mid-level alumni – alumni with 2 to 5 years of work experience. </span>
                     </li>
                     <li>
-                        <span className="font-medium">Early Career Alumni</span>
+                        <span className="font-medium">Early-career alumni – alumni who are fresh graduates or have less than 1 year of work experience.</span>
                     </li>
                     <li>
-                        <span className="font-medium">Experienced Alumni</span>
+                        <span className="font-medium">Experienced alumni – alumni with 5 or more years of work experience.</span>
                     </li>
                     <li>
-                        <span className="font-medium">Has Masters Degree</span>
+                        <span className="font-medium">Master’s degree holders – alumni who have a master’s degree or PhD.</span>
                     </li>
                 </ul>
                 {loadingAnalysis ? (

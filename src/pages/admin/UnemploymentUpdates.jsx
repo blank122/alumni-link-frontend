@@ -62,6 +62,16 @@ const UnemploymentUpdates = () => {
                         <FaEnvelope />
                         Send Email Updates
                     </button>
+                    <button
+                        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow"
+                        onClick={() => {
+                            setActionType('email');
+                            setIsModalOpen(true);
+                        }}
+                    >
+                        <FaSms />
+                        Send Single SMS Update
+                    </button>
                 </div>
             </div>
 
