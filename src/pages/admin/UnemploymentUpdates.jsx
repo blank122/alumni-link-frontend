@@ -15,7 +15,7 @@ const UnemploymentUpdates = () => {
     const [actionType, setActionType] = useState(''); // "sms" or "email"
 
     const [isLoading, setIsLoading] = useState(false);
-
+    
     const [phoneNumber, setPhoneNumber] = useState("");
 
     const handleSend = async () => {
