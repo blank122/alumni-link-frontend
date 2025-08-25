@@ -9,7 +9,6 @@ const AccountInfoStep = ({ userData, handleChange, errors, currentStepIndex, tot
     // - At least one lowercase
     // - At least one number
     // - At least one special character
-    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     return (
         <motion.div
@@ -44,12 +43,7 @@ const AccountInfoStep = ({ userData, handleChange, errors, currentStepIndex, tot
                     value={userData.password}
                     className="w-full p-2 border rounded mb-1"
                 />
-                {/* Regex check */}
-                {!strongPasswordRegex.test(userData.password) && userData.password.length > 0 && (
-                    <p className="text-red-500 text-sm">
-                        Password must be at least 8 characters long, contain one uppercase, one lowercase, one number, and one special character.
-                    </p>
-                )}
+        
                 {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
         </motion.div>

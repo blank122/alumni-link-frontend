@@ -145,6 +145,8 @@ const MultiStepForm = () => {
     const validateStep = () => {
         let newErrors = {};
         const phoneRegex = /^(09|\+639)\d{9}$/;
+        const strongPasswordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         //registration
         if (step === 1) {
             if (!userData.alm_first_name) newErrors.alm_first_name = "First Name is required";
@@ -192,6 +194,10 @@ const MultiStepForm = () => {
         else if (step === 8) {
             if (!userData.email) newErrors.email = "Email is required";
             if (!userData.password) newErrors.password = "Password is required";
+            else if (!strongPasswordRegex.test(userData.password)) {
+                newErrors.password =
+                    "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.";
+            }
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
