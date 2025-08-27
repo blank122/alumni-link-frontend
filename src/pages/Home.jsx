@@ -52,11 +52,14 @@ const Home = () => {
                         Your journey continues here, where every step forward is a step together.
                     </p>
                     <div className="flex justify-start mt-2">
-                        <a href="#about" className="px-6 py-3 bg-yellow-500 text-white font-semibold rounded-md shadow-md hover:bg-yellow-600">
+                        <Link
+                            to="/about"
+                            className="px-6 py-3 bg-yellow-500 text-white font-semibold rounded-md shadow-md hover:bg-yellow-600"
+                        >
                             See More
-                        </a>
-                    </div>
+                        </Link>
 
+                    </div>
 
                 </div>
 
