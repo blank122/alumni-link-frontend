@@ -5,7 +5,7 @@ const AdminRoute = () => {
     const { user } = useAuth();
 
     // ✅ Check if user exists and is an admin (account_type === 1)
-    return user && user.account_type === 1 ? <Outlet /> : <Navigate to="/unauthorized" />;
+    return user && user.account_type === 1 ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default AdminRoute;
