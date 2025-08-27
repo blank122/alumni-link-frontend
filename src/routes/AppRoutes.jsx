@@ -99,7 +99,7 @@ const AppRoutes = () => {
                 </Route>
             </Route>
 
-            <Route path="/unauthorized" element={<Unauthorized />} />
+            {/* <Route path="/unauthorized" element={<Unauthorized />} /> */}
         </Routes>
     );
 };
