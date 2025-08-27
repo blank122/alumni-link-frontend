@@ -23,15 +23,17 @@ const CertificationClusterChart = () => {
     <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
       <h2>Certification Clusters by Employment Status</h2>
       <p className="text-sm text-gray-600 mt-4">
-        This bar chart visualizes the distribution of alumni certifications clustered by employment status and relevance to their current job roles. Each bar represents a group of alumni whose certifications fall into one of four categories:
+        This bar chart visualizes the distribution of alumni certifications clustered by employment status and relevance to their current job roles. Each bar represents a group of alumni whose certifications fall into one of five categories:
         <ul className="list-disc pl-5 mt-2">
           <li><strong>Related & Employed:</strong> Alumni whose certifications are related to their current jobs and are currently employed.</li>
           <li><strong>Related & Unemployed:</strong> Alumni with job-related certifications but currently not employed.</li>
           <li><strong>Not Related & Employed:</strong> Alumni who are employed, but their certifications are not directly related to their current jobs.</li>
           <li><strong>Not Related & Unemployed:</strong> Alumni whose certifications are unrelated to jobs and are currently unemployed.</li>
+          <li><strong>Not Related & Freelance:</strong> Alumni working as freelancers in areas where their certifications are not directly related to their freelance work.</li>
         </ul>
         This clustering helps identify how certifications align with job outcomes and may guide curriculum planning or career support initiatives.
       </p>
+
 
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
