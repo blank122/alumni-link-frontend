@@ -15,7 +15,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
     }
 
     if (allowedRoles && !allowedRoles.includes(user.account_type)) {
-        return <Navigate to="/unauthorized" replace />;
+        return <Navigate to="/" replace />;
     }
 
     return <Outlet />;
