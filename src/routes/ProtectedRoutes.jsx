@@ -11,11 +11,11 @@ const ProtectedRoute = ({ allowedRoles }) => {
     const { user } = useAuth();
 
     if (!user) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     if (allowedRoles && !allowedRoles.includes(user.account_type)) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     return <Outlet />;
