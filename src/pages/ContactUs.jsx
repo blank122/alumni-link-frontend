@@ -20,10 +20,11 @@ const ContactUs = () => {
                         </p>
                         <p className="text-gray-600">
                             <span className="font-medium text-gray-800">Email:</span>{" "}
-                            <a href="mailto:contact@alumnilink.com" className="text-blue-600 hover:underline">contact@alumnilink.com</a>
+                            <a href="mailto:contact@alumnilink.com" className="text-blue-600 hover:underline">ccdmnoffice@gmail.com
+</a>
                         </p>
                         <p className="text-gray-600">
-                            <span className="font-medium text-gray-800">Phone:</span> +123 456 7890
+                            <span className="font-medium text-gray-800">Phone:</span> (082)300-5456/305-0647
                         </p>
                     </div>
 
