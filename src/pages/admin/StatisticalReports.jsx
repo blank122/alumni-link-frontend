@@ -135,7 +135,7 @@ const StatisticalReports = () => {
 
             </div>
 
-            {/* <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
+            <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Certifications, Technical Skills and Soft Skills Analysis</h2>
                 <p className="text-sm text-gray-500 mb-4">
                     This analysis groups alumni into three distinct clusters based on their certifications, technical/soft skills, and career progression.
@@ -162,7 +162,7 @@ const StatisticalReports = () => {
                     <ClusterChart data={certAnalysis} clusteringType="kmeans-certificate" chartType="pie" />
                 )}
 
-            </div> */}
+            </div>
             
             {/* certificaiton clusters in relation with employment */}
             <CertificationClusters />
