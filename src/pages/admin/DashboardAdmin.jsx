@@ -2,11 +2,13 @@
 import { motion } from "framer-motion";
 import { useAuth } from "../../contexts/AuthContext";
 import { useState } from "react";
-import {useDashboardAnalytics} from "../../hooks/DashboardAnalytics";
+import { useDashboardAnalytics } from "../../hooks/DashboardAnalytics";
 import StatsCard from "../../components/StatsCard";
 import { FaCheckCircle, FaUserTimes, FaBriefcase, FaLaptopCode } from "react-icons/fa";
 import DashboardCharts from "../../components/DashboardChart";
 import EmploymentPieChart from "../../components/EmploymentPieChart";
+import GraduatesLineChart from "../../components/GraduatesLineChart";
+import ChartLoading from "../../components/ChartLoading";
 
 import Select from 'react-select';
 
@@ -90,6 +92,7 @@ const DashboardAdmin = () => {
     const employed = data?.summary?.employedAccounts || 0;
     const freelance = data?.summary?.freelanceAccounts || 0;
     const unemployed = data?.summary?.unemployedAccounts || 0;
+    const graduatesDemograph = data?.graduates || [];
 
     const monthlyData = data?.monthly || [];
 
@@ -220,9 +223,19 @@ const DashboardAdmin = () => {
 
 
             </div>
-
-            <DashboardCharts data={monthlyData} />
-            <EmploymentPieChart data={data} />
+            <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Graduates Overtime</h2>
+                <p className="text-sm text-gray-500 mb-4">
+                    This chart illustrates the number of alumni who graduated each year. It provides a historical overview of graduation trends and helps identify periods of growth or decline in alumni graduation rates.
+                </p>
+                {loading ? (
+                    <ChartLoading message="Loading graduates data..." />
+                ) : (
+                    <GraduatesLineChart data={graduatesDemograph} />
+                )}
+            </div>
+            <DashboardCharts data={monthlyData} loading={loading} />
+            <EmploymentPieChart data={data} loading={loading}/>
 
         </div>
     );

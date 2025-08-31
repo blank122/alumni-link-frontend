@@ -63,5 +63,9 @@ export const useDashboardAnalytics = (
     return { data, loading, error };
 };
 
+export const useGraduatesDemoGraph = (token) => {
+
+}
+
 
 

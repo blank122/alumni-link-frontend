@@ -2,9 +2,6 @@
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 
 import { useAuth } from "../../contexts/AuthContext";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import GraduatesLineChart from "../../components/GraduatesLineChart";
 import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredRegionalEmployment } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
 import CertificationClusters from "./CertificationClusterChart";
@@ -13,10 +10,6 @@ import ChartLoading from "../../components/ChartLoading";
 
 const StatisticalReports = () => {
     const { token } = useAuth();
-
-    const [GraduatesDemograph, setGraduatesDemograph] = useState([]);
-    const [LoadingGraduates, setLoadingGraduates] = useState(true);
-
     //clustering data  
     const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
     const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
@@ -24,29 +17,29 @@ const StatisticalReports = () => {
     const { data: regionalEmploymentAnalysis, loadingData: loadingRegional } = useClusteredRegionalEmployment(token);
 
     // graduates demograph
-    useEffect(() => {
-        const fetchGraduatesDemograph = async () => {
-            try {
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/graduates-per-year`
-                    , {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            Accept: "application/json",
-                        },
-                    });
-                setGraduatesDemograph(response.data.data);
-                console.log(response.data.data);
-            } catch (error) {
-                console.error("Error fetching alumni data:", error);
-            } finally {
-                setLoadingGraduates(false);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchGraduatesDemograph = async () => {
+    //         try {
+    //             const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/graduates-per-year`
+    //                 , {
+    //                     headers: {
+    //                         Authorization: `Bearer ${token}`,
+    //                         Accept: "application/json",
+    //                     },
+    //                 });
+    //             setGraduatesDemograph(response.data.data);
+    //             console.log(response.data.data);
+    //         } catch (error) {
+    //             console.error("Error fetching alumni data:", error);
+    //         } finally {
+    //             setLoadingGraduates(false);
+    //         }
+    //     };
 
-        if (token) {
-            fetchGraduatesDemograph();
-        }
-    }, [token]);
+    //     if (token) {
+    //         fetchGraduatesDemograph();
+    //     }
+    // }, [token]);
 
 
 
@@ -56,21 +49,7 @@ const StatisticalReports = () => {
             <h1 className="text-2xl font-bold">Statistical Reports</h1>
 
             {/* Job Seeker Status Over Time */}
-            {/* graduate per academic schoolyear */}
-            <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Graduates Overtime</h2>
-                <p className="text-sm text-gray-500 mb-4">
-                    This chart illustrates the number of alumni who graduated each year. It provides a historical overview of graduation trends and helps identify periods of growth or decline in alumni graduation rates.
-                </p>
-                {LoadingGraduates ? (
-                    <ChartLoading message="Loading graduates data..." />
-                ) : (
-                    <GraduatesLineChart data={GraduatesDemograph} />
-                )}
-            </div>
-
-
-
+            
             <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Clustering Analysis</h2>
                 <p className="text-sm text-gray-500 mb-4">
