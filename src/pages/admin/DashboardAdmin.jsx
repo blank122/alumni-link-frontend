@@ -264,7 +264,7 @@ const DashboardAdmin = () => {
                 )}
             </div>
 
-            <DashboardCharts data={monthlyData} loading={loading} />
+            <DashboardCharts data={data} loading={loading} />
             <EmploymentPieChart data={data} loading={loading} />
 
         </div>
