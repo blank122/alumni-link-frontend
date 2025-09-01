@@ -6,6 +6,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 
 const GraduatesLineChart = ({ data }) => {
@@ -16,7 +17,23 @@ const GraduatesLineChart = ({ data }) => {
         <XAxis dataKey="year" />
         <YAxis allowDecimals={false} />
         <Tooltip />
-        <Line type="monotone" dataKey="total" stroke="#8884d8" strokeWidth={2} />
+        <Legend />
+        {/* Current graduates */}
+        <Line
+          type="monotone"
+          dataKey="currentTotal"
+          stroke="#8884d8"
+          strokeWidth={2}
+          name="Current Graduates"
+        />
+        {/* Previous graduates */}
+        <Line
+          type="monotone"
+          dataKey="previousTotal"
+          stroke="#82ca9d"
+          strokeWidth={2}
+          name="Previous Graduates"
+        />
       </LineChart>
     </ResponsiveContainer>
   );

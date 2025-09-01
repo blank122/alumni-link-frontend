@@ -92,11 +92,34 @@ const DashboardAdmin = () => {
     const employed = data?.current?.summary?.employedAccounts || 0;
     const freelance = data?.current?.summary?.freelanceAccounts || 0;
     const unemployed = data?.current?.summary?.unemployedAccounts || 0;
-    const graduatesDemograph = data?.current?.graduates?.data || [];
     const monthlyData = data?.current?.monthly?.data || [];
 
     //description dynamic
+    // Extract raw data
+    const currentGraduates = data?.current?.graduates?.data || [];
+    const previousGraduates = data?.previous?.graduates?.data || [];
+
+    // Normalize + merge by year
+    const allYears = [
+        ...new Set([
+            ...currentGraduates.map((g) => g.year),
+            ...previousGraduates.map((g) => g.year),
+        ]),
+    ];
+
+    const graduatesDemograph = allYears.map((year) => {
+        const current = currentGraduates.find((g) => g.year === year);
+        const previous = previousGraduates.find((g) => g.year === year);
+
+        return {
+            year,
+            currentTotal: current ? current.total : 0,
+            previousTotal: previous ? previous.total : 0,
+        };
+    });
+
     const graduatesDescription = data?.current?.graduates?.description;
+
 
     // State for multi-select
 
@@ -225,21 +248,24 @@ const DashboardAdmin = () => {
 
             </div>
             <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Graduates Overtime</h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                    Alumni Graduates Over Time
+                </h2>
                 <p className="text-sm text-gray-500 mb-4">
-                    This chart illustrates the number of alumni who graduated each year. It provides a historical overview of graduation trends and helps identify periods of growth or decline in alumni graduation rates.
+                    This chart illustrates the number of alumni who graduated each year,
+                    comparing current and previous periods.
                 </p>
-                <p>
-                    {graduatesDescription}
-                </p>
+                <p>{graduatesDescription}</p>
+
                 {loading ? (
                     <ChartLoading message="Loading graduates data..." />
                 ) : (
                     <GraduatesLineChart data={graduatesDemograph} />
                 )}
             </div>
+
             <DashboardCharts data={monthlyData} loading={loading} />
-            <EmploymentPieChart data={data} loading={loading}/>
+            <EmploymentPieChart data={data} loading={loading} />
 
         </div>
     );
