@@ -48,6 +48,7 @@ export const useDashboardAnalytics = (
                         params,
                     }
                 );
+                console.log(response.data);
 
                 setData(response.data);
             } catch (err) {

@@ -86,18 +86,19 @@ const DashboardAdmin = () => {
             selectedSoftSkills.map(skill => skill.value),
             selectedCourses.map(course => course.value));
 
-    const registered = data?.summary?.registeredAccounts || 0;
-    const approved = data?.summary?.approvedAccounts || 0;
-    const pending = data?.summary?.pendingAccounts || 0;
-    const employed = data?.summary?.employedAccounts || 0;
-    const freelance = data?.summary?.freelanceAccounts || 0;
-    const unemployed = data?.summary?.unemployedAccounts || 0;
-    const graduatesDemograph = data?.graduates || [];
+    const registered = data?.current?.summary?.registeredAccounts || 0;
+    const approved = data?.current?.summary?.approvedAccounts || 0;
+    const pending = data?.current?.summary?.pendingAccounts || 0;
+    const employed = data?.current?.summary?.employedAccounts || 0;
+    const freelance = data?.current?.summary?.freelanceAccounts || 0;
+    const unemployed = data?.current?.summary?.unemployedAccounts || 0;
+    const graduatesDemograph = data?.current?.graduates?.data || [];
+    const monthlyData = data?.current?.monthly?.data || [];
 
-    const monthlyData = data?.monthly || [];
+    //description dynamic
+    const graduatesDescription = data?.current?.graduates?.description;
 
     // State for multi-select
-
 
     return (
         <div className="flex flex-col h-screen p-6">
@@ -192,7 +193,7 @@ const DashboardAdmin = () => {
                 <StatsCard
                     icon={FaUserTimes}
                     title="Total Unemployed"
-                    value={monthlyData.reduce((acc, item) => acc + (item.unemployed || 0), 0)}
+                    value={unemployed}
                     isLoading={loading}
                     bgColor="bg-orange-100 text-orange-700"
                 />
@@ -227,6 +228,9 @@ const DashboardAdmin = () => {
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Graduates Overtime</h2>
                 <p className="text-sm text-gray-500 mb-4">
                     This chart illustrates the number of alumni who graduated each year. It provides a historical overview of graduation trends and helps identify periods of growth or decline in alumni graduation rates.
+                </p>
+                <p>
+                    {graduatesDescription}
                 </p>
                 {loading ? (
                     <ChartLoading message="Loading graduates data..." />
