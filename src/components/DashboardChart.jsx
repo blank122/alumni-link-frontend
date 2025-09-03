@@ -9,6 +9,13 @@ import {
 
 import ChartLoading from "../components/ChartLoading";
 
+// Month formatter for readability
+const monthFormatter = (month) => {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return months[parseInt(month, 10) - 1] || month;
+};
+
 const DashboardCharts = ({ data, loading }) => {
   // Normalize and merge monthly data
   const currentMonthly = data?.current?.monthly?.data || [];
@@ -27,19 +34,39 @@ const DashboardCharts = ({ data, loading }) => {
 
     return {
       month,
-      currentRegistrations: current ? current.registrations : 0,
-      previousRegistrations: previous ? previous.registrations : 0,
-      currentUnemployed: current ? current.unemployed : 0,
-      previousUnemployed: previous ? previous.unemployed : 0,
+      currentRegistrations: current ? current.registrations : null,
+      previousRegistrations: previous ? previous.registrations : null,
+      currentUnemployed: current ? current.unemployed : null,
+      previousUnemployed: previous ? previous.unemployed : null,
     };
   });
 
-  // Descriptions
-  const registrationsDescription = data?.current?.monthly?.description;
-  const previousRegistrationsDescription = data?.previous?.monthly?.description;
+  // Extract ranges
+  const currentRange = data?.current?.range || [];
+  const previousRange = data?.previous?.range || [];
 
-  const unemploymentDescription = data?.current?.monthly?.description;
-  const previousUnemploymentDescription = data?.previous?.monthly?.description;
+  // Format dates nicely
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+  const currentRangeText = currentRange.length === 2
+    ? `${formatDate(currentRange[0])} – ${formatDate(currentRange[1])}`
+    : "N/A";
+
+  const previousRangeText = previousRange.length === 2
+    ? `${formatDate(previousRange[0])} – ${formatDate(previousRange[1])}`
+    : "N/A";
+
+  // Descriptions
+  const registrationsDescription = data?.current?.monthly?.registrationsDescription;
+  const previousRegistrationsDescription = data?.previous?.monthly?.registrationsDescription;
+
+  const unemploymentDescription = data?.current?.monthly?.unemploymentDescription;
+  const previousUnemploymentDescription = data?.previous?.monthly?.unemploymentDescription;
 
   return (
     <div className="flex flex-col gap-6 mt-8">
@@ -60,10 +87,16 @@ const DashboardCharts = ({ data, loading }) => {
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={mergedMonthly}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Legend />
+                  <XAxis dataKey="month" tickFormatter={monthFormatter} />
+                  <YAxis
+                    allowDecimals={false}
+                    label={{ value: "Registrations", angle: -90, position: "insideLeft" }}
+                  />
+                  <Tooltip
+                    formatter={(value, name) => [`${value || 0}`, name]}
+                    labelFormatter={(month) => `Month: ${monthFormatter(month)}`}
+                  />
+                  <Legend verticalAlign="top" height={36} />
                   <Bar
                     dataKey="currentRegistrations"
                     fill="#4F46E5"
@@ -71,7 +104,7 @@ const DashboardCharts = ({ data, loading }) => {
                   />
                   <Bar
                     dataKey="previousRegistrations"
-                    fill="#82CA9D"
+                    fill="#22C55E"
                     name="Previous Registrations"
                   />
                 </BarChart>
@@ -79,6 +112,8 @@ const DashboardCharts = ({ data, loading }) => {
             </div>
             {/* Descriptions */}
             <div className="mt-3 text-sm text-gray-600">
+              <p className="text-sm text-center text-gray-500 mb-2">Current: {currentRangeText}</p>
+              <p className="text-sm text-center text-gray-500 mb-2">Previous: {previousRangeText}</p>
               <p>{registrationsDescription}</p>
               <p className="text-gray-500">{previousRegistrationsDescription}</p>
             </div>
@@ -102,16 +137,23 @@ const DashboardCharts = ({ data, loading }) => {
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={mergedMonthly}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Legend />
+                  <XAxis dataKey="month" tickFormatter={monthFormatter} />
+                  <YAxis
+                    allowDecimals={false}
+                    label={{ value: "Unemployed Alumni", angle: -90, position: "insideLeft" }}
+                  />
+                  <Tooltip
+                    formatter={(value, name) => [`${value || 0}`, name]}
+                    labelFormatter={(month) => `Month: ${monthFormatter(month)}`}
+                  />
+                  <Legend verticalAlign="top" height={36} />
                   <Line
                     type="monotone"
                     dataKey="currentUnemployed"
                     stroke="#EF4444"
                     strokeWidth={2}
                     name="Current Unemployed"
+                    connectNulls={false}
                   />
                   <Line
                     type="monotone"
@@ -119,12 +161,16 @@ const DashboardCharts = ({ data, loading }) => {
                     stroke="#3B82F6"
                     strokeWidth={2}
                     name="Previous Unemployed"
+                    connectNulls={false}
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
             {/* Descriptions */}
             <div className="mt-3 text-sm text-gray-600">
+              <p className="text-sm text-center text-gray-500 mb-2">Current: {currentRangeText}</p>
+              <p className="text-sm text-center text-gray-500 mb-2">Previous: {previousRangeText}</p>
+
               <p>{unemploymentDescription}</p>
               <p className="text-gray-500">{previousUnemploymentDescription}</p>
             </div>
