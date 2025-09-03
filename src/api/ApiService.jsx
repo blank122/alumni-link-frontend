@@ -36,6 +36,7 @@ export const createApiClient = (token) => {
     getClusteredCertifications: () => axios.get(`${API_BASE_URL}/clustered-data-analysis-certifications`, { headers }),
     getClusteredCertificationsEmployment: () => axios.get(`${API_BASE_URL}/clustering-certification-employment`, { headers }),
     getClusteredRegionalEmployment: () => axios.get(`${API_BASE_URL}/ph-location-public`, { headers }),
+    getJobTrends: () => axios.get(`${API_BASE_URL}/admin/analytics/job-trends`, { headers }),
 
 
   };

@@ -425,6 +425,7 @@ const ManageMap = () => {
         </div>
 
       </div>
+      
     </div>
   );
 };

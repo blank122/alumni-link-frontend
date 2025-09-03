@@ -2,10 +2,11 @@
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 
 import { useAuth } from "../../contexts/AuthContext";
-import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredRegionalEmployment } from '../../hooks/ClusteringData';
+import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredRegionalEmployment, useJobTrends } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
 import CertificationClusters from "./CertificationClusterChart";
 import ChartLoading from "../../components/ChartLoading";
+import JobTrends from "./JobTrends";
 
 
 const StatisticalReports = () => {
@@ -15,6 +16,7 @@ const StatisticalReports = () => {
     const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
     const { data: certAnalysis, loadingData: loadingCert } = useClusteredCertifications(token);
     const { data: regionalEmploymentAnalysis, loadingData: loadingRegional } = useClusteredRegionalEmployment(token);
+    const { data: jobTrends, loadingData: loadingTrends } = useJobTrends(token);
 
     // graduates demograph
     // useEffect(() => {
@@ -49,7 +51,7 @@ const StatisticalReports = () => {
             <h1 className="text-2xl font-bold">Statistical Reports</h1>
 
             {/* Job Seeker Status Over Time */}
-            
+
             <div className="bg-white p-6 shadow-lg rounded-lg mt-8">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Alumni Clustering Analysis</h2>
                 <p className="text-sm text-gray-500 mb-4">
@@ -142,8 +144,10 @@ const StatisticalReports = () => {
                 )}
 
             </div>
-            
+
             {/* certificaiton clusters in relation with employment */}
+            <JobTrends data={jobTrends} loading={loadingTrends} />
+
             <CertificationClusters />
 
         </div>
