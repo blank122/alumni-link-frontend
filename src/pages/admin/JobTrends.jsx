@@ -145,7 +145,7 @@ const JobTrends = ({ data, loading }) => {
     // Show loading / empty states
     if (loading) {
         return (
-            <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+            <div className="bg-white rounded-2xl shadow-lg p-6 text-center mt-5">
                 <p className="text-gray-500">Loading job trends...</p>
             </div>
         );
@@ -153,7 +153,7 @@ const JobTrends = ({ data, loading }) => {
 
     if (!flattenedData.length) {
         return (
-            <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+            <div className="bg-white rounded-2xl shadow-lg p-6 text-center mt-5">
                 <p className="text-gray-500">No job trend data available.</p>
             </div>
         );
