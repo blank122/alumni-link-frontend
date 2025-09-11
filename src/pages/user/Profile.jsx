@@ -44,7 +44,7 @@ const Profile = () => {
     if (!data) return <div className="text-center text-red-500 mt-6">Failed to load profile data.</div>;
 
     const { alumni } = data;
-    const { alumni_education, address, employment_history, employment_status } = alumni;
+    const { alumni_education, address, employment_history, employment_status, technicalskillslogs, softskillslogs } = alumni;
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -167,6 +167,7 @@ const Profile = () => {
                 </div>
             )}
 
+            {/* address */}
             {address && (
                 <div className="mt-10 w-full max-w-6xl mx-auto px-4">
                     <div className="bg-white rounded-lg shadow-sm transition-all duration-300 hover:shadow-md border border-gray-100 overflow-hidden">
@@ -281,6 +282,149 @@ const Profile = () => {
                     )}
                 </div>
             </div>
+
+            {/* Technical Skills */}
+            <div className="mt-10 w-full max-w-6xl mx-auto px-4">
+                <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                            <FaBuilding className="text-blue-600" />
+                            Technical Skills
+                        </h2>
+                        <button
+                            onClick={() => setShowModal(true)}
+                            className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
+                            title="Add Skills"
+                        >
+                            <FaPlus />
+                        </button>
+                        <EmploymentModal
+                            isOpen={showModal}
+                            onClose={() => setShowModal(false)}
+                        />
+                    </div>
+
+                    {technicalskillslogs && technicalskillslogs.length > 0 ? (
+                        <div className="space-y-4">
+                            {technicalskillslogs.map((log) => (
+                                <div
+                                    key={log.id}
+                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
+                                >
+                                    <div className="flex gap-4">
+                                        <div className="mt-1">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <FaBuilding className="text-gray-600" />
+                                            </div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-800">
+                                                        {log.technical_skills?.tch_skill_name}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        Added on {new Date(log.created_at).toLocaleDateString()}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleEditSkill(log)}
+                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    title="Edit skill"
+                                                >
+                                                    <FaEdit />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-8 text-gray-500">
+                            <p className="mb-2">No Technical Skills added yet</p>
+                            <button
+                                onClick={() => setShowModal(true)}
+                                className="text-blue-500 hover:text-blue-700 font-medium"
+                            >
+                                + Add Skills
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Soft Skills */}
+            <div className="mt-10 w-full max-w-6xl mx-auto px-4">
+                <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                            <FaBuilding className="text-blue-600" />
+                            Soft Skills
+                        </h2>
+                        <button
+                            onClick={() => setShowModal(true)}
+                            className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
+                            title="Add Skills"
+                        >
+                            <FaPlus />
+                        </button>
+                        <EmploymentModal
+                            isOpen={showModal}
+                            onClose={() => setShowModal(false)}
+                        />
+                    </div>
+
+                    {softskillslogs && softskillslogs.length > 0 ? (
+                        <div className="space-y-4">
+                            {softskillslogs.map((log) => (
+                                <div
+                                    key={log.id}
+                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
+                                >
+                                    <div className="flex gap-4">
+                                        <div className="mt-1">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <FaBuilding className="text-gray-600" />
+                                            </div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-800">
+                                                        {log.soft_skill?.sft_skill_name}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        Added on {new Date(log.created_at).toLocaleDateString()}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleEditSkill(log)}
+                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    title="Edit skill"
+                                                >
+                                                    <FaEdit />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-8 text-gray-500">
+                            <p className="mb-2">No Technical Skills added yet</p>
+                            <button
+                                onClick={() => setShowModal(true)}
+                                className="text-blue-500 hover:text-blue-700 font-medium"
+                            >
+                                + Add Skills
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
 
             {/* change password modal */}
             {changePassword && (
