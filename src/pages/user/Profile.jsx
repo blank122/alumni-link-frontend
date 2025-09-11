@@ -49,7 +49,7 @@ const Profile = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
             {/* Profile Card */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 mt-10 w-full max-w-6xl mx-auto px-4 overflow-hidden">
+            <div className="mt-10 w-full max-w-6xl mx-auto px-4 bg-white shadow-xl rounded-2xl p-8 transition duration-300 ease-in-out">
                 {/* Header */}
                 <div className="border-b border-gray-200 px-6 py-4">
                     <div className="flex items-center justify-between">
