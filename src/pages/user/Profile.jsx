@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
-import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLock, FaPlus, FaEdit } from "react-icons/fa";
+import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaCogs, FaPlus, FaEdit, FaHandsHelping } from "react-icons/fa";
 import EmploymentModal from "./Components/EmploymentModal";
 import AddressModal from "./Components/AddressModal";
 import SkillsModal from "./Components/SkillsModal";
@@ -293,7 +293,7 @@ const Profile = () => {
                 <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                            <FaBuilding className="text-blue-600" />
+                            <FaCogs className="text-blue-600" />
                             Technical Skills
                         </h2>
                         <button
@@ -321,7 +321,7 @@ const Profile = () => {
                                     <div className="flex gap-4">
                                         <div className="mt-1">
                                             <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaBuilding className="text-gray-600" />
+                                                <FaCogs className="text-gray-600" />
                                             </div>
                                         </div>
                                         <div className="flex-1">
@@ -366,7 +366,7 @@ const Profile = () => {
                 <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                            <FaBuilding className="text-blue-600" />
+                            <FaHandsHelping className="text-blue-600" />
                             Soft Skills
                         </h2>
                         <button
@@ -394,7 +394,7 @@ const Profile = () => {
                                     <div className="flex gap-4">
                                         <div className="mt-1">
                                             <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaBuilding className="text-gray-600" />
+                                                <FaHandsHelping className="text-gray-600" />
                                             </div>
                                         </div>
                                         <div className="flex-1">
