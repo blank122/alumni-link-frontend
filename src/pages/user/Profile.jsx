@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
-import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaCogs, FaPlus, FaEdit, FaHandsHelping } from "react-icons/fa";
+import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaCogs, FaPlus, FaEdit, FaHandsHelping, FaCertificate } from "react-icons/fa";
 import EmploymentModal from "./Components/EmploymentModal";
 import AddressModal from "./Components/AddressModal";
 import SkillsModal from "./Components/SkillsModal";
@@ -433,7 +433,79 @@ const Profile = () => {
                     )}
                 </div>
             </div>
+            
+            {/* certifications */}
+            <div className="mt-10 w-full max-w-6xl mx-auto px-4">
+                <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                            <FaCertificate className="text-blue-600" />
+                            Certifications
+                        </h2>
+                        <button
+                            onClick={() => setShowSoftSkillsModal(true)}
+                            className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
+                            title="Add Skills"
+                        >
+                            <FaPlus />
+                        </button>
+                        <SkillsModal
+                            key={"soft"}
+                            isOpen={showSoftSkillsModal}
+                            skillType={"softSkills"}
+                            onClose={() => setShowSoftSkillsModal(false)}
+                        />
+                    </div>
 
+                    {softskillslogs && softskillslogs.length > 0 ? (
+                        <div className="space-y-4">
+                            {softskillslogs.map((log) => (
+                                <div
+                                    key={log.id}
+                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
+                                >
+                                    <div className="flex gap-4">
+                                        <div className="mt-1">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <FaHandsHelping className="text-gray-600" />
+                                            </div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-800">
+                                                        {log.soft_skill?.sft_skill_name}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        Added on {new Date(log.created_at).toLocaleDateString()}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleEditSkill(log)}
+                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    title="Edit skill"
+                                                >
+                                                    <FaEdit />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-8 text-gray-500">
+                            <p className="mb-2">No Soft Skills added yet</p>
+                            <button
+                                onClick={() => setShowSoftSkillsModal(true)}
+                                className="text-blue-500 hover:text-blue-700 font-medium"
+                            >
+                                + Add Skills
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
 
             {/* change password modal */}
             {changePassword && (
