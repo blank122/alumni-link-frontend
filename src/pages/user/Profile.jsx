@@ -4,6 +4,8 @@ import axios from "axios";
 import { FaUser, FaGraduationCap, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope, FaLock, FaPlus, FaEdit } from "react-icons/fa";
 import EmploymentModal from "./Components/EmploymentModal";
 import AddressModal from "./Components/AddressModal";
+import SkillsModal from "./Components/SkillsModal";
+
 import formatDate from "../../utils/helper";
 
 const Profile = () => {
@@ -12,6 +14,8 @@ const Profile = () => {
     const [loading, setLoading] = useState(true);
     const [changePassword, setChangePassword] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showSkillsModal, setShowSkillsModal] = useState(false);
+
     const [showAddressModal, setShowAddressModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
 
@@ -292,15 +296,17 @@ const Profile = () => {
                             Technical Skills
                         </h2>
                         <button
-                            onClick={() => setShowModal(true)}
+                            onClick={() => setShowSkillsModal(true)}
                             className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
                             title="Add Skills"
                         >
                             <FaPlus />
                         </button>
-                        <EmploymentModal
-                            isOpen={showModal}
-                            onClose={() => setShowModal(false)}
+                        <SkillsModal
+                            isOpen={showSkillsModal}
+                            skillType={"techSkills"}
+
+                            onClose={() => setShowSkillsModal(false)}
                         />
                     </div>
 
@@ -344,7 +350,7 @@ const Profile = () => {
                         <div className="text-center py-8 text-gray-500">
                             <p className="mb-2">No Technical Skills added yet</p>
                             <button
-                                onClick={() => setShowModal(true)}
+                                onClick={() => setShowSkillsModal(true)}
                                 className="text-blue-500 hover:text-blue-700 font-medium"
                             >
                                 + Add Skills
@@ -363,15 +369,16 @@ const Profile = () => {
                             Soft Skills
                         </h2>
                         <button
-                            onClick={() => setShowModal(true)}
+                            onClick={() => setShowSkillsModal(true)}
                             className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
                             title="Add Skills"
                         >
                             <FaPlus />
                         </button>
-                        <EmploymentModal
-                            isOpen={showModal}
-                            onClose={() => setShowModal(false)}
+                        <SkillsModal
+                            isOpen={showSkillsModal}
+                            skillType={"softSkills"}
+                            onClose={() => setShowSkillsModal(false)}
                         />
                     </div>
 

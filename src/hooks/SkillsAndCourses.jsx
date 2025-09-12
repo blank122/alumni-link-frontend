@@ -8,7 +8,7 @@ export const fetchTechnicalSkills = (token) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!token) return;
-      
+
       try {
         const api = createApiClient(token);
         const response = await api.getTechSkills();
@@ -33,11 +33,13 @@ export const fetchSoftSkills = (token) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!token) return;
-      
+
       try {
         const api = createApiClient(token);
         const response = await api.getSoftSkills();
         setSoftSkills(response.data.data);
+        console.log("fetched softskills data:", response.data.data);
+
       } catch (error) {
         console.error("Error fetching softskills data:", error);
       } finally {
@@ -46,7 +48,7 @@ export const fetchSoftSkills = (token) => {
     };
 
     fetchData();
-  }, [token]);s
+  }, [token]);
 
   return { softSkills, loadingSoft };
 };
@@ -58,7 +60,7 @@ export const fetchCourses = (token) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!token) return;
-      
+
       try {
         const api = createApiClient(token);
         const response = await api.getSoftSkills();
