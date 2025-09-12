@@ -3,7 +3,7 @@ import { fetchTechnicalSkills, fetchSoftSkills } from "../../../hooks/SkillsAndC
 import createApiClient from "../../../api/ApiService";
 import { useEffect, useState } from "react";
 
-const SkillsModal = ({ isOpen, onClose, skillType }) => {
+const SkillsModal = ({ key, isOpen, onClose, skillType }) => {
     const { user, token } = useAuth();
     const { softSkills, softLoad } = fetchSoftSkills(token);
     const { techSkills, techLoad } = fetchTechnicalSkills(token);
