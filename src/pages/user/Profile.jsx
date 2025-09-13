@@ -49,7 +49,7 @@ const Profile = () => {
     if (!data) return <div className="text-center text-red-500 mt-6">Failed to load profile data.</div>;
 
     const { alumni } = data;
-    const { alumni_education, address, employment_history, employment_status, technicalskillslogs, softskillslogs, user_defined_soft_skills, user_defined_tech_skills } = alumni;
+    const { alumni_education, address, employment_history, employment_status, technicalskillslogs, softskillslogs, user_defined_soft_skills, user_defined_tech_skills, certifications } = alumni;
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -539,33 +539,52 @@ const Profile = () => {
                         />
                     </div>
 
-                    {softskillslogs && softskillslogs.length > 0 ? (
+                    {certifications && certifications.length > 0 ? (
                         <div className="space-y-4">
-                            {softskillslogs.map((log) => (
+                            {certifications.map((log) => (
                                 <div
                                     key={log.id}
                                     className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
                                 >
                                     <div className="flex gap-4">
+                                        {/* Icon */}
                                         <div className="mt-1">
                                             <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaHandsHelping className="text-gray-600" />
+                                                <FaCertificate className="text-gray-600" />
                                             </div>
                                         </div>
+
+                                        {/* Content */}
                                         <div className="flex-1">
                                             <div className="flex justify-between items-start">
                                                 <div>
+                                                    {/* Certificate Name */}
                                                     <h3 className="font-semibold text-gray-800">
-                                                        {log.soft_skill?.sft_skill_name}
+                                                        {log.cert_name}
                                                     </h3>
-                                                    <p className="text-sm text-gray-500">
+
+                                                    {/* Serial Number */}
+                                                    <p className="text-sm text-gray-600">
+                                                        Serial No: <span className="font-medium">{log.cert_serial_no}</span>
+                                                    </p>
+
+                                                    {/* Awarded Year */}
+                                                    <p className="text-sm text-gray-600">
+                                                        Awarded: <span className="font-medium">{log.cert_awarded}</span>
+                                                    </p>
+
+                                                    {/* Created Date */}
+                                                    <p className="text-xs text-gray-500 mt-1">
                                                         Added on {new Date(log.created_at).toLocaleDateString()}
                                                     </p>
                                                 </div>
+
+                                                {/* Edit Button */}
                                                 <button
                                                     onClick={() => handleEditSkill(log)}
                                                     className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    title="Edit skill"
+                                                    title="Edit certification"
+                                                    aria-label={`Edit certification ${log.cert_name}`}
                                                 >
                                                     <FaEdit />
                                                 </button>
@@ -575,6 +594,7 @@ const Profile = () => {
                                 </div>
                             ))}
                         </div>
+
                     ) : (
                         <div className="text-center py-8 text-gray-500">
                             <p className="mb-2">No Soft Skills added yet</p>
