@@ -49,7 +49,7 @@ const Profile = () => {
     if (!data) return <div className="text-center text-red-500 mt-6">Failed to load profile data.</div>;
 
     const { alumni } = data;
-    const { alumni_education, address, employment_history, employment_status, technicalskillslogs, softskillslogs } = alumni;
+    const { alumni_education, address, employment_history, employment_status, technicalskillslogs, softskillslogs, user_defined_soft_skills, user_defined_tech_skills } = alumni;
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
@@ -311,11 +311,14 @@ const Profile = () => {
                         />
                     </div>
 
-                    {technicalskillslogs && technicalskillslogs.length > 0 ? (
+                    {/* Check if there are any skills (predefined or user-defined) */}
+                    {((technicalskillslogs && technicalskillslogs.length > 0) ||
+                        (user_defined_tech_skills && user_defined_tech_skills.length > 0)) ? (
                         <div className="space-y-4">
-                            {technicalskillslogs.map((log) => (
+                            {/* Display predefined soft skills */}
+                            {technicalskillslogs && technicalskillslogs.map((log) => (
                                 <div
-                                    key={log.id}
+                                    key={`predefined-${log.id}`}
                                     className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
                                 >
                                     <div className="flex gap-4">
@@ -346,12 +349,50 @@ const Profile = () => {
                                     </div>
                                 </div>
                             ))}
+
+                            {/* Display user-defined soft skills */}
+                            {user_defined_tech_skills && user_defined_tech_skills.map((skill) => (
+                                <div
+                                    key={`user-defined-${skill.id}`}
+                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
+                                >
+                                    <div className="flex gap-4">
+                                        <div className="mt-1">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <FaCogs className="text-gray-600" />
+                                            </div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-800">
+                                                        {skill.skill_name}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        Added on {new Date(skill.created_at).toLocaleDateString()}
+                                                        {/* <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                                            Custom
+                                                        </span> */}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleEditSkill(skill, 'user-defined')}
+                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    title="Edit skill"
+                                                >
+                                                    <FaEdit />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     ) : (
                         <div className="text-center py-8 text-gray-500">
-                            <p className="mb-2">No Technical Skills added yet</p>
+                            <p className="mb-2">No Soft Skills added yet</p>
                             <button
-                                onClick={() => setShowTechSkillsModal(true)}
+                                onClick={() => setShowSoftSkillsModal(true)}
                                 className="text-blue-500 hover:text-blue-700 font-medium"
                             >
                                 + Add Skills
@@ -384,11 +425,14 @@ const Profile = () => {
                         />
                     </div>
 
-                    {softskillslogs && softskillslogs.length > 0 ? (
+                    {/* Check if there are any skills (predefined or user-defined) */}
+                    {((softskillslogs && softskillslogs.length > 0) ||
+                        (user_defined_soft_skills && user_defined_soft_skills.length > 0)) ? (
                         <div className="space-y-4">
-                            {softskillslogs.map((log) => (
+                            {/* Display predefined soft skills */}
+                            {softskillslogs && softskillslogs.map((log) => (
                                 <div
-                                    key={log.id}
+                                    key={`predefined-${log.id}`}
                                     className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
                                 >
                                     <div className="flex gap-4">
@@ -419,6 +463,44 @@ const Profile = () => {
                                     </div>
                                 </div>
                             ))}
+
+                            {/* Display user-defined soft skills */}
+                            {user_defined_soft_skills && user_defined_soft_skills.map((skill) => (
+                                <div
+                                    key={`user-defined-${skill.id}`}
+                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
+                                >
+                                    <div className="flex gap-4">
+                                        <div className="mt-1">
+                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <FaHandsHelping className="text-gray-600" />
+                                            </div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-800">
+                                                        {skill.skill_name}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        Added on {new Date(skill.created_at).toLocaleDateString()}
+                                                        {/* <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                                            Custom
+                                                        </span> */}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleEditSkill(skill, 'user-defined')}
+                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    title="Edit skill"
+                                                >
+                                                    <FaEdit />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     ) : (
                         <div className="text-center py-8 text-gray-500">
@@ -433,7 +515,7 @@ const Profile = () => {
                     )}
                 </div>
             </div>
-            
+
             {/* certifications */}
             <div className="mt-10 w-full max-w-6xl mx-auto px-4">
                 <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
