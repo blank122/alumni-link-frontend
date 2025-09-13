@@ -40,8 +40,8 @@ const SkillsModal = ({ key, isOpen, onClose, skillType }) => {
         if (selectedSkill && !selectedSkills.some(skill => skill.name === selectedSkill)) {
             // Add existing skill from dropdown
             const skillData = skills.find(skill => {
-                const skillName = skillType === "softSkills" 
-                    ? skill.sft_skill_name 
+                const skillName = skillType === "softSkills"
+                    ? skill.sft_skill_name
                     : skill.tch_skill_name;
                 return skillName === selectedSkill;
             });
@@ -59,7 +59,7 @@ const SkillsModal = ({ key, isOpen, onClose, skillType }) => {
         if (customSkillInput.trim() && !selectedSkills.some(skill => skill.name === customSkillInput.trim())) {
             // Generate a simple incremental ID for custom skills
             const customId = selectedSkills.filter(skill => skill.isCustom).length + 1;
-            
+
             setSelectedSkills([...selectedSkills, {
                 id: customId,
                 name: customSkillInput.trim(),
@@ -82,6 +82,7 @@ const SkillsModal = ({ key, isOpen, onClose, skillType }) => {
             const customSkills = selectedSkills.filter(skill => skill.isCustom);
 
             const payload = {
+                alumni_id: user?.alumni_id, // ✅ Add user id here
                 // Regular skills (existing format)
                 [skillType]: regularSkills.map(skill => ({
                     id: skill.id,
@@ -94,11 +95,26 @@ const SkillsModal = ({ key, isOpen, onClose, skillType }) => {
                 }))
             };
 
-            console.log("Saving skills:", payload);
-            
+
+
+            console.log("Saving skills JSON:", JSON.stringify(payload, null, 2));
+
             // TODO: Replace with actual API call
             // await apiClient.post('/save-skills', payload);
-            
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-skills/`
+                , {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+            const result = await response.json();
+            console.log("Server response:", result);
+
             alert("Skills updated successfully!");
             onClose();
             window.location.reload();
@@ -180,7 +196,7 @@ const SkillsModal = ({ key, isOpen, onClose, skillType }) => {
                             </button>
                         )}
                     </div>
-                    
+
                     {showCustomInput && (
                         <div className="flex space-x-2">
                             <input
@@ -218,11 +234,10 @@ const SkillsModal = ({ key, isOpen, onClose, skillType }) => {
                         {selectedSkills.map((skill) => (
                             <span
                                 key={`${skill.name}-${skill.id}`}
-                                className={`px-3 py-1 rounded-full text-sm flex items-center ${
-                                    skill.isCustom 
-                                        ? "bg-green-100 text-green-800" 
-                                        : "bg-blue-100 text-blue-800"
-                                }`}
+                                className={`px-3 py-1 rounded-full text-sm flex items-center ${skill.isCustom
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-blue-100 text-blue-800"
+                                    }`}
                             >
                                 {skill.name}
                                 {skill.isCustom && (

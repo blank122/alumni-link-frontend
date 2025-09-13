@@ -38,6 +38,7 @@ export const createApiClient = (token) => {
     getClusteredRegionalEmployment: () => axios.get(`${API_BASE_URL}/ph-location-public`, { headers }),
     getJobTrends: () => axios.get(`${API_BASE_URL}/admin/analytics/job-trends`, { headers }),
 
+  
 
   };
 };
