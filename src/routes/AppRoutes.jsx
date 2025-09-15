@@ -43,6 +43,8 @@ import UserHelp from "../pages/user/Help";
 import Unauthorized from "../pages/errors/Unauthorized";
 import Updates from "../pages/admin/UnemploymentUpdates";
 import AdminAccounts from "../pages/admin/AdminAccounts";
+import MultiForm from "../pages/MultiForm";
+import EducationAndSkillsStep from "../pages/register/EducationAndSkillsStep";
 const AppRoutes = () => {
     return (
         <Routes>
@@ -51,6 +53,9 @@ const AppRoutes = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/register1" element={<MultiForm />} />
+                <Route path="/educationandskills" element={<EducationAndSkillsStep />} />
+
                 <Route path="/programs-events" element={<ProgramEvents />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/contact" element={<ContactUs />} />
