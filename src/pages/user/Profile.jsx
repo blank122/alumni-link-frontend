@@ -337,13 +337,6 @@ const Profile = () => {
                                                         Added on {new Date(log.created_at).toLocaleDateString()}
                                                     </p>
                                                 </div>
-                                                <button
-                                                    onClick={() => handleEditSkill(log)}
-                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    title="Edit skill"
-                                                >
-                                                    <FaEdit />
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -451,13 +444,7 @@ const Profile = () => {
                                                         Added on {new Date(log.created_at).toLocaleDateString()}
                                                     </p>
                                                 </div>
-                                                <button
-                                                    onClick={() => handleEditSkill(log)}
-                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    title="Edit skill"
-                                                >
-                                                    <FaEdit />
-                                                </button>
+
                                             </div>
                                         </div>
                                     </div>
@@ -489,13 +476,7 @@ const Profile = () => {
                                                         </span> */}
                                                     </p>
                                                 </div>
-                                                <button
-                                                    onClick={() => handleEditSkill(skill, 'user-defined')}
-                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    title="Edit skill"
-                                                >
-                                                    <FaEdit />
-                                                </button>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -578,16 +559,7 @@ const Profile = () => {
                                                         Added on {new Date(log.created_at).toLocaleDateString()}
                                                     </p>
                                                 </div>
-
-                                                {/* Edit Button */}
-                                                <button
-                                                    onClick={() => handleEditSkill(log)}
-                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    title="Edit certification"
-                                                    aria-label={`Edit certification ${log.cert_name}`}
-                                                >
-                                                    <FaEdit />
-                                                </button>
+                                                
                                             </div>
                                         </div>
                                     </div>
