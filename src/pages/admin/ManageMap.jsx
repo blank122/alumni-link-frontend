@@ -4,6 +4,7 @@ import Supercluster from 'supercluster';
 import axios from 'axios';
 import { useAuth } from "../../contexts/AuthContext";
 import { FiSearch, FiX, FiUsers, FiMapPin, FiBriefcase } from 'react-icons/fi';
+import { motion } from "framer-motion";
 
 const ManageMap = () => {
   const { token } = useAuth();
@@ -327,105 +328,121 @@ const ManageMap = () => {
         })}
 
         {selectedCompany && (
-          <Overlay anchor={selectedCompany.coordinates} offset={[120, 30]}>
-            <div className="bg-white rounded-2xl p-5 shadow-xl border border-gray-200 max-w-[350px] z-[1000]">
-              {selectedCompany.isCluster ? (
-                <>
-                  <h4 className="text-lg font-semibold mb-3 flex items-center text-gray-800">
-                    <FiUsers className="mr-1" />
-                    Cluster ({selectedCompany.size} companies)
-                  </h4>
-                  <p className="text-lg font-semibold mb-3 flex items-center text-gray-800">
-                    <FiMapPin className="mr-1" />
-                    <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
-                  </p>
-                  <p className="text-lg font-semibold mb-3 flex items-center text-gray-800">
-                    <FiUsers className="mr-1" />
-                    <strong>Total Employees:</strong> {selectedCompany.employees.length}
-                  </p>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
 
-                  <div className="my-3 border-t border-gray-200 pt-3">
-                    <h5 className="flex items-center m-0 mb-2">
+            <Overlay anchor={selectedCompany.coordinates} offset={[120, 30]}>
+              <div className="bg-white rounded-2xl p-5 shadow-xl border border-gray-200 max-w-[350px] z-[1000]">
+                {selectedCompany.isCluster ? (
+                  <>
+                    <h4 className="text-lg font-semibold mb-3 flex items-center text-gray-800">
+                      <FiUsers className="mr-1" />
+                      Cluster ({selectedCompany.size} companies)
+                    </h4>
+                    <p className="text-lg font-semibold mb-3 flex items-center text-gray-800">
+                      <FiMapPin className="mr-1" />
+                      <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
+                    </p>
+                    <p className="text-lg font-semibold mb-3 flex items-center text-gray-800">
+                      <FiUsers className="mr-1" />
+                      <strong>Total Employees:</strong> {selectedCompany.employees.length}
+                    </p>
+
+                    <div className="my-3 border-t border-gray-200 pt-3">
+                      <h5 className="flex items-center m-0 mb-2">
+                        <FiBriefcase className="mr-1" />
+                        Companies in this cluster:
+                      </h5>
+                      <div className="max-h-[220px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                        {selectedCompany.originalCompanies.map((company, i) => (
+                          <div key={i} className="mb-3 pb-3 border-b border-gray-100 flex items-center hover:bg-gray-50 rounded-lg px-2 transition">
+                            <FiBriefcase className="mr-2 flex-shrink-0" />
+                            <div>
+                              <p className="font-bold mb-1">{company.company_name}</p>
+                              <p className="text-sm m-0">
+                                Employees: {company.employees.length}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h4 className="m-0 mb-2 flex items-center">
                       <FiBriefcase className="mr-1" />
-                      Companies in this cluster:
-                    </h5>
-                    <div className="max-h-[220px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                      {selectedCompany.originalCompanies.map((company, i) => (
-                        <div key={i} className="mb-3 pb-3 border-b border-gray-100 flex items-center hover:bg-gray-50 rounded-lg px-2 transition">
-                          <FiBriefcase className="mr-2 flex-shrink-0" />
+                      {selectedCompany.company_name}
+                    </h4>
+                    <p className="m-1 flex items-center">
+                      <FiMapPin className="mr-1" />
+                      <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
+                    </p>
+                    <p className="m-1 flex items-center">
+                      <FiUsers className="mr-1" />
+                      <strong>Employees:</strong> {selectedCompany.employees.length}
+                    </p>
+                    <div className="max-h-[200px] overflow-y-auto">
+                      {selectedCompany.employees.map((emp, i) => (
+                        <div key={i} className="mb-2 pb-2 border-b border-gray-100 flex items-center">
+                          <FiUsers className="mr-2 flex-shrink-0" />
                           <div>
-                            <p className="font-bold mb-1">{company.company_name}</p>
-                            <p className="text-sm m-0">
-                              Employees: {company.employees.length}
-                            </p>
+                            <strong>{emp.name}</strong><br />
+                            <span className="text-sm">{emp.job_title}</span>
                           </div>
                         </div>
                       ))}
                     </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h4 className="m-0 mb-2 flex items-center">
-                    <FiBriefcase className="mr-1" />
-                    {selectedCompany.company_name}
-                  </h4>
-                  <p className="m-1 flex items-center">
-                    <FiMapPin className="mr-1" />
-                    <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
-                  </p>
-                  <p className="m-1 flex items-center">
-                    <FiUsers className="mr-1" />
-                    <strong>Employees:</strong> {selectedCompany.employees.length}
-                  </p>
-                  <div className="max-h-[200px] overflow-y-auto">
-                    {selectedCompany.employees.map((emp, i) => (
-                      <div key={i} className="mb-2 pb-2 border-b border-gray-100 flex items-center">
-                        <FiUsers className="mr-2 flex-shrink-0" />
-                        <div>
-                          <strong>{emp.name}</strong><br />
-                          <span className="text-sm">{emp.job_title}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
+                  </>
+                )}
 
-              <button
-                onClick={() => setSelectedCompany(null)}
-                className="mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-xl cursor-pointer w-full flex items-center justify-center shadow-md transition"
-              >
-                <FiX className="mr-1" />
-                Close
-              </button>
-            </div>
-          </Overlay>
+                <button
+                  onClick={() => setSelectedCompany(null)}
+                  className="mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-xl cursor-pointer w-full flex items-center justify-center shadow-md transition"
+                >
+                  <FiX className="mr-1" />
+                  Close
+                </button>
+              </div>
+            </Overlay>
+          </motion.div>
+
         )}
       </Map>
 
       <div>
-        <div className=" bg-white rounded-lg p-4 shadow-md w-8xl max-h-[90vh] overflow-y-auto">
-          <h4 className="text-lg font-semibold mb-3">Cluster-Based Alumni Summary</h4>
-          {clusterAnalysis.length === 0 ? (
-            <p className="text-sm text-gray-500">No clusters available.</p>
-          ) : (
-            clusterAnalysis.map((item, index) => (
-              <div key={index} className="mb-3 border-b pb-2 text-sm">
-                <p>
-                  <strong>{item.type === 'cluster' ? `Cluster of ${item.cluster_size} companies` : item.company_name}</strong>
-                </p>
-                <p>
-                  📍 <strong>Coords:</strong> {item.coordinates[0].toFixed(2)}, {item.coordinates[1].toFixed(2)}
-                </p>
-                <p>👥 <strong>Employees:</strong> {item.employee_count}</p>
-              </div>
-            ))
-          )}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="mt-10 bg-white rounded-lg p-4 shadow-md w-8xl max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+            <h4 className="text-lg font-semibold mb-3">Cluster-Based Alumni Summary</h4>
+            {clusterAnalysis.length === 0 ? (
+              <p className="text-sm text-gray-500">No clusters available.</p>
+            ) : (
+              clusterAnalysis.map((item, index) => (
+                <div key={index} className={`mb-3 border-b pb-3 text-sm rounded-lg p-3 transition hover:bg-gray-50 ${item.type === 'cluster' ? 'bg-orange-50 border-orange-200' : 'bg-gray-50 border-gray-200'}`}>
+                  <p>
+                    <strong>{item.type === 'cluster' ? `Cluster of ${item.cluster_size} companies` : item.company_name}</strong>
+                  </p>
+                  <p>
+                    <FiMapPin className="inline mr-1 text-blue-500" /> <strong>Coords:</strong> {item.coordinates[0].toFixed(2)}, {item.coordinates[1].toFixed(2)}
+                  </p>
+                  <p>
+                    <FiUsers className="inline mr-1 text-green-500" /> <strong>Employees:</strong>  {item.employee_count}
+                  </p>
+                </div>
+              ))
+            )}
+          </div>
+        </motion.div>
 
       </div>
-      
+
     </div>
   );
 };
