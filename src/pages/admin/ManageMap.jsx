@@ -328,30 +328,30 @@ const ManageMap = () => {
 
         {selectedCompany && (
           <Overlay anchor={selectedCompany.coordinates} offset={[120, 30]}>
-            <div className="bg-white rounded-lg p-4 shadow-lg max-w-[300px] z-[1000]">
+            <div className="bg-white rounded-2xl p-5 shadow-xl border border-gray-200 max-w-[350px] z-[1000]">
               {selectedCompany.isCluster ? (
                 <>
-                  <h4 className="m-0 mb-2 flex items-center">
+                  <h4 className="text-lg font-semibold mb-3 flex items-center text-gray-800">
                     <FiUsers className="mr-1" />
                     Cluster ({selectedCompany.size} companies)
                   </h4>
-                  <p className="m-1 flex items-center">
+                  <p className="text-lg font-semibold mb-3 flex items-center text-gray-800">
                     <FiMapPin className="mr-1" />
                     <strong>Location:</strong> {selectedCompany.coordinates[0].toFixed(4)}, {selectedCompany.coordinates[1].toFixed(4)}
                   </p>
-                  <p className="m-1 flex items-center">
+                  <p className="text-lg font-semibold mb-3 flex items-center text-gray-800">
                     <FiUsers className="mr-1" />
                     <strong>Total Employees:</strong> {selectedCompany.employees.length}
                   </p>
 
-                  <div className="my-2 border-t border-gray-200 pt-2">
+                  <div className="my-3 border-t border-gray-200 pt-3">
                     <h5 className="flex items-center m-0 mb-2">
                       <FiBriefcase className="mr-1" />
                       Companies in this cluster:
                     </h5>
-                    <div className="max-h-[200px] overflow-y-auto">
+                    <div className="max-h-[220px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                       {selectedCompany.originalCompanies.map((company, i) => (
-                        <div key={i} className="mb-2 pb-2 border-b border-gray-100 flex items-center">
+                        <div key={i} className="mb-3 pb-3 border-b border-gray-100 flex items-center hover:bg-gray-50 rounded-lg px-2 transition">
                           <FiBriefcase className="mr-2 flex-shrink-0" />
                           <div>
                             <p className="font-bold mb-1">{company.company_name}</p>
@@ -394,7 +394,7 @@ const ManageMap = () => {
 
               <button
                 onClick={() => setSelectedCompany(null)}
-                className="mt-2 px-4 py-2 bg-[#FF5722] text-white border-none rounded cursor-pointer w-full flex items-center justify-center"
+                className="mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-xl cursor-pointer w-full flex items-center justify-center shadow-md transition"
               >
                 <FiX className="mr-1" />
                 Close
