@@ -54,115 +54,86 @@ const Profile = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
             {/* Profile Card */}
-            <div className="mt-10 w-full max-w-6xl mx-auto px-4 bg-white shadow-xl rounded-2xl p-8 transition duration-300 ease-in-out">
-                {/* Header */}
-                <div className="border-b border-gray-200 px-6 py-4">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-                            <div className="bg-blue-50 p-2 rounded-full">
-                                <span className="text-blue-600">ℹ️</span>
-                            </div>
+            <div className="mt-10 w-full max-w-6xl mx-auto px-4">
+                <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-5 flex items-center justify-between">
+                        <h2 className="text-xl font-semibold text-white flex items-center gap-3">
+                            <span className="bg-white/20 p-2 rounded-full">ℹ️</span>
                             General Information
                         </h2>
-                        {/* <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                            Edit
-                        </button> */}
+                        {/* <button className="bg-white/20 px-3 py-1 rounded-md text-white hover:bg-white/30 text-sm">Edit</button> */}
                     </div>
-                </div>
 
-                {/* Profile Section */}
-                <div className="p-6">
-                    <div className="flex items-start gap-6">
-                        <div className="w-24 h-24 bg-blue-500 text-white rounded-full flex items-center justify-center text-4xl font-bold shadow-inner">
+                    {/* Profile Section */}
+                    <div className="p-6 flex items-start gap-6">
+                        {/* Avatar */}
+                        <div className="w-24 h-24 bg-gradient-to-tr from-blue-500 to-blue-400 text-white rounded-full flex items-center justify-center text-3xl font-bold shadow-lg">
                             {alumni.alm_first_name[0]}{alumni.alm_last_name[0]}
                         </div>
 
+                        {/* Info */}
                         <div className="flex-1">
-                            <h1 className="text-2xl font-semibold text-gray-800 mb-1">
-                                {alumni.alm_first_name} {alumni.alm_last_name}
-                            </h1>
-
-                            <div className="flex items-center gap-2 mb-4">
-                                <span className={`inline-block w-3 h-3 rounded-full ${employment_status?.emp_info_status === '0' ? 'bg-red-500' :
+                            <h1 className="text-2xl font-bold text-gray-800">{alumni.alm_first_name} {alumni.alm_last_name}</h1>
+                            <div className="flex items-center gap-2 mt-2">
+                                <span className={`w-3 h-3 rounded-full ${employment_status?.emp_info_status === '0' ? 'bg-red-500' :
                                     employment_status?.emp_info_status === '1' ? 'bg-yellow-500' :
                                         employment_status?.emp_info_status === '2' ? 'bg-green-500' :
-                                            'bg-gray-500'
+                                            'bg-gray-400'
                                     }`}></span>
-                                <p className="text-gray-600">
-                                    {
-                                        employment_status?.emp_info_status === '0' ? 'Currently unemployed' :
-                                            employment_status?.emp_info_status === '1' ? 'Freelancing' :
-                                                employment_status?.emp_info_status === '2' ? 'Currently employed' :
-                                                    'Employment status not specified'
-                                    }
+                                <p className="text-gray-600 text-sm">
+                                    {employment_status?.emp_info_status === '0' ? 'Unemployed' :
+                                        employment_status?.emp_info_status === '1' ? 'Freelancing' :
+                                            employment_status?.emp_info_status === '2' ? 'Employed' :
+                                                'Not specified'}
                                 </p>
                             </div>
                         </div>
                     </div>
 
                     {/* Details Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                        <div className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                            <div className="bg-blue-50 p-2 rounded-full mt-1">
-                                <FaUser className="text-blue-600 text-lg" />
-                            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 border-t border-gray-100">
+                        <div className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50">
+                            <FaUser className="text-blue-500" />
                             <div>
-                                <p className="text-sm text-gray-500">Gender</p>
-                                <p className="text-gray-800 font-medium">{alumni.alm_gender || 'Not specified'}</p>
+                                <p className="text-xs text-gray-500">Gender</p>
+                                <p className="font-medium text-gray-800">{alumni.alm_gender || 'Not specified'}</p>
                             </div>
                         </div>
-
-                        <div className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                            <div className="bg-blue-50 p-2 rounded-full mt-1">
-                                <FaPhone className="text-blue-600 text-lg" />
-                            </div>
+                        <div className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50">
+                            <FaPhone className="text-blue-500" />
                             <div>
-                                <p className="text-sm text-gray-500">Contact</p>
-                                <p className="text-gray-800 font-medium">{alumni.alm_contact_number || 'Not provided'}</p>
+                                <p className="text-xs text-gray-500">Contact</p>
+                                <p className="font-medium text-gray-800">{alumni.alm_contact_number || 'Not provided'}</p>
                             </div>
                         </div>
-
-                        <div className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                            <div className="bg-blue-50 p-2 rounded-full mt-1">
-                                <FaEnvelope className="text-blue-600 text-lg" />
-                            </div>
+                        <div className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50">
+                            <FaEnvelope className="text-blue-500" />
                             <div>
-                                <p className="text-sm text-gray-500">Email</p>
-                                <p className="text-gray-800 font-medium">{data.email}</p>
+                                <p className="text-xs text-gray-500">Email</p>
+                                <p className="font-medium text-gray-800">{data.email}</p>
                             </div>
                         </div>
-
-                        {/* <div
-                            className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
-                            onClick={() => setChangePassword(true)}
-                        >
-                            <div className="bg-blue-50 p-2 rounded-full mt-1">
-                                <FaLock className="text-blue-600 text-lg" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500">Password</p>
-                                <p className="text-blue-600 font-medium">Change password</p>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
             </div>
 
+
             {alumni_education && (
                 <div className="mt-10 w-full max-w-6xl mx-auto px-4">
                     <div className="bg-white shadow-xl rounded-2xl p-8 transition duration-300 ease-in-out">
-                        <h2 className="text-2xl font-bold flex items-center gap-3 text-gray-800 mb-4">
-                            <FaGraduationCap className="text-blue-600 text-2xl" />
+                        <h2 className="text-xl font-bold flex items-center gap-3 text-gray-800 mb-4">
+                            <FaGraduationCap className="text-blue-600" />
                             Education
                         </h2>
 
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             <p className="text-gray-800">
-                                <span className="font-medium">Bachelor's Degree:</span>{' '}
+                                <span className="font-medium bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs mr-2">Bachelor’s</span>
                                 {alumni_education?.courses?.course_name || 'Not specified'}
                             </p>
                             <p className="text-gray-800">
-                                <span className="font-medium">Master's Degree:</span>{' '}
+                                <span className="font-medium bg-green-50 text-green-700 px-2 py-0.5 rounded-full text-xs mr-2">Master’s</span>
                                 {alumni_education.alm_edu_masters_deg
                                     ? `${alumni_education.alm_edu_masters_deg} at ${alumni_education.alm_edu_masters_deg_school || 'Unknown School'}`
                                     : 'N/A'}
@@ -175,44 +146,30 @@ const Profile = () => {
             {/* address */}
             {address && (
                 <div className="mt-10 w-full max-w-6xl mx-auto px-4">
-                    <div className="bg-white rounded-lg shadow-sm transition-all duration-300 hover:shadow-md border border-gray-100 overflow-hidden">
-                        <div className="p-6">
-                            <div className="flex justify-between items-center mb-4">
-                                <div className="flex items-center space-x-3">
-                                    <div className="bg-blue-50 p-3 rounded-full">
-                                        <FaMapMarkerAlt className="text-blue-600 text-xl" />
-                                    </div>
-                                    <h2 className="text-xl font-semibold text-gray-800">Address</h2>
-                                </div>
-                                <button
-                                    onClick={() => setShowAddressModal(true)}
-                                    className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition-colors duration-200"
-                                    aria-label="Add address"
-                                >
-                                    <FaEdit className="text-lg" />
-                                </button>
+                    <div className="bg-white shadow-xl rounded-2xl p-6">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-bold flex items-center gap-2 text-gray-800">
+                                <FaMapMarkerAlt className="text-blue-600" />
+                                Address
+                            </h2>
+                            <button
+                                onClick={() => setShowAddressModal(true)}
+                                className="p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition"
+                            >
+                                <FaEdit />
+                            </button>
+                        </div>
+                        <div className="pl-10 space-y-2">
+                            <div>
+                                <p className="text-sm text-gray-500">Location</p>
+                                <p className="text-gray-800">{address.full_address}</p>
                             </div>
-
-                            <div className="pl-14"> {/* Matches the icon + title alignment */}
-                                <div className="flex flex-col space-y-3">
-                                    <div className="flex items-start">
-                                        <span className="text-gray-500 font-medium min-w-[80px]">Location:</span>
-                                        <span className="text-gray-800">{address.full_address}</span>
-                                    </div>
-
-                                    {/* LinkedIn-style additional details (example) */}
-                                    <div className="flex items-start">
-                                        <span className="text-gray-500 font-medium min-w-[80px]">Type:</span>
-                                        <span className="text-gray-800">Primary</span>
-                                    </div>
-                                </div>
+                            <div>
+                                <p className="text-sm text-gray-500">Type</p>
+                                <p className="text-gray-800">Primary</p>
                             </div>
                         </div>
-
-                        <AddressModal
-                            isOpen={showAddressModal}
-                            onClose={() => setShowAddressModal(false)}
-                        />
+                        <AddressModal isOpen={showAddressModal} onClose={() => setShowAddressModal(false)} />
                     </div>
                 </div>
             )}
@@ -220,56 +177,36 @@ const Profile = () => {
             {/* Employment */}
             <div className="mt-10 w-full max-w-6xl mx-auto px-4">
                 <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-bold flex items-center gap-2 text-gray-800">
                             <FaBuilding className="text-blue-600" />
                             Experience
                         </h2>
                         <button
                             onClick={() => setShowModal(true)}
-                            className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
-                            title="Add experience"
+                            className="p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition"
                         >
                             <FaPlus />
                         </button>
-                        <EmploymentModal
-                            isOpen={showModal}
-                            onClose={() => setShowModal(false)}
-                        />
                     </div>
 
+
                     {employment_history && employment_history.length > 0 ? (
-                        <div className="space-y-4">
+                        <div className="relative border-l border-gray-200 pl-6 space-y-6">
                             {employment_history.map((job) => (
-                                <div key={job.id} className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group">
-                                    <div className="flex gap-4">
-                                        <div className="mt-1">
-                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaBuilding className="text-gray-600" />
-                                            </div>
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className="font-semibold text-gray-800">{job.job_title}</h3>
-                                                    <p className="text-gray-600">{job.company_name}</p>
-                                                    <p className="text-sm text-gray-500">
-                                                        {formatDate(job.start_date)} - {job.end_date ? formatDate(job.end_date) : "Present"}
-                                                    </p>
-                                                    <p className="text-sm text-gray-500 mt-1">
-                                                        <FaMapMarkerAlt className="inline mr-1" />
-                                                        {job.employment_address?.full_address || "Location not specified"}
-                                                    </p>
-                                                </div>
-                                                <button
-                                                    onClick={() => handleEditJob(job)} // You'll need to implement this function
-                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    title="Edit experience"
-                                                >
-                                                    <FaEdit />
-                                                </button>
-                                            </div>
-                                        </div>
+                                <div key={job.id} className="relative">
+                                    <span className="absolute -left-3 top-2 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
+                                    </span>
+                                    <div className="px-7">
+                                        <h3 className="font-semibold text-gray-800">{job.job_title}</h3>
+                                        <p className="text-gray-600">{job.company_name}</p>
+                                        <p className="text-sm text-gray-500">
+                                            {formatDate(job.start_date)} - {job.end_date ? formatDate(job.end_date) : "Present"}
+                                        </p>
+                                        <p className="text-sm text-gray-500 flex items-center gap-1">
+                                            <FaMapMarkerAlt className="text-gray-400" />
+                                            {job.employment_address?.full_address || "Location not specified"}
+                                        </p>
                                     </div>
                                 </div>
                             ))}
@@ -291,292 +228,104 @@ const Profile = () => {
             {/* Technical Skills */}
             <div className="mt-10 w-full max-w-6xl mx-auto px-4">
                 <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-bold flex items-center gap-2 text-gray-800">
                             <FaCogs className="text-blue-600" />
                             Technical Skills
                         </h2>
                         <button
                             onClick={() => setShowTechSkillsModal(true)}
-                            className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
-                            title="Add Skills"
+                            className="p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition"
                         >
                             <FaPlus />
                         </button>
-                        <SkillsModal
-                            key={"tech"}
-                            isOpen={showTechSkillsModal}
-                            skillType={"techSkills"}
-                            onClose={() => setShowTechSkillsModal(false)}
-                        />
                     </div>
 
-                    {/* Check if there are any skills (predefined or user-defined) */}
-                    {((technicalskillslogs && technicalskillslogs.length > 0) ||
-                        (user_defined_tech_skills && user_defined_tech_skills.length > 0)) ? (
-                        <div className="space-y-4">
-                            {/* Display predefined soft skills */}
-                            {technicalskillslogs && technicalskillslogs.map((log) => (
-                                <div
-                                    key={`predefined-${log.id}`}
-                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
-                                >
-                                    <div className="flex gap-4">
-                                        <div className="mt-1">
-                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaCogs className="text-gray-600" />
-                                            </div>
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className="font-semibold text-gray-800">
-                                                        {log.technical_skills?.tch_skill_name}
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Added on {new Date(log.created_at).toLocaleDateString()}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
 
-                            {/* Display user-defined soft skills */}
-                            {user_defined_tech_skills && user_defined_tech_skills.map((skill) => (
-                                <div
-                                    key={`user-defined-${skill.id}`}
-                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
-                                >
-                                    <div className="flex gap-4">
-                                        <div className="mt-1">
-                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaCogs className="text-gray-600" />
-                                            </div>
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className="font-semibold text-gray-800">
-                                                        {skill.skill_name}
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Added on {new Date(skill.created_at).toLocaleDateString()}
-                                                        {/* <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                                            Custom
-                                                        </span> */}
-                                                    </p>
-                                                </div>
-                                                <button
-                                                    onClick={() => handleEditSkill(skill, 'user-defined')}
-                                                    className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    title="Edit skill"
-                                                >
-                                                    <FaEdit />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    {/* Check if there are any skills (predefined or user-defined) */}
+                    {(technicalskillslogs?.length > 0 || user_defined_tech_skills?.length > 0) ? (
+                        <div className="flex flex-wrap gap-2">
+                            {technicalskillslogs?.map((log) => (
+                                <span key={log.id} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
+                                    {log.technical_skills?.tch_skill_name}
+                                </span>
+                            ))}
+                            {user_defined_tech_skills?.map((skill) => (
+                                <span key={skill.id} className="px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm">
+                                    {skill.skill_name}
+                                </span>
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-8 text-gray-500">
-                            <p className="mb-2">No Soft Skills added yet</p>
-                            <button
-                                onClick={() => setShowSoftSkillsModal(true)}
-                                className="text-blue-500 hover:text-blue-700 font-medium"
-                            >
-                                + Add Skills
-                            </button>
-                        </div>
+                        <p className="text-gray-500 text-center py-8">No technical skills added yet</p>
                     )}
                 </div>
             </div>
 
             {/* Soft Skills */}
             <div className="mt-10 w-full max-w-6xl mx-auto px-4">
-                <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                <div className="bg-white shadow-xl rounded-2xl p-6">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-bold flex items-center gap-2 text-gray-800">
                             <FaHandsHelping className="text-blue-600" />
                             Soft Skills
                         </h2>
                         <button
                             onClick={() => setShowSoftSkillsModal(true)}
-                            className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
-                            title="Add Skills"
+                            className="p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition"
                         >
                             <FaPlus />
                         </button>
-                        <SkillsModal
-                            key={"soft"}
-                            isOpen={showSoftSkillsModal}
-                            skillType={"softSkills"}
-                            onClose={() => setShowSoftSkillsModal(false)}
-                        />
                     </div>
 
-                    {/* Check if there are any skills (predefined or user-defined) */}
-                    {((softskillslogs && softskillslogs.length > 0) ||
-                        (user_defined_soft_skills && user_defined_soft_skills.length > 0)) ? (
-                        <div className="space-y-4">
-                            {/* Display predefined soft skills */}
-                            {softskillslogs && softskillslogs.map((log) => (
-                                <div
-                                    key={`predefined-${log.id}`}
-                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
-                                >
-                                    <div className="flex gap-4">
-                                        <div className="mt-1">
-                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaHandsHelping className="text-gray-600" />
-                                            </div>
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className="font-semibold text-gray-800">
-                                                        {log.soft_skill?.sft_skill_name}
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Added on {new Date(log.created_at).toLocaleDateString()}
-                                                    </p>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    {(softskillslogs?.length > 0 || user_defined_soft_skills?.length > 0) ? (
+                        <div className="flex flex-wrap gap-2">
+                            {softskillslogs?.map((log) => (
+                                <span key={log.id} className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm">
+                                    {log.soft_skill?.sft_skill_name}
+                                </span>
                             ))}
-
-                            {/* Display user-defined soft skills */}
-                            {user_defined_soft_skills && user_defined_soft_skills.map((skill) => (
-                                <div
-                                    key={`user-defined-${skill.id}`}
-                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
-                                >
-                                    <div className="flex gap-4">
-                                        <div className="mt-1">
-                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaHandsHelping className="text-gray-600" />
-                                            </div>
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className="font-semibold text-gray-800">
-                                                        {skill.skill_name}
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Added on {new Date(skill.created_at).toLocaleDateString()}
-                                                        {/* <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                                            Custom
-                                                        </span> */}
-                                                    </p>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            {user_defined_soft_skills?.map((skill) => (
+                                <span key={skill.id} className="px-3 py-1 bg-pink-50 text-pink-700 rounded-full text-sm">
+                                    {skill.skill_name}
+                                </span>
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-8 text-gray-500">
-                            <p className="mb-2">No Soft Skills added yet</p>
-                            <button
-                                onClick={() => setShowSoftSkillsModal(true)}
-                                className="text-blue-500 hover:text-blue-700 font-medium"
-                            >
-                                + Add Skills
-                            </button>
-                        </div>
+                        <p className="text-gray-500 text-center py-8">No soft skills added yet</p>
                     )}
                 </div>
             </div>
 
             {/* certifications */}
             <div className="mt-10 w-full max-w-6xl mx-auto px-4">
-                <div className="bg-white shadow-lg rounded-lg p-6 transition duration-300 ease-in-out border border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                <div className="bg-white shadow-xl rounded-2xl p-6">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-bold flex items-center gap-2 text-gray-800">
                             <FaCertificate className="text-blue-600" />
                             Certifications
                         </h2>
                         <button
                             onClick={() => setShowSoftSkillsModal(true)}
-                            className="p-2 rounded-full hover:bg-gray-100 text-gray-600 hover:text-gray-800"
-                            title="Add Skills"
+                            className="p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-blue-600 transition"
                         >
                             <FaPlus />
                         </button>
-                        <SkillsModal
-                            key={"soft"}
-                            isOpen={showSoftSkillsModal}
-                            skillType={"softSkills"}
-                            onClose={() => setShowSoftSkillsModal(false)}
-                        />
                     </div>
 
-                    {certifications && certifications.length > 0 ? (
+                    {certifications?.length > 0 ? (
                         <div className="space-y-4">
                             {certifications.map((log) => (
-                                <div
-                                    key={log.id}
-                                    className="pb-4 border-b border-gray-100 last:border-0 last:pb-0 group"
-                                >
-                                    <div className="flex gap-4">
-                                        {/* Icon */}
-                                        <div className="mt-1">
-                                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <FaCertificate className="text-gray-600" />
-                                            </div>
-                                        </div>
-
-                                        {/* Content */}
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    {/* Certificate Name */}
-                                                    <h3 className="font-semibold text-gray-800">
-                                                        {log.cert_name}
-                                                    </h3>
-
-                                                    {/* Serial Number */}
-                                                    <p className="text-sm text-gray-600">
-                                                        Serial No: <span className="font-medium">{log.cert_serial_no}</span>
-                                                    </p>
-
-                                                    {/* Awarded Year */}
-                                                    <p className="text-sm text-gray-600">
-                                                        Awarded: <span className="font-medium">{log.cert_awarded}</span>
-                                                    </p>
-
-                                                    {/* Created Date */}
-                                                    <p className="text-xs text-gray-500 mt-1">
-                                                        Added on {new Date(log.created_at).toLocaleDateString()}
-                                                    </p>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div key={log.id} className="p-4 border rounded-lg hover:shadow-md transition">
+                                    <h3 className="font-semibold text-gray-800">{log.cert_name}</h3>
+                                    <p className="text-sm text-gray-600">Serial: {log.cert_serial_no}</p>
+                                    <p className="text-sm text-gray-600">Awarded: {log.cert_awarded}</p>
+                                    <p className="text-xs text-gray-500 mt-1">Added on {new Date(log.created_at).toLocaleDateString()}</p>
                                 </div>
                             ))}
                         </div>
-
                     ) : (
-                        <div className="text-center py-8 text-gray-500">
-                            <p className="mb-2">No Soft Skills added yet</p>
-                            <button
-                                onClick={() => setShowSoftSkillsModal(true)}
-                                className="text-blue-500 hover:text-blue-700 font-medium"
-                            >
-                                + Add Skills
-                            </button>
-                        </div>
+                        <p className="text-gray-500 text-center py-8">No certifications added yet</p>
                     )}
                 </div>
             </div>
