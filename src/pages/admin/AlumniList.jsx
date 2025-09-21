@@ -150,19 +150,7 @@ const AlumniTableRow = ({ item, loadingAction, onAction, viewSubmission }) => {
           color="red"
           className="ml-2"
         />
-        <button
-          onClick={() => setOpen(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-        >
-          Review Alumni
-        </button>
-
-        <AlumniSubmission
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          accountID={item.id}
-         
-        />
+      
       </td>
     </tr>
   );
