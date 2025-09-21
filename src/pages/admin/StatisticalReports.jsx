@@ -7,6 +7,9 @@ import ClusterChart from "../../components/ClusterChart";
 import CertificationClusters from "./CertificationClusterChart";
 import ChartLoading from "../../components/ChartLoading";
 import JobTrends from "./JobTrends";
+import axios from "axios";
+import CorrelationChart from "../../components/CorrelationChart";
+import { useEffect, useState } from "react";
 
 
 const StatisticalReports = () => {
@@ -17,31 +20,32 @@ const StatisticalReports = () => {
     const { data: certAnalysis, loadingData: loadingCert } = useClusteredCertifications(token);
     const { data: regionalEmploymentAnalysis, loadingData: loadingRegional } = useClusteredRegionalEmployment(token);
     const { data: jobTrends, loadingData: loadingTrends } = useJobTrends(token);
-
+    const [correlation, setCorrelation] = useState([]);
+    const [loading, setLoading] = useState(true);
     // graduates demograph
-    // useEffect(() => {
-    //     const fetchGraduatesDemograph = async () => {
-    //         try {
-    //             const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/graduates-per-year`
-    //                 , {
-    //                     headers: {
-    //                         Authorization: `Bearer ${token}`,
-    //                         Accept: "application/json",
-    //                     },
-    //                 });
-    //             setGraduatesDemograph(response.data.data);
-    //             console.log(response.data.data);
-    //         } catch (error) {
-    //             console.error("Error fetching alumni data:", error);
-    //         } finally {
-    //             setLoadingGraduates(false);
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchCorrelationData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/analytics/heatmap`
+                    , {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    });
+                setCorrelation(response.data.data);
+                console.log(response.data.data);
+            } catch (error) {
+                console.error("Error fetching alumni data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    //     if (token) {
-    //         fetchGraduatesDemograph();
-    //     }
-    // }, [token]);
+        if (token) {
+            fetchCorrelationData();
+        }
+    }, [token]);
 
 
 
@@ -149,6 +153,11 @@ const StatisticalReports = () => {
             <JobTrends data={jobTrends} loading={loadingTrends} />
 
             <CertificationClusters />
+            <div className="p-6 bg-white rounded-xl shadow-lg mt-5">
+                <h2 className="text-xl font-bold mb-4">Correlation Heatmap</h2>
+                <CorrelationChart data={correlation} />
+            </div>
+
 
         </div>
     );
