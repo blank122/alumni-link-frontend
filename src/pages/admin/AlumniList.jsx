@@ -1,23 +1,26 @@
 import { useState } from 'react';
 import { useAuth } from "../../contexts/AuthContext";
 import { motion } from 'framer-motion';
-import { 
-  FaUserTimes, FaBriefcase, FaCheckCircle 
+import {
+  FaUserTimes, FaBriefcase, FaCheckCircle
 } from 'react-icons/fa';
 import StatsCard from '../../components/StatsCard';
 import { useAlumniData, useAccountCounts } from '../../hooks/AlumniData';
 import createApiClient from '../../api/ApiService';
+import AlumniSubmission from '../../components/admin/AlumniSubmission';
 
 const AlumniList = () => {
   const { token } = useAuth();
   const { account, loading } = useAlumniData(token);
-  const { 
-    pendingCount, 
-    approvedCount, 
-    loadingPending, 
-    loadingApproved 
+  const [open, setOpen] = useState(false);
+
+  const {
+    pendingCount,
+    approvedCount,
+    loadingPending,
+    loadingApproved
   } = useAccountCounts(token);
-  
+
   const [loadingAction, setLoadingAction] = useState(null);
 
   const handleAction = async (id, actionType) => {
@@ -30,7 +33,7 @@ const AlumniList = () => {
       const api = createApiClient(token);
       const status = actionType === "Approve" ? "2" : "0";
       await api.updateAccountStatus(id, status);
-      
+
       alert(`${actionType} action successful!`);
       window.location.reload();
     } catch (error) {
@@ -44,15 +47,15 @@ const AlumniList = () => {
   return (
     <div className="flex flex-col h-screen p-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        <StatsCard 
+        <StatsCard
           icon={FaUserTimes}
           title="Pending Accounts"
           value={pendingCount}
           isLoading={loadingPending}
           bgColor="bg-gray-300"
         />
-        
-        <StatsCard 
+
+        <StatsCard
           icon={FaBriefcase}
           title="Approved Accounts"
           value={approvedCount}
@@ -61,9 +64,9 @@ const AlumniList = () => {
         />
       </div>
 
-      <AlumniTable 
-        accounts={account} 
-        loading={loading} 
+      <AlumniTable
+        accounts={account}
+        loading={loading}
         loadingAction={loadingAction}
         onAction={handleAction}
       />
@@ -96,7 +99,7 @@ const AlumniTable = ({ accounts, loading, loadingAction, onAction }) => (
           <tbody>
             {accounts.length > 0 ? (
               accounts.map((item) => (
-                <AlumniTableRow 
+                <AlumniTableRow
                   key={item.id}
                   item={item}
                   loadingAction={loadingAction}
@@ -117,10 +120,10 @@ const AlumniTable = ({ accounts, loading, loadingAction, onAction }) => (
   </motion.div>
 );
 
-const AlumniTableRow = ({ item, loadingAction, onAction }) => {
+const AlumniTableRow = ({ item, loadingAction, onAction, viewSubmission }) => {
   const statusText = item.status === 1 ? "Pending" : "Rejected";
   const isProcessing = loadingAction === item.id;
-  
+
   return (
     <tr className="border-b bg-gray-100 hover:bg-gray-200 transition">
       <td className="px-6 py-4 text-gray-700">
@@ -132,20 +135,33 @@ const AlumniTableRow = ({ item, loadingAction, onAction }) => {
       <td className="px-6 py-4 text-gray-700">{item.email || "N/A"}</td>
       <td className="px-6 py-4 text-gray-700">{statusText}</td>
       <td className="px-6 py-4 text-center">
-        <ActionButton 
+        <ActionButton
           actionType="Approve"
           itemId={item.id}
           isProcessing={isProcessing}
           onClick={onAction}
           color="green"
         />
-        <ActionButton 
+        <ActionButton
           actionType="Reject"
           itemId={item.id}
           isProcessing={isProcessing}
           onClick={onAction}
           color="red"
           className="ml-2"
+        />
+        <button
+          onClick={() => setOpen(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+          Review Alumni
+        </button>
+
+        <AlumniSubmission
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          accountID={item.id}
+         
         />
       </td>
     </tr>
@@ -157,18 +173,19 @@ const ActionButton = ({ actionType, itemId, isProcessing, onClick, color, classN
     green: 'bg-green-500 hover:bg-green-600',
     red: 'bg-red-500 hover:bg-red-600',
   };
-  
+
   return (
     <button
       onClick={() => onClick(itemId, actionType)}
-      className={`px-4 py-2 text-white rounded-md transition ${className} ${
-        isProcessing ? "bg-gray-400 cursor-not-allowed" : colorClasses[color]
-      }`}
+      className={`px-4 py-2 text-white rounded-md transition ${className} ${isProcessing ? "bg-gray-400 cursor-not-allowed" : colorClasses[color]
+        }`}
       disabled={isProcessing}
     >
       {isProcessing ? "Processing..." : actionType}
     </button>
   );
 };
+
+
 
 export default AlumniList;

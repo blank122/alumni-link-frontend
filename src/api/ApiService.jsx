@@ -11,6 +11,8 @@ export const createApiClient = (token) => {
   return {
     //api for admin
     getAlumni: () => axios.get(`${API_BASE_URL}/admin/get-alumni`, { headers }),
+    getSpecificAlumni: (accountID) => axios.get(`${API_BASE_URL}/alumni/${accountID}`, { headers }),
+
     getPendingAccounts: () => axios.get(`${API_BASE_URL}/admin/pending-accounts`, { headers }),
     getApprovedAccounts: () => axios.get(`${API_BASE_URL}/admin/approved-accounts`, { headers }),
     updateAccountStatus: (id, status) =>
@@ -38,7 +40,7 @@ export const createApiClient = (token) => {
     getClusteredRegionalEmployment: () => axios.get(`${API_BASE_URL}/ph-location-public`, { headers }),
     getJobTrends: () => axios.get(`${API_BASE_URL}/admin/analytics/job-trends`, { headers }),
 
-  
+
 
   };
 };
