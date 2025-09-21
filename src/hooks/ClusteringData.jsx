@@ -65,7 +65,7 @@ export const useClusteredCertifications = (token) => {
 
       try {
         const api = createApiClient(token);
-        const response = await api.getClusteredCertifications();
+        const response = await api.getClusteredCertificationsEmployment();
         console.log("fetched data", response.data); // should show unemployed, employed, courses
         setData(response.data); // ✅ fixed this line
       } catch (error) {
