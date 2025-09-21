@@ -75,7 +75,7 @@ const StatisticalReports = () => {
                 {loadingAnalysis ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={analysis} clusteringType="kmeans-profile" chartType="bar" />
+                    <ClusterChart data={analysis} clusteringType="kmeans-profile" chartType="heatmap" />
                 )}
 
             </div>
@@ -111,7 +111,7 @@ const StatisticalReports = () => {
                 {loadingRegional ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={regionalEmploymentAnalysis} clusteringType="kmeans-ph-regions" chartType="bar" />
+                    <ClusterChart data={regionalEmploymentAnalysis} clusteringType="kmeans-ph-regions" chartType="scatter" />
                 )}
 
             </div>
