@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
 import ProgressBar from "../user/Components/ProgressBar";
+import ProgressHeader from "../../components/ProgressHeader";
 
 const courseNames = {
     1: "Bachelor of Science in Information Technology",
@@ -56,14 +57,15 @@ const softSkills =
 
 const ReviewStep = ({ userData, currentStepIndex, totalSteps }) => (
     <motion.div
-        className="p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg w-full max-w-4xl mx-auto border border-gray-100 max-h-[80vh] overflow-y-auto"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
     >
-        <div className="w-full max-w-3xl">
-            <ProgressBar currentStepIndex={currentStepIndex} totalSteps={totalSteps} />
-        </div>
+        <ProgressHeader
+            currentStepIndex={currentStepIndex}
+            totalSteps={totalSteps}
+            title="Review Step"
+        />
         <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">
                 Review Your Information
