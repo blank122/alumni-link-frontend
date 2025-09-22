@@ -1,15 +1,47 @@
-import { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
 import createApiClient from '../../api/ApiService';
-import { useFindAlumni } from '../../hooks/AlumniData';
 import { useAuth } from "../../contexts/AuthContext";
 
-const AlumniSubmission = ({ isOpen, onClose, accountID }) => {
+const AlumniSubmission = ({ userData, onClose, accountID }) => {
     const { token } = useAuth();
-    const { account, loading } = useFindAlumni(token, accountID);
 
-    const userData = account;
+    const [loading, setLoading] = useState(false);
 
-    if (!isOpen) return null; // don’t render modal if closed
+    // if (!isOpen) return null; // don’t render modal if closed
+    useEffect(() => {
+        if (userData) {
+            console.log(
+                "🔍 userData inside AlumniSubmission:",
+                JSON.stringify(userData, null, 2)
+            );
+        }
+    }, [userData]);
+
+    if (!userData) return null;
+
+    const employmentStatusMap = {
+        "0": "Unemployed",
+        "1": "Freelance",
+        "2": "Employed",
+    };
+
+    const handleStatusUpdate = async (status) => {
+        try {
+            setLoading(true);
+            const api = createApiClient(token);
+            const res = await api.updateAccountStatus(accountID, status);
+            console.log("✅ API response:", res.data);
+            alert(`Account ${status} successfully and email sent!`);
+            onClose(); // close modal
+        } catch (err) {
+            console.error("❌ Error updating account status:", err);
+            alert("Failed to update status. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     return (
         <div>
@@ -80,11 +112,11 @@ const AlumniSubmission = ({ isOpen, onClose, accountID }) => {
                         <div className="space-y-3">
                             <div>
                                 <p className="text-sm text-gray-500 font-medium">Full Address</p>
-                                <p className="text-gray-800 font-medium">{userData.add_full_address}</p>
+                                <p className="text-gray-800 font-medium">{userData.address.full_address}</p>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500 font-medium">Coordinates</p>
-                                <p className="text-gray-800 font-mono text-sm bg-gray-100 p-2 rounded">{userData.add_lat}, {userData.add_long}</p>
+                                <p className="text-gray-800 font-mono text-sm bg-gray-100 p-2 rounded">{userData.address.add_lat}, {userData.address.add_long}</p>
                             </div>
                         </div>
                     </div>
@@ -101,21 +133,13 @@ const AlumniSubmission = ({ isOpen, onClose, accountID }) => {
                             <p className="text-sm text-gray-500 font-medium">Technical Skills</p>
                         </div>
                         <div className="space-y-3">
-                            {(userData.technical_skills_logs.length > 0 || userData.custom_tech_skills.length > 0) ? (
+                            {(userData.technicalskillslogs.length > 0) ? (
                                 <ul className="list-disc list-inside text-gray-800">
                                     {/* Predefined technical skills */}
-                                    {userData.technical_skills_logs.map((skill, index) => (
-                                        <li key={`tech-predef-${index}`}>
-                                            {technicalSkills[skill] || "Unknown Skill"}
-                                        </li>
+                                    {userData.technicalskillslogs?.map((log) => (
+                                        <li key={log.id}>{log.technical_skills?.tch_skill_name}</li>
                                     ))}
 
-                                    {/* Custom technical skills */}
-                                    {userData.custom_tech_skills.map((customSkill, index) => (
-                                        <li key={`tech-custom-${index}`}>
-                                            {customSkill.skill_name}
-                                        </li>
-                                    ))}
                                 </ul>
                             ) : (
                                 <p className="text-gray-800 font-medium">N/A</p>
@@ -131,21 +155,13 @@ const AlumniSubmission = ({ isOpen, onClose, accountID }) => {
                             <p className="text-sm text-gray-500 font-medium">Soft Skills</p>
                         </div>
                         <div className="space-y-3">
-                            {(userData.soft_skills_logs.length > 0 || userData.custom_soft_skills.length > 0) ? (
+                            {(userData.softskillslogs.length > 0) ? (
                                 <ul className="list-disc list-inside text-gray-800">
                                     {/* Predefined soft skills */}
-                                    {userData.soft_skills_logs.map((skill, index) => (
-                                        <li key={`soft-predef-${index}`}>
-                                            {softSkills[skill] || "Unknown Skill"}
-                                        </li>
+                                    {userData.softskillslogs?.map((log) => (
+                                        <li key={log.id}>{log.soft_skill?.sft_skill_name}</li>
                                     ))}
 
-                                    {/* Custom soft skills */}
-                                    {userData.custom_soft_skills.map((customSkill, index) => (
-                                        <li key={`soft-custom-${index}`}>
-                                            {customSkill.skill_name}
-                                        </li>
-                                    ))}
                                 </ul>
                             ) : (
                                 <p className="text-sm text-gray-500 font-medium">N/A</p>
@@ -173,21 +189,21 @@ const AlumniSubmission = ({ isOpen, onClose, accountID }) => {
                         <div className="space-y-3">
                             <div>
                                 <p className="text-sm text-gray-500 font-medium">Degree Program</p>
-                                <p className="text-gray-800 font-medium">{courseNames[userData.course_id] || userData.course_id}</p>
+                                <p className="text-gray-800 font-medium">{userData.alumni_education.courses.course_name}</p>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <p className="text-sm text-gray-500 font-medium">Year Graduated</p>
-                                    <p className="text-gray-800 font-medium">{userData.year_graduated}</p>
+                                    <p className="text-gray-800 font-medium">{userData.alumni_education.alm_edu_grad_year}</p>
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500 font-medium">Masters Degree</p>
-                                    <p className="text-gray-800 font-medium">{userData.masters_type || "N/A"}</p>
+                                    <p className="text-gray-800 font-medium">{userData.alumni_education.alm_edu_masters_deg || "N/A"}</p>
                                 </div>
                             </div>
                             <div>
                                 <p className="text-sm text-gray-500 font-medium">Institution</p>
-                                <p className="text-gray-800 font-medium">{userData.masters_institution || "N/A"}</p>
+                                <p className="text-gray-800 font-medium">{userData.alumni_education.alm_edu_masters_deg || "N/A"}</p>
                             </div>
                         </div>
                     </div>
@@ -205,7 +221,9 @@ const AlumniSubmission = ({ isOpen, onClose, accountID }) => {
                         <div className="space-y-3">
                             <div>
                                 <p className="text-sm text-gray-500 font-medium">Employment Status</p>
-                                <p className="text-gray-800 font-medium">{employmentData[userData.emp_status] || userData.emp_status}</p>
+                                <p className="text-gray-800 font-medium">
+                                    {employmentStatusMap[userData?.employment_status?.emp_info_status] || "Unknown"}
+                                </p>
                             </div>
                             {userData.emp_status == 2 && (
                                 <>
@@ -281,6 +299,22 @@ const AlumniSubmission = ({ isOpen, onClose, accountID }) => {
                     className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100 transition"
                 >
                     Cancel
+                </button>
+
+                <button
+                    disabled={loading}
+                    onClick={() => handleStatusUpdate("0")}
+                    className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
+                >
+                    {loading ? "Processing..." : "Reject"}
+                </button>
+
+                <button
+                    disabled={loading}
+                    onClick={() => handleStatusUpdate("2")}
+                    className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition"
+                >
+                    {loading ? "Processing..." : "Approve"}
                 </button>
 
             </div>

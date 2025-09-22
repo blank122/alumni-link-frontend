@@ -6,13 +6,13 @@ import {
 } from 'react-icons/fa';
 import StatsCard from '../../components/StatsCard';
 import { useAlumniData, useAccountCounts } from '../../hooks/AlumniData';
-import createApiClient from '../../api/ApiService';
 import AlumniSubmission from '../../components/admin/AlumniSubmission';
 
 const AlumniList = () => {
   const { token } = useAuth();
   const { account, loading } = useAlumniData(token);
   const [open, setOpen] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(null);
 
   const {
     pendingCount,
@@ -20,29 +20,6 @@ const AlumniList = () => {
     loadingPending,
     loadingApproved
   } = useAccountCounts(token);
-
-  const [loadingAction, setLoadingAction] = useState(null);
-
-  const handleAction = async (id, actionType) => {
-    const confirmation = window.confirm(`Are you sure you want to ${actionType} this account?`);
-    if (!confirmation) return;
-
-    setLoadingAction(id);
-
-    try {
-      const api = createApiClient(token);
-      const status = actionType === "Approve" ? "2" : "0";
-      await api.updateAccountStatus(id, status);
-
-      alert(`${actionType} action successful!`);
-      window.location.reload();
-    } catch (error) {
-      alert(`Failed to ${actionType} the account.`);
-      console.error("Error:", error);
-    } finally {
-      setLoadingAction(null);
-    }
-  };
 
   return (
     <div className="flex flex-col h-screen p-6">
@@ -67,14 +44,30 @@ const AlumniList = () => {
       <AlumniTable
         accounts={account}
         loading={loading}
-        loadingAction={loadingAction}
-        onAction={handleAction}
+        onView={(accountData) => {
+          setSelectedAccount(accountData);
+          setOpen(true);
+        }}
       />
+
+      {/* Modal */}
+      {open && selectedAccount && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-11/12 md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-y-auto">
+            <AlumniSubmission
+              userData={selectedAccount.alumni}
+              onClose={() => setOpen(false)}
+              accountID={selectedAccount.id}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-const AlumniTable = ({ accounts, loading, loadingAction, onAction }) => (
+
+const AlumniTable = ({ accounts, loading, onView }) => (
   <motion.div
     className="mt-6 p-4 bg-white shadow-md rounded-lg"
     initial={{ opacity: 0, scale: 0.9 }}
@@ -102,8 +95,7 @@ const AlumniTable = ({ accounts, loading, loadingAction, onAction }) => (
                 <AlumniTableRow
                   key={item.id}
                   item={item}
-                  loadingAction={loadingAction}
-                  onAction={onAction}
+                  onView={onView}
                 />
               ))
             ) : (
@@ -120,10 +112,13 @@ const AlumniTable = ({ accounts, loading, loadingAction, onAction }) => (
   </motion.div>
 );
 
-const AlumniTableRow = ({ item, loadingAction, onAction, viewSubmission }) => {
-  const statusText = item.status === 1 ? "Pending" : "Rejected";
-  const isProcessing = loadingAction === item.id;
+const AlumniTableRow = ({ item, onView }) => {
+  const statusText = item.status === 1 ? "Pending" : item.status === 2 ? "Approved" : "Rejected";
 
+  console.log(
+    "🔍 item inside AlumniTableRow:",
+    JSON.stringify(item, null, 2)
+  );
   return (
     <tr className="border-b bg-gray-100 hover:bg-gray-200 transition">
       <td className="px-6 py-4 text-gray-700">
@@ -135,26 +130,17 @@ const AlumniTableRow = ({ item, loadingAction, onAction, viewSubmission }) => {
       <td className="px-6 py-4 text-gray-700">{item.email || "N/A"}</td>
       <td className="px-6 py-4 text-gray-700">{statusText}</td>
       <td className="px-6 py-4 text-center">
-        <ActionButton
-          actionType="Approve"
-          itemId={item.id}
-          isProcessing={isProcessing}
-          onClick={onAction}
-          color="green"
-        />
-        <ActionButton
-          actionType="Reject"
-          itemId={item.id}
-          isProcessing={isProcessing}
-          onClick={onAction}
-          color="red"
-          className="ml-2"
-        />
-      
+        <button
+          onClick={() => onView(item)}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+        >
+          View Application
+        </button>
       </td>
     </tr>
   );
 };
+
 
 const ActionButton = ({ actionType, itemId, isProcessing, onClick, color, className = '' }) => {
   const colorClasses = {
