@@ -202,9 +202,9 @@ const ForumDetails = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg transition-colors">
+                                            {/* <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg transition-colors">
                                                 <FaEllipsisH />
-                                            </button>
+                                            </button> */}
                                         </div>
 
                                         {/* Thread Content */}
@@ -220,7 +220,7 @@ const ForumDetails = () => {
                                         {/* Thread Actions */}
                                         <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
                                             <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                                                <button className="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                                                {/* <button className="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                                     <FaHeart />
                                                     <span>Like</span>
                                                 </button>
@@ -231,12 +231,12 @@ const ForumDetails = () => {
                                                 <button className="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                                     <FaShare />
                                                     <span>Share</span>
-                                                </button>
+                                                </button> */}
                                             </div>
-                                            <button className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-medium">
+                                            {/* <button className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-medium">
                                                 <span>Reply</span>
                                                 <FaPaperPlane className="text-xs" />
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </div>
                                 </div>
