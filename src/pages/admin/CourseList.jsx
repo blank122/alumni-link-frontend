@@ -44,19 +44,37 @@ const CourseList = () => {
     }, [token, colors]);
 
     return (
-        <div className="flex flex-col h-screen p-6">
-            <h1 className="text-2xl font-bold">Courses Population</h1>
+        <div className="flex flex-col h-screen p-6 bg-gray-50">
+            {/* Header */}
+            <div className="mb-6">
+                <h1 className="text-3xl font-extrabold text-gray-800">📊 Alumni Population by Course</h1>
+                <p className="text-gray-500 mt-1">Overview of student distribution per course</p>
+            </div>
 
-            <div className="mt-6 bg-white shadow-lg rounded-xl p-6">
+            {/* Chart Card */}
+            <div className="flex-1 bg-white shadow-xl rounded-2xl p-6">
                 {loadingData ? (
-                    <p className="text-gray-500">Loading...</p>
+                    <div className="flex justify-center items-center h-full">
+                        <p className="text-gray-500 animate-pulse">Loading data...</p>
+                    </div>
                 ) : (
-                    <ResponsiveContainer width="100%" height={400}>
-                        <BarChart data={dataCount} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Bar dataKey="population">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                            data={dataCount}
+                            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                        >
+                            <XAxis dataKey="name" tick={{ fill: "#6B7280", fontSize: 12 }} />
+                            <YAxis tick={{ fill: "#6B7280", fontSize: 12 }} />
+                            <Tooltip
+                                cursor={{ fill: "rgba(156,163,175,0.1)" }}
+                                contentStyle={{
+                                    backgroundColor: "white",
+                                    borderRadius: "12px",
+                                    border: "1px solid #E5E7EB",
+                                    boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+                                }}
+                            />
+                            <Bar dataKey="population" radius={[6, 6, 0, 0]}>
                                 {dataCount.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
@@ -66,6 +84,7 @@ const CourseList = () => {
                 )}
             </div>
         </div>
+
     );
 };
 
