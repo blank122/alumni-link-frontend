@@ -3,9 +3,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 const Forums = () => {
-
     const { user, token } = useAuth();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,32 +15,20 @@ const Forums = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get( `${import.meta.env.VITE_API_BASE_URL}/forums`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/forums`, {
+                    headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
                 });
-
-                if (response.data && response.data.data) {
+                if (response.data?.data) {
                     setData(response.data.data);
-                    console.log("Fetched data:", response.data.data);
-                } else {
-                    console.error("Unexpected API response structure:", response.data);
-                    setData([]); // Fallback to empty array
-                }
+                } else setData([]);
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setData([]); // Prevent undefined issue
+                setData([]);
             } finally {
                 setLoading(false);
             }
         };
-
-
-        if (token) {
-            fetchData();
-        }
+        if (token) fetchData();
     }, [token]);
 
     const handleCreatePost = async (e) => {
@@ -51,56 +37,59 @@ const Forums = () => {
         formData.append("title", forumTitle);
         formData.append("description", forumDescription);
         formData.append("account_id", user.id);
+
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/forums", formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                },
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/forums`, formData, {
+                headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
             });
             if (response.status === 201) {
                 alert("Forum created successfully!");
                 setShowModal(false);
                 setForumTitle("");
                 setForumDescription("");
+                setData([response.data, ...data]); // Add new forum to top
             }
         } catch (error) {
-            console.error("Error creating job:", error);
+            console.error("Error creating forum:", error);
         }
     };
 
-
     return (
-        <div className="container mx-auto py-10">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">📝 Forums</h1>
+        <div className="container mx-auto py-10 px-4">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
+                    📝 Forums
+                </h1>
                 <button
                     onClick={() => setShowModal(true)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700"
+                    className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-all duration-300"
                 >
-                    + Create Forums
+                    + Create Forum
                 </button>
             </div>
+
+            {/* Loading */}
             {loading ? (
-                <p>Loading Forums...</p>
+                <p className="text-center text-gray-500 mt-10">Loading Forums...</p>
             ) : (
-                <div className="min-w-6xl max-w-full mx-auto p-4 space-y-6">
-                    {data && data.length > 0 ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {data.length > 0 ? (
                         data.map((forum) => {
                             const firstName = forum.account?.alumni?.alm_first_name || "Unknown";
                             const lastName = forum.account?.alumni?.alm_last_name || "";
-                            const initials =
-                                (firstName.charAt(0) || "").toUpperCase() + (lastName.charAt(0) || "").toUpperCase();
-                            const fullName = `${firstName} ${lastName}`.trim(); // Ensure proper spacing
+                            const initials = (firstName[0] || "").toUpperCase() + (lastName[0] || "").toUpperCase();
+                            const fullName = `${firstName} ${lastName}`.trim();
+
                             return (
                                 <div
                                     key={forum.id}
-                                    onClick={() => navigate(`/admin/forums/${forum.id}`)} // Navigate to details page
-                                    className="cursor-pointer bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm p-4 transition-all duration-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                                    onClick={() => navigate(`/admin/forums/${forum.id}`)}
+                                    className="cursor-pointer bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-md p-5 hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
                                 >
-                                    {/* Header: Profile Picture & Name */}
-                                    <div className="flex items-center space-x-3">
-                                        <div className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white font-bold rounded-full text-lg">
+                                    {/* Header */}
+                                    <div className="flex items-center space-x-4">
+                                        <div className="w-12 h-12 flex items-center justify-center bg-blue-500 text-white font-bold rounded-full text-lg">
                                             {initials}
                                         </div>
                                         <div>
@@ -110,72 +99,62 @@ const Forums = () => {
                                             </p>
                                         </div>
                                     </div>
-                                    {/* Content */} 
-                                    <div className="mt-3">
+
+                                    {/* Content */}
+                                    <div className="mt-4">
                                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">{forum.frm_title}</h3>
-                                        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{forum.frm_description}</p>
+                                        <p className="text-gray-600 dark:text-gray-300 mt-1">{forum.frm_description}</p>
                                     </div>
+
                                     {/* Actions */}
-                                    <div className="flex items-center justify-between mt-4 text-gray-500 dark:text-gray-400 text-sm">
-                                        {/* <button className="flex items-center space-x-1 hover:text-blue-500">
-                                            <i className="fas fa-heart"></i>
-                                            <span>Like</span>
-                                        </button> */}
-                                        <button className="flex items-center space-x-1 hover:text-blue-500">
-                                            <i className="fas fa-comment"></i>
-                                            <span>Create Discussion</span>
+                                    <div className="flex items-center justify-end mt-4 gap-4 text-gray-500 dark:text-gray-400 text-sm">
+                                        <button className="flex items-center gap-1 hover:text-blue-500 transition">
+                                            <i className="fas fa-comment"></i> Discuss
                                         </button>
-                                        {/* <button className="flex items-center space-x-1 hover:text-blue-500">
-                                            <i className="fas fa-share"></i>
-                                            <span>Share</span>
-                                        </button> */}
                                     </div>
                                 </div>
                             );
                         })
                     ) : (
-                        <p className="text-gray-500 text-center col-span-full">No forums available.</p>
+                        <p className="text-gray-500 text-center col-span-full mt-10">No forums available.</p>
                     )}
                 </div>
             )}
-               {/* Forum Creation Modal */}
-               {showModal && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-5">
 
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96 border border-gray-300">
-                        <h2 className="text-lg font-semibold mb-4">Create Forum  </h2>
+            {/* Forum Creation Modal */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-2xl w-96 border border-gray-300 dark:border-gray-700">
+                        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white flex items-center gap-2">
+                            📝 Create Forum
+                        </h2>
                         <form onSubmit={handleCreatePost} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Forum Title</label>
-                                <input
-                                    type="text"
-                                    value={forumTitle}
-                                    onChange={(e) => setForumTitle(e.target.value)}
-                                    required
-                                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Forum Description</label>
-                                <textarea
-                                    value={forumDescription}
-                                    onChange={(e) => setForumDescription(e.target.value)}
-                                    required
-                                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
-                                ></textarea>
-                            </div>
-                         
-                            <div className="flex justify-end space-x-2">
+                            <input
+                                type="text"
+                                placeholder="Forum Title"
+                                value={forumTitle}
+                                onChange={(e) => setForumTitle(e.target.value)}
+                                required
+                                className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none transition-all duration-300 hover:border-blue-500"
+                            />
+                            <textarea
+                                placeholder="Forum Description"
+                                value={forumDescription}
+                                onChange={(e) => setForumDescription(e.target.value)}
+                                required
+                                className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none transition-all duration-300 hover:border-blue-500"
+                            ></textarea>
+                            <div className="flex justify-end gap-2">
                                 <button
                                     type="button"
                                     onClick={() => setShowModal(false)}
-                                    className="px-4 py-2 bg-gray-300 rounded-lg"
+                                    className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                                 >
                                     Create
                                 </button>
@@ -185,9 +164,6 @@ const Forums = () => {
                 </div>
             )}
         </div>
-
-
-
     );
 };
 
