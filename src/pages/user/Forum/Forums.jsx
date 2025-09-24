@@ -16,7 +16,7 @@ const Forums = () => {
         const fetchData = async () => {
             try {
 
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/forums`, 
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/forums`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ const Forums = () => {
     }, [token]);
 
     return (
-        <div className={`flex flex-col h-screen p-6 `}>
+        <div className="flex flex-col h-screen p-6">
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">📝 Forums</h1>
                 <button
