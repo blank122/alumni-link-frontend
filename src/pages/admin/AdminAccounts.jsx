@@ -89,6 +89,9 @@ const AdminAccountPage = () => {
           <div>
             <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
               Admin Accounts
+              <span className="px-2 py-1 text-sm font-semibold bg-gray-200 text-gray-700 rounded-md">
+                {admins.length}
+              </span>
             </h2>
             <p className="text-sm text-gray-500">
               Manage system administrators and access control
