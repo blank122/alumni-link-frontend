@@ -3,6 +3,21 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import {
+    Home,
+    Briefcase,
+    Megaphone,
+    Calendar,
+    MessageSquare,
+    BookOpen,
+    Users,
+    Shield,
+    Map,
+    MessageCircle,
+    BarChart3,
+    Smartphone,
+    LogOut,
+} from "lucide-react";
 
 const AdminLayout = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +29,20 @@ const AdminLayout = ({ children }) => {
         logout(); // Clear user authentication
         navigate("/login"); // Redirect to login page
     };
-
+    const navItems = [
+        { path: "/admin/dashboard", label: "Dashboard", icon: <Home size={18} /> },
+        { path: "/admin/jobs", label: "Jobs", icon: <Briefcase size={18} /> },
+        { path: "/admin/announcement", label: "Announcements", icon: <Megaphone size={18} /> },
+        { path: "/admin/events", label: "Events", icon: <Calendar size={18} /> },
+        { path: "/admin/forums", label: "Forums", icon: <MessageSquare size={18} /> },
+        { path: "/admin/course-list", label: "Course List", icon: <BookOpen size={18} /> },
+        { path: "/admin/alumni-list", label: "Account Request", icon: <Users size={18} /> },
+        { path: "/admin/admin-list", label: "Admin", icon: <Shield size={18} /> },
+        { path: "/admin/manage-map", label: "Manage Map", icon: <Map size={18} /> },
+        { path: "/admin/manage-feedback", label: "Feedback", icon: <MessageCircle size={18} /> },
+        { path: "/admin/statistical-reports", label: "Statistical Reports", icon: <BarChart3 size={18} /> },
+        { path: "/admin/updates", label: "Unemployment Updates", icon: <Smartphone size={18} /> },
+    ];
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
@@ -40,44 +68,34 @@ const AdminLayout = ({ children }) => {
                     </div>
 
                     {/* Scrollable Navigation Links */}
-                    <div className="flex-1 overflow-y-auto px-4 py-2">
-                        <ul className="space-y-2">
-                            {[
-                                { path: "/admin/dashboard", label: "Dashboard", icon: "🏠" },
-                                { path: "/admin/jobs", label: "Jobs", icon: "📋" },
-                                { path: "/admin/announcement", label: "Announcements", icon: "📢" },
-                                { path: "/admin/events", label: "Events", icon: "📅" },
-                                { path: "/admin/forums", label: "Forums", icon: "💬" },
-                                { path: "/admin/course-list", label: "Course List", icon: "📚" },
-                                { path: "/admin/alumni-list", label: "Alumni List", icon: "🎓" },
-                                { path: "/admin/admin-list", label: "Admin ", icon: "🎓" },
-
-                                { path: "/admin/manage-map", label: "Manage Map", icon: "🗺️" },
-                                { path: "/admin/manage-feedback", label: "Feedback", icon: "📝" },
-                                { path: "/admin/statistical-reports", label: "Statistical Reports", icon: "📊" },
-                                { path: "/admin/updates", label: "Unemployment Updates", icon: "📲" },
-                            ].map(({ path, label, icon }) => (
+                    <div className="flex-1 overflow-y-auto px-4 py-3">
+                        <ul className="space-y-1">
+                            {navItems.map(({ path, label, icon }) => (
                                 <li key={path}>
                                     <NavLink
                                         to={path}
                                         className={({ isActive }) =>
-                                            `flex items-center space-x-3 p-3 rounded-lg text-gray-700 font-medium ${isActive ? "bg-green-100 text-green-700" : "hover:bg-gray-200"
+                                            `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 
+                 font-medium text-sm
+                 ${isActive
+                                                ? "bg-green-100 text-green-700 shadow-sm border-l-4 border-green-600"
+                                                : "text-gray-700 hover:bg-gray-100 hover:text-green-600"
                                             }`
                                         }
                                     >
-                                        <span>{icon}</span>
-                                        <span>{label}</span>
+                                        <span className="flex-shrink-0">{icon}</span>
+                                        <span className="tracking-wide">{label}</span>
                                     </NavLink>
                                 </li>
                             ))}
 
-                            {/* Logout Button */}
-                            <li className="pb-4"> {/* Added padding-bottom to ensure it's not cut off */}
+                            {/* Logout */}
+                            <li className="pt-4">
                                 <button
                                     onClick={handleLogout}
-                                    className="flex w-full items-center space-x-3 p-3 rounded-lg text-gray-700 font-medium hover:bg-gray-200"
+                                    className="flex w-full items-center space-x-3 px-4 py-3 rounded-xl text-gray-700 font-medium text-sm hover:bg-red-50 hover:text-red-600 transition-all duration-200"
                                 >
-                                    <span>🚪</span>
+                                    <LogOut size={18} />
                                     <span>Logout</span>
                                 </button>
                             </li>
