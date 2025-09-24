@@ -3,7 +3,29 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-
+import {
+    Home,
+    Briefcase,
+    Megaphone,
+    Calendar,
+    MessageSquare,
+    Map,
+    User,
+    MessageCircle,
+    HelpCircle,
+    LogOut,
+} from "lucide-react";
+const userNavItems = [
+    { path: "/user/dashboard", label: "Dashboard", icon: <Home size={18} /> },
+    { path: "/user/jobs", label: "Jobs", icon: <Briefcase size={18} /> },
+    { path: "/user/announcement", label: "Announcements", icon: <Megaphone size={18} /> },
+    { path: "/user/events", label: "Events", icon: <Calendar size={18} /> },
+    { path: "/user/forums", label: "Forums", icon: <MessageSquare size={18} /> },
+    { path: "/user/maps", label: "Map", icon: <Map size={18} /> },
+    { path: "/user/profile", label: "Profile", icon: <User size={18} /> },
+    { path: "/user/survey", label: "Feedback", icon: <MessageCircle size={18} /> },
+    { path: "/user/help", label: "Help", icon: <HelpCircle size={18} /> },
+];
 const UserLayout = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { user, logout } = useAuth(); // Retrieve user and logout function
@@ -38,45 +60,39 @@ const UserLayout = ({ children }) => {
                     </div>
 
 
-                    {/* Navigation Links */}
-                    <ul className="mt-6 space-y-2">
-                        {[
-                            { path: "/user/dashboard", label: "Dashboard", icon: "🏠" },
-                            { path: "/user/jobs", label: "Jobs", icon: "📋" },
-                            { path: "/user/announcement", label: "Announcements", icon: "📢" },
-                            { path: "/user/events", label: "Events", icon: "📅" },
-                            { path: "/user/forums", label: "Forums", icon: "💬" },
-                            // { path: "/user/cce-admins", label: "CCE ADMINS", icon: "📚" },
-                            { path: "/user/maps", label: "Map", icon: "🗺️" },
-                            { path: "/user/profile", label: "Profile", icon: "👨🏼‍💻" },
-                            { path: "/user/survey", label: "Feedback", icon: "📝" },
-                            { path: "/user/help", label: "Help", icon: "❓" }
-                        ].map(({ path, label, icon }) => (
-                            <li key={path}>
-                                <NavLink
-                                    to={path}
-                                    className={({ isActive }) =>
-                                        `flex items-center space-x-3 p-3 rounded-lg text-gray-700 font-medium ${isActive ? "bg-green-100 text-green-700" : "hover:bg-gray-200"
-                                        }`
-                                    }
-                                >
-                                    <span>{icon}</span>
-                                    <span>{label}</span>
-                                </NavLink>
-                            </li>
-                        ))}
+                    <div className="flex-1 overflow-y-auto px-4 py-3">
+                        <ul className="space-y-1">
+                            {userNavItems.map(({ path, label, icon }) => (
+                                <li key={path}>
+                                    <NavLink
+                                        to={path}
+                                        className={({ isActive }) =>
+                                            `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 
+                 font-medium text-sm
+                 ${isActive
+                                                ? "bg-blue-100 text-blue-700 shadow-sm border-l-4 border-blue-600"
+                                                : "text-gray-700 hover:bg-gray-100 hover:text-blue-600"
+                                            }`
+                                        }
+                                    >
+                                        <span className="flex-shrink-0">{icon}</span>
+                                        <span className="tracking-wide">{label}</span>
+                                    </NavLink>
+                                </li>
+                            ))}
 
-                        {/* Logout Button */}
-                        <li>
-                            <button
-                                onClick={handleLogout}
-                                className="flex w-full items-center space-x-3 p-3 rounded-lg text-gray-700 font-medium hover:bg-gray-200"
-                            >
-                                <span>🚪</span>
-                                <span>Logout</span>
-                            </button>
-                        </li>
-                    </ul>
+                            {/* Logout */}
+                            <li className="pt-4">
+                                <button
+                                    onClick={handleLogout}
+                                    className="flex w-full items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 font-medium text-sm hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+                                >
+                                    <LogOut size={18} />
+                                    <span>Logout</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </aside>
 
