@@ -71,7 +71,7 @@ const Forums = () => {
 
 
     return (
-        <div className={`flex flex-col h-screen p-6 `}>
+        <div className="container mx-auto py-10">
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">📝 Forums</h1>
                 <button
@@ -140,7 +140,7 @@ const Forums = () => {
             )}
                {/* Forum Creation Modal */}
                {showModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-25 backdrop-blur-md">
+                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-5">
 
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96 border border-gray-300">
                         <h2 className="text-lg font-semibold mb-4">Create Forum  </h2>
