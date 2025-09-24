@@ -2,7 +2,7 @@
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
 
 import { useAuth } from "../../contexts/AuthContext";
-import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredRegionalEmployment, useJobTrends } from '../../hooks/ClusteringData';
+import { useClusteringData, useClusteredLocation, useClusteredCertifications, useClusteredRegionalEmployment, useJobTrends, useClusteredCertificationsEmployment } from '../../hooks/ClusteringData';
 import ClusterChart from "../../components/ClusterChart";
 import CertificationClusters from "./CertificationClusterChart";
 import ChartLoading from "../../components/ChartLoading";
@@ -18,6 +18,8 @@ const StatisticalReports = () => {
     const { data: analysis, loadingData: loadingAnalysis } = useClusteringData(token);
     const { data: locationAnalysis, loadingData: loadingLocation } = useClusteredLocation(token);
     const { data: certAnalysis, loadingData: loadingCert } = useClusteredCertifications(token);
+    const { data: certEmploymentAnalysis, loadingData: loadingCertEmp } = useClusteredCertificationsEmployment(token);
+
     const { data: regionalEmploymentAnalysis, loadingData: loadingRegional } = useClusteredRegionalEmployment(token);
     const { data: jobTrends, loadingData: loadingTrends } = useJobTrends(token);
     const [correlation, setCorrelation] = useState([]);
@@ -141,10 +143,10 @@ const StatisticalReports = () => {
                     This segmentation helps identify trends in alumni upskilling, career trajectories, and potential gaps in certification attainment.
                 </p>
 
-                {loadingCert ? (
+                {loadingCertEmp ? (
                     <ChartLoading message="Loading clustering analysis chart..." />
                 ) : (
-                    <ClusterChart data={certAnalysis} clusteringType="kmeans-certificate" chartType="pie" />
+                    <ClusterChart data={certEmploymentAnalysis} clusteringType="kmeans-certificate" chartType="pie" />
                 )}
 
             </div>
@@ -153,6 +155,7 @@ const StatisticalReports = () => {
             <JobTrends data={jobTrends} loading={loadingTrends} />
 
             <CertificationClusters />
+
             <div className="p-6 bg-white rounded-xl shadow-lg mt-5">
                 <h2 className="text-xl font-bold mb-4">Correlation Heatmap</h2>
                 <CorrelationChart data={correlation} />
