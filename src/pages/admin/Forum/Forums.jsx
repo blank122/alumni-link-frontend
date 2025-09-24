@@ -86,7 +86,7 @@ const Forums = () => {
                         <FaComments className="text-2xl text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Discussion Forums</h1>
+                        <h1 className="text-3xl font-bold text-black-800 dark:text-white">Discussion Forums</h1>
                         <p className="text-gray-600 dark:text-gray-400">Join the conversation with alumni community</p>
                     </div>
                 </div>
