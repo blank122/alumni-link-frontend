@@ -1,14 +1,28 @@
-
 import { useEffect, useState } from "react";
 import createApiClient from '../../api/ApiService';
 import { useAuth } from "../../contexts/AuthContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  FiUser, 
+  FiMapPin, 
+  FiTool, 
+  FiUsers, 
+  FiBook, 
+  FiBriefcase, 
+  FiAward, 
+  FiX,
+  FiCheck,
+  FiXCircle,
+  FiMail,
+  FiPhone,
+  FiCalendar,
+  FiNavigation
+} from "react-icons/fi";
 
 const AlumniSubmission = ({ userData, onClose, accountID }) => {
     const { token } = useAuth();
-
     const [loading, setLoading] = useState(false);
 
-    // if (!isOpen) return null; // don’t render modal if closed
     useEffect(() => {
         if (userData) {
             console.log(
@@ -32,8 +46,8 @@ const AlumniSubmission = ({ userData, onClose, accountID }) => {
             const api = createApiClient(token);
             const res = await api.updateAccountStatus(accountID, status);
             console.log("✅ API response:", res.data);
-            alert(`Account ${status} successfully and email sent!`);
-            onClose(); // close modal
+            alert(`Account ${status === "2" ? "approved" : "rejected"} successfully and email sent!`);
+            onClose();
         } catch (err) {
             console.error("❌ Error updating account status:", err);
             alert("Failed to update status. Please try again.");
@@ -42,288 +56,272 @@ const AlumniSubmission = ({ userData, onClose, accountID }) => {
         }
     };
 
+    const InfoCard = ({ icon: Icon, title, children, color = "blue" }) => {
+        const colorClasses = {
+            blue: "bg-blue-50 dark:bg-blue-900/20 text-blue-500",
+            green: "bg-green-50 dark:bg-green-900/20 text-green-500",
+            purple: "bg-purple-50 dark:bg-purple-900/20 text-purple-500",
+            amber: "bg-amber-50 dark:bg-amber-900/20 text-amber-500",
+            indigo: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500",
+            sky: "bg-sky-50 dark:bg-sky-900/20 text-sky-500"
+        };
 
-    return (
-        <div>
-            {/* Header */}
-            <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    Review Alumni Information
-                </h2>
-                <p className="text-gray-500">
-                    Please verify all details before Approving the Alumni Registration Account
+        return (
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6"
+            >
+                <div className="flex items-center mb-4">
+                    <div className={`p-3 rounded-xl ${colorClasses[color]} mr-3`}>
+                        <Icon className="w-5 h-5" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{title}</h3>
+                </div>
+                <div className="space-y-4">
+                    {children}
+                </div>
+            </motion.div>
+        );
+    };
+
+    const InfoField = ({ label, value, icon: Icon }) => (
+        <div className="flex items-start space-x-3">
+            {Icon && <Icon className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />}
+            <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{label}</p>
+                <p className="text-gray-900 dark:text-white font-medium">
+                    {value || <span className="text-gray-400">N/A</span>}
                 </p>
-                <button
-                    onClick={onClose}
-                    className="text-gray-500 hover:text-gray-700 transition"
-                >
-                    ✕
-                </button>
-            </div>
-
-            {/* Two Column Layout */}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Left Column */}
-                <div className="space-y-6">
-                    {/* Personal Details */}
-                    <div className="p-5 rounded-xl">
-                        <div className="flex items-center mb-3">
-                            <div className="bg-blue-100 p-2 rounded-lg mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-lg font-semibold text-gray-700">Personal Details</h3>
-                        </div>
-                        <div className="space-y-3">
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Full Name</p>
-                                <p className="text-gray-800 font-medium">{userData.alm_first_name} {userData.alm_last_name}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Email Address</p>
-                                <p className="text-gray-800 font-medium">{userData.email}</p>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p className="text-sm text-gray-500 font-medium">Gender</p>
-                                    <p className="text-gray-800 font-medium">{userData.alm_gender}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-500 font-medium">Contact Number</p>
-                                    <p className="text-gray-800 font-medium">{userData.alm_contact_number}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Address */}
-                    <div className="p-5 rounded-xl">
-                        <div className="flex items-center mb-3">
-                            <div className="bg-green-100 p-2 rounded-lg mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-lg font-semibold text-gray-700">Address</h3>
-                        </div>
-                        <div className="space-y-3">
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Full Address</p>
-                                <p className="text-gray-800 font-medium">{userData.address.full_address}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Coordinates</p>
-                                <p className="text-gray-800 font-mono text-sm bg-gray-100 p-2 rounded">{userData.address.add_lat}, {userData.address.add_long}</p>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Skills */}
-
-                    <div className="p-5 rounded-xl">
-                        <div className="flex items-center mb-3">
-                            <div className="bg-green-100 p-2 rounded-lg mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 18l6-6-6-6M8 6l-6 6 6 6" />
-                                </svg>
-
-                            </div>
-                            <p className="text-sm text-gray-500 font-medium">Technical Skills</p>
-                        </div>
-                        <div className="space-y-3">
-                            {(userData.technicalskillslogs.length > 0) ? (
-                                <ul className="list-disc list-inside text-gray-800">
-                                    {/* Predefined technical skills */}
-                                    {userData.technicalskillslogs?.map((log) => (
-                                        <li key={log.id}>{log.technical_skills?.tch_skill_name}</li>
-                                    ))}
-
-                                </ul>
-                            ) : (
-                                <p className="text-gray-800 font-medium">N/A</p>
-                            )}
-                        </div>
-
-                        <div className="flex items-center mb-3">
-                            <div className="bg-green-100 p-2 rounded-lg mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a4 4 0 00-5-4m-6 6v-2a4 4 0 00-5-4H2v2a4 4 0 004 4h6zM9 10a4 4 0 110-8 4 4 0 010 8zm6 4a4 4 0 100-8 4 4 0 000 8z" />
-                                </svg>
-                            </div>
-                            <p className="text-sm text-gray-500 font-medium">Soft Skills</p>
-                        </div>
-                        <div className="space-y-3">
-                            {(userData.softskillslogs.length > 0) ? (
-                                <ul className="list-disc list-inside text-gray-800">
-                                    {/* Predefined soft skills */}
-                                    {userData.softskillslogs?.map((log) => (
-                                        <li key={log.id}>{log.soft_skill?.sft_skill_name}</li>
-                                    ))}
-
-                                </ul>
-                            ) : (
-                                <p className="text-sm text-gray-500 font-medium">N/A</p>
-                            )}
-                        </div>
-
-                    </div>
-
-                </div>
-
-                {/* Right Column */}
-                <div className="space-y-6">
-                    {/* Education */}
-                    <div className="p-5 rounded-xl">
-                        <div className="flex items-center mb-3">
-                            <div className="bg-purple-100 p-2 rounded-lg mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                                </svg>
-                            </div>
-                            <h3 className="text-lg font-semibold text-gray-700">Education</h3>
-                        </div>
-                        <div className="space-y-3">
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Alumni ID</p>
-                                <p className="text-gray-800 font-medium">{userData.alumni_education.school_id}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Degree Program</p>
-                                <p className="text-gray-800 font-medium">{userData.alumni_education.courses.course_name}</p>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p className="text-sm text-gray-500 font-medium">Year Graduated</p>
-                                    <p className="text-gray-800 font-medium">{userData.alumni_education.alm_edu_grad_year}</p>
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-500 font-medium">Masters Degree</p>
-                                    <p className="text-gray-800 font-medium">{userData.alumni_education.alm_edu_masters_deg || "N/A"}</p>
-                                </div>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Institution</p>
-                                <p className="text-gray-800 font-medium">{userData.alumni_education.alm_edu_masters_deg || "N/A"}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Employment */}
-                    <div className="p-5 rounded-xl">
-                        <div className="flex items-center mb-3">
-                            <div className="bg-amber-100 p-2 rounded-lg mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-lg font-semibold text-gray-700">Employment</h3>
-                        </div>
-                        <div className="space-y-3">
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Employment Status</p>
-                                <p className="text-gray-800 font-medium">
-                                    {employmentStatusMap[userData?.employment_status?.emp_info_status] || "Unknown"}
-                                </p>
-                            </div>
-                            {userData.emp_status == 2 && (
-                                <>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <p className="text-sm text-gray-500 font-medium">Company</p>
-                                            <p className="text-gray-800 font-medium">{userData.company_name || "N/A"}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-gray-500 font-medium">Job Title</p>
-                                            <p className="text-gray-800 font-medium">{userData.job_title || "N/A"}</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500 font-medium">Start Date</p>
-                                        <p className="text-gray-800 font-medium">{userData.start_date || "N/A"}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500 font-medium">Company Address</p>
-                                        <p className="text-gray-800 font-medium">{userData.emp_full_address || "N/A"}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500 font-medium">Coordinates</p>
-                                        <p className="text-gray-800 font-mono text-sm bg-gray-100 p-2 rounded">{userData.emp_lat || "N/A"}, {userData.emp_long || "N/A"}</p>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Certificates and Skills */}
-                    <div className="p-5 rounded-xl">
-                        <div className="flex items-center mb-3">
-                            <div className="bg-sky-100 p-2 rounded-lg mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                            </div>
-                            <h3 className="text-lg font-semibold text-gray-700">Certificates & Skills</h3>
-                        </div>
-
-                        <div className="space-y-3">
-                            {/* Certificate */}
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Certificate Serial No.</p>
-                                <p className="text-gray-800 font-medium">{userData.cert_serial_no || "N/A"}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Certificate Name</p>
-                                <p className="text-gray-800 font-medium">{userData.cert_name || "N/A"}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium">Awarded Date</p>
-                                <p className="text-gray-800 font-medium">{userData.cert_awarded || "N/A"}</p>
-                            </div>
-                            {/* <div>
-                            <p className="text-sm text-gray-500 font-medium">Certificate File</p>
-                            <p className="text-gray-800 font-medium">{userData.cert_file ? (
-                                <a href={userData.cert_file} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">
-                                    View Certificate
-                                </a>
-                            ) : "N/A"}</p>
-                        </div> */}
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            {/* Footer */}
-            <div className="flex justify-end gap-3 border-t p-4">
-                <button
-                    onClick={onClose}
-                    className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100 transition"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    disabled={loading}
-                    onClick={() => handleStatusUpdate("0")}
-                    className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
-                >
-                    {loading ? "Processing..." : "Reject"}
-                </button>
-
-                <button
-                    disabled={loading}
-                    onClick={() => handleStatusUpdate("2")}
-                    className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition"
-                >
-                    {loading ? "Processing..." : "Approve"}
-                </button>
-
             </div>
         </div>
     );
-};
-export default AlumniSubmission;
 
+    const SkillsList = ({ skills, type }) => (
+        <div className="flex flex-wrap gap-2">
+            {skills?.length > 0 ? (
+                skills.map((log) => (
+                    <span
+                        key={log.id}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    >
+                        {type === 'technical' 
+                            ? log.technical_skills?.tch_skill_name
+                            : log.soft_skill?.sft_skill_name
+                        }
+                    </span>
+                ))
+            ) : (
+                <span className="text-gray-400 text-sm">No {type} skills added</span>
+            )}
+        </div>
+    );
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col"
+            >
+                {/* Header */}
+                <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                            Review Alumni Information
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">
+                            Please verify all details before approving the alumni registration
+                        </p>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                        <FiX className="w-6 h-6" />
+                    </button>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Left Column */}
+                        <div className="space-y-6">
+                            {/* Personal Details */}
+                            <InfoCard icon={FiUser} title="Personal Details" color="blue">
+                                <InfoField 
+                                    label="Full Name" 
+                                    value={`${userData.alm_first_name} ${userData.alm_last_name}`}
+                                    icon={FiUser}
+                                />
+                                <InfoField 
+                                    label="Email Address" 
+                                    value={userData.email}
+                                    icon={FiMail}
+                                />
+                                <div className="grid grid-cols-2 gap-4">
+                                    <InfoField 
+                                        label="Gender" 
+                                        value={userData.alm_gender}
+                                    />
+                                    <InfoField 
+                                        label="Contact Number" 
+                                        value={userData.alm_contact_number}
+                                        icon={FiPhone}
+                                    />
+                                </div>
+                            </InfoCard>
+
+                            {/* Address */}
+                            <InfoCard icon={FiMapPin} title="Address" color="green">
+                                <InfoField 
+                                    label="Full Address" 
+                                    value={userData.address?.full_address}
+                                    icon={FiMapPin}
+                                />
+                                <InfoField 
+                                    label="Coordinates" 
+                                    value={userData.address ? `${userData.address.add_lat}, ${userData.address.add_long}` : null}
+                                    icon={FiNavigation}
+                                />
+                            </InfoCard>
+
+                            {/* Skills */}
+                            <InfoCard icon={FiTool} title="Skills" color="indigo">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Technical Skills</p>
+                                    <SkillsList skills={userData.technicalskillslogs} type="technical" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Soft Skills</p>
+                                    <SkillsList skills={userData.softskillslogs} type="soft" />
+                                </div>
+                            </InfoCard>
+                        </div>
+
+                        {/* Right Column */}
+                        <div className="space-y-6">
+                            {/* Education */}
+                            <InfoCard icon={FiBook} title="Education" color="purple">
+                                <InfoField 
+                                    label="Alumni ID" 
+                                    value={userData.alumni_education?.school_id}
+                                />
+                                <InfoField 
+                                    label="Degree Program" 
+                                    value={userData.alumni_education?.courses?.course_name}
+                                />
+                                <div className="grid grid-cols-2 gap-4">
+                                    <InfoField 
+                                        label="Year Graduated" 
+                                        value={userData.alumni_education?.alm_edu_grad_year}
+                                        icon={FiCalendar}
+                                    />
+                                    <InfoField 
+                                        label="Masters Degree" 
+                                        value={userData.alumni_education?.alm_edu_masters_deg}
+                                    />
+                                </div>
+                                <InfoField 
+                                    label="Institution" 
+                                    value={userData.alumni_education?.alm_edu_masters_deg_school}
+                                />
+                            </InfoCard>
+
+                            {/* Employment */}
+                            <InfoCard icon={FiBriefcase} title="Employment" color="amber">
+                                <InfoField 
+                                    label="Employment Status" 
+                                    value={employmentStatusMap[userData?.employment_status?.emp_info_status] || "Unknown"}
+                                />
+                                {userData.emp_status == 2 && (
+                                    <>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <InfoField 
+                                                label="Company" 
+                                                value={userData.company_name}
+                                            />
+                                            <InfoField 
+                                                label="Job Title" 
+                                                value={userData.job_title}
+                                            />
+                                        </div>
+                                        <InfoField 
+                                            label="Start Date" 
+                                            value={userData.start_date}
+                                            icon={FiCalendar}
+                                        />
+                                        <InfoField 
+                                            label="Company Address" 
+                                            value={userData.emp_full_address}
+                                            icon={FiMapPin}
+                                        />
+                                        <InfoField 
+                                            label="Coordinates" 
+                                            value={userData.emp_lat && userData.emp_long ? `${userData.emp_lat}, ${userData.emp_long}` : null}
+                                            icon={FiNavigation}
+                                        />
+                                    </>
+                                )}
+                            </InfoCard>
+
+                            {/* Certificates */}
+                            <InfoCard icon={FiAward} title="Certificates" color="sky">
+                                <InfoField 
+                                    label="Certificate Serial No." 
+                                    value={userData.cert_serial_no}
+                                />
+                                <InfoField 
+                                    label="Certificate Name" 
+                                    value={userData.cert_name}
+                                />
+                                <InfoField 
+                                    label="Awarded Date" 
+                                    value={userData.cert_awarded}
+                                    icon={FiCalendar}
+                                />
+                            </InfoCard>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={onClose}
+                        className="px-6 py-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors font-medium"
+                    >
+                        Cancel
+                    </motion.button>
+
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        disabled={loading}
+                        onClick={() => handleStatusUpdate("0")}
+                        className="flex items-center space-x-2 px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                        <FiXCircle className="w-4 h-4" />
+                        <span>{loading ? "Processing..." : "Reject"}</span>
+                    </motion.button>
+
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        disabled={loading}
+                        onClick={() => handleStatusUpdate("2")}
+                        className="flex items-center space-x-2 px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                        <FiCheck className="w-4 h-4" />
+                        <span>{loading ? "Processing..." : "Approve"}</span>
+                    </motion.button>
+                </div>
+            </motion.div>
+        </div>
+    );
+};
+
+export default AlumniSubmission;
