@@ -3,12 +3,15 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/layouts/Navbar";
 import { Link } from "react-router-dom";
+import ForgotPasswordModal from "../components/ForgotPasswordModal";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { login } = useAuth();
     const [error, setError] = useState("");
+    const [showForgotModal, setShowForgotModal] = useState(false);
+
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const handleLogin = async (e) => {
@@ -78,9 +81,13 @@ const Login = () => {
                                     Remember me
                                 </label>
                             </div>
-                            <a href="#!" className="text-sm text-green-600 hover:underline">
+                            <button
+                                type="button"
+                                className="text-sm text-green-600 hover:underline"
+                                onClick={() => setShowForgotModal(true)}
+                            >
                                 Forgot password
-                            </a>
+                            </button>
                         </div>
 
                         <button
@@ -111,6 +118,8 @@ const Login = () => {
                     </p>
                 </div>
             </div>
+            {showForgotModal && <ForgotPasswordModal onClose={() => setShowForgotModal(false)} />}
+
         </div>
     );
 };

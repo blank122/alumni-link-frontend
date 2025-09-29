@@ -46,6 +46,7 @@ import AdminAccounts from "../pages/admin/AdminAccounts";
 import MultiForm from "../pages/MultiForm";
 import EducationAndSkillsStep from "../pages/register/EducationAndSkillsStep";
 import EmploymentStep from "../pages/register/EmployeeStep";
+import ResetPassword from "../pages/ResetPassword";
 const AppRoutes = () => {
     return (
         <Routes>
@@ -57,6 +58,7 @@ const AppRoutes = () => {
                 <Route path="/register1" element={<MultiForm />} />
                 <Route path="/educationandskills" element={<EducationAndSkillsStep />} />
                 <Route path="/employeestep" element={<EmploymentStep />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
 
                 <Route path="/programs-events" element={<ProgramEvents />} />
                 <Route path="/careers" element={<Careers />} />
