@@ -118,6 +118,11 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
         return acc;
     }, {});
 
+    const truncateLabel = (label, maxLength = 15) => {
+        if (!label) return "";
+        return label.length > maxLength ? label.substring(0, maxLength) + "…" : label;
+    };
+
 
     const renderChart = () => {
         switch (chartType) {
@@ -260,10 +265,10 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                             <Tooltip
                                 formatter={(value, name, props) => [
                                     value,
-                                    `${name} (${props.payload.percentage ||
-                                    (value / clusteredData.length * 100).toFixed(1) + '%'})`
+                                    props.payload.name // always show full name here
                                 ]}
                             />
+
                             <Legend />
                             <Pie
                                 data={sortedClusters}
@@ -272,10 +277,13 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                                 cx="50%"
                                 cy="50%"
                                 outerRadius={100}
-                                label={({ name, percent }) =>
-                                    `${name}: ${(percent * 100).toFixed(1)}%`
-                                }
+                                label={({ name, percent }) => {
+                                    const screenWidth = window.innerWidth;
+                                    const maxLen = screenWidth < 640 ? 10 : 20;
+                                    return `${truncateLabel(name, maxLen)}: ${(percent * 100).toFixed(1)}%`;
+                                }}
                             >
+
                                 {sortedClusters.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.fill} />
                                 ))}
@@ -297,9 +305,24 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis
                                 dataKey="name"
-                                tick={{ angle: -45, textAnchor: "end" }}
-                                height={70}
+                                tick={({ x, y, payload }) => {
+                                    const screenWidth = window.innerWidth;
+                                    const maxLen = screenWidth < 640 ? 12 : 20; // shorter on mobile
+                                    return (
+                                        <text
+                                            x={x}
+                                            y={y + 15}
+                                            textAnchor="middle"
+                                            fontSize={screenWidth < 640 ? 10 : 12}
+                                        >
+                                            {truncateLabel(payload.value, maxLen)}
+                                        </text>
+                                    );
+                                }}
+                                interval={0}
+                                height={screenWidth < 640 ? 40 : 70}
                             />
+
                             <YAxis allowDecimals={false} />
                             <Tooltip
                                 formatter={(value, name, props) => [
@@ -338,10 +361,24 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis
                                 dataKey="name"
-                                tick={{ angle: 0, textAnchor: "middle" }}
+                                tick={({ x, y, payload }) => {
+                                    const screenWidth = window.innerWidth;
+                                    const maxLen = screenWidth < 640 ? 12 : 20; // shorter on mobile
+                                    return (
+                                        <text
+                                            x={x}
+                                            y={y + 15}
+                                            textAnchor="middle"
+                                            fontSize={screenWidth < 640 ? 10 : 12}
+                                        >
+                                            {truncateLabel(payload.value, maxLen)}
+                                        </text>
+                                    );
+                                }}
                                 interval={0}
-                                height={50}
+                                height={screenWidth < 640 ? 40 : 70}
                             />
+
                             <YAxis allowDecimals={false} />
                             <Tooltip
                                 formatter={(value, name, props) => [
