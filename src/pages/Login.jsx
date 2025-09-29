@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/layouts/Navbar";
@@ -8,24 +8,41 @@ import ForgotPasswordModal from "../components/ForgotPasswordModal";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
     const { login } = useAuth();
     const [error, setError] = useState("");
     const [showForgotModal, setShowForgotModal] = useState(false);
-
     const [loading, setLoading] = useState(false);
+
     const navigate = useNavigate();
+
+    // Load remembered email from localStorage
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("rememberedEmail");
+        if (savedEmail) {
+            setEmail(savedEmail);
+            setRememberMe(true);
+        }
+    }, []);
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setError("");
         setLoading(true);
         try {
-            // Pass email and password as an object
             const data = await login({ email, password });
 
-            console.log("Login Response:", data); // Debugging step
+            console.log("Login Response:", data);
 
             if (!data.success || !data.user) {
                 throw new Error(data.message || "Invalid response from server");
+            }
+
+            // Save or remove email based on rememberMe
+            if (rememberMe) {
+                localStorage.setItem("rememberedEmail", email);
+            } else {
+                localStorage.removeItem("rememberedEmail");
             }
 
             if (data.user.account_type === 1) {
@@ -48,6 +65,7 @@ const Login = () => {
                     <h2 className="text-2xl font-bold text-center mb-6">LOGIN TO YOUR ACCOUNT</h2>
                     <h2 className="text-gray-500 text-center mb-6">Welcome back! Please enter your details</h2>
                     {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
                     <form onSubmit={handleLogin}>
                         <div className="mb-4">
                             <label className="block text-gray-700 font-semibold mb-2">Email</label>
@@ -76,7 +94,14 @@ const Login = () => {
 
                         <div className="flex items-center justify-between mb-6">
                             <div>
-                                <input id="rememberMe" type="checkbox" className="mr-2" disabled={loading} />
+                                <input
+                                    id="rememberMe"
+                                    type="checkbox"
+                                    className="mr-2"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    disabled={loading}
+                                />
                                 <label htmlFor="rememberMe" className="text-gray-700 text-sm">
                                     Remember me
                                 </label>
@@ -96,7 +121,7 @@ const Login = () => {
                             disabled={loading}
                         >
                             {loading ? (
-                                <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8H4z"></path>
                                 </svg>
@@ -113,13 +138,14 @@ const Login = () => {
                     </div>
 
                     <p className="text-center text-sm text-gray-700 mt-6">
-                        Don’t have an account?{' '}
-                        <Link to="/register" className="text-green-600 hover:underline font-semibold">Register Now</Link>
+                        Don’t have an account?{" "}
+                        <Link to="/register" className="text-green-600 hover:underline font-semibold">
+                            Register Now
+                        </Link>
                     </p>
                 </div>
             </div>
             {showForgotModal && <ForgotPasswordModal onClose={() => setShowForgotModal(false)} />}
-
         </div>
     );
 };
