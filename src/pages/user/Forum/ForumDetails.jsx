@@ -33,8 +33,15 @@ const ForumDetails = () => {
     useEffect(() => {
         const fetchForumDetails = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/forums/${id}`);
-                setForum(response.data.data);
+                const response = await axios.get(
+                    `${import.meta.env.VITE_API_BASE_URL}/forums/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    }
+                ); setForum(response.data.data);
             } catch (error) {
                 console.error("Error fetching forum:", error);
             } finally {
