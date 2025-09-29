@@ -52,7 +52,7 @@ const AlumniList = () => {
 
       {/* Modal */}
       {open && selectedAccount && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-6 w-11/12 md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-y-auto">
             <AlumniSubmission
               userData={selectedAccount.alumni}

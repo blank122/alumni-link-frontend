@@ -188,6 +188,10 @@ const AlumniSubmission = ({ userData, onClose, accountID }) => {
                         </div>
                         <div className="space-y-3">
                             <div>
+                                <p className="text-sm text-gray-500 font-medium">Alumni ID</p>
+                                <p className="text-gray-800 font-medium">{userData.alumni_education.school_id}</p>
+                            </div>
+                            <div>
                                 <p className="text-sm text-gray-500 font-medium">Degree Program</p>
                                 <p className="text-gray-800 font-medium">{userData.alumni_education.courses.course_name}</p>
                             </div>
