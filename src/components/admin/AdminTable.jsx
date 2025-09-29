@@ -48,13 +48,16 @@ const AdminsTable = ({ admins }) => {
                     {admins.length === 0 ? (
                         <tr>
                             <td
-                                colSpan="5"
-                                className="px-6 py-12 text-gray-500 text-center italic flex flex-col items-center gap-2"
+                                colSpan="12"
+                                className="px-6 py-12 text-gray-500 text-center"
                             >
-                                <User className="w-10 h-10 text-gray-400" />
-                                No admin accounts yet.
+                                <div className="flex flex-col items-center justify-center gap-2">
+                                    <User className="w-10 h-10 text-gray-400" />
+                                    <span className="italic">No admin accounts yet.</span>
+                                </div>
                             </td>
                         </tr>
+
                     ) : (
                         visibleAdmins.map((admin, index) => (
                             <tr
