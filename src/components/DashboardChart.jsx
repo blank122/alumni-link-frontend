@@ -6,6 +6,15 @@ import {
   ResponsiveContainer,
   CartesianGrid
 } from 'recharts';
+import { motion } from 'framer-motion';
+import {
+  FiTrendingUp,
+  FiUsers,
+  FiUserX,
+  FiCalendar,
+  FiBarChart2,
+  FiActivity
+} from 'react-icons/fi';
 
 import ChartLoading from "../components/ChartLoading";
 
@@ -68,116 +77,277 @@ const DashboardCharts = ({ data, loading }) => {
   const unemploymentDescription = data?.current?.monthly?.unemploymentDescription;
   const previousUnemploymentDescription = data?.previous?.monthly?.unemploymentDescription;
 
-  return (
-    <div className="flex flex-col gap-6 mt-8">
+  // Custom Tooltip Component
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+          <p className="font-semibold text-gray-900 dark:text-white mb-2">
+            {monthFormatter(label)}
+          </p>
+          {payload.map((entry, index) => (
+            <p key={index} className="text-sm" style={{ color: entry.color }}>
+              {entry.name}: <span className="font-semibold">{entry.value || 0}</span>
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  return (
+    <div className="grid grid-cols-1 gap-6 mt-8">
       {/* Alumni Registrations Chart */}
-      <div className="bg-white p-4 sm:p-6 shadow-lg rounded-lg w-full">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">
-          Alumni Registrations Over Time
-        </h2>
-        <p className="text-sm text-gray-500 mb-4">
-          Tracks monthly alumni registrations (current vs previous).
-        </p>
+      <motion.div
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <FiUsers className="w-6 h-6 text-blue-500" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Alumni Registrations Over Time
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Monthly alumni registration trends comparison
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <FiCalendar className="w-4 h-4" />
+            <span>Monthly</span>
+          </div>
+        </div>
+
         {loading ? (
           <ChartLoading message="Loading registrations chart..." />
         ) : (
           <>
             <div className="w-full min-w-0">
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={mergedMonthly}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" tickFormatter={monthFormatter} />
+                <BarChart data={mergedMonthly} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#E5E7EB"
+                    strokeOpacity={0.3}
+                  />
+                  <XAxis
+                    dataKey="month"
+                    tickFormatter={monthFormatter}
+                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                  />
                   <YAxis
                     allowDecimals={false}
-                    label={{ value: "Registrations", angle: -90, position: "insideLeft" }}
+                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                    label={{
+                      value: "Registrations",
+                      angle: -90,
+                      position: "insideLeft",
+                      offset: -10,
+                      style: { textAnchor: 'middle', fill: '#6B7280' }
+                    }}
                   />
-                  <Tooltip
-                    formatter={(value, name) => [`${value || 0}`, name]}
-                    labelFormatter={(month) => `Month: ${monthFormatter(month)}`}
+                  <Tooltip content={<CustomTooltip />} />
+                  <Legend
+                    verticalAlign="top"
+                    height={36}
+                    wrapperStyle={{ fontSize: '14px' }}
                   />
-                  <Legend verticalAlign="top" height={36} />
                   <Bar
                     dataKey="currentRegistrations"
-                    fill="#4F46E5"
-                    name="Current Registrations"
+                    fill="#3B82F6"
+                    name="Current Period"
+                    radius={[4, 4, 0, 0]}
+                    className="transition-opacity hover:opacity-80"
                   />
                   <Bar
                     dataKey="previousRegistrations"
-                    fill="#22C55E"
-                    name="Previous Registrations"
+                    fill="#10B981"
+                    name="Previous Period"
+                    radius={[4, 4, 0, 0]}
+                    className="transition-opacity hover:opacity-80"
                   />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            {/* Descriptions */}
-            <div className="mt-3 text-sm text-gray-600">
-              <p className="text-sm text-center text-gray-500 mb-2">Current: {currentRangeText}</p>
-              <p className="text-sm text-center text-gray-500 mb-2">Previous: {previousRangeText}</p>
-              <p>{registrationsDescription}</p>
-              <p className="text-gray-500">{previousRegistrationsDescription}</p>
+
+            {/* Time Period Info */}
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-200 dark:border-gray-600">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <div>
+                    <span className="font-medium text-gray-900 dark:text-white">Current Period</span>
+                    <p className="text-gray-600 dark:text-gray-400">{currentRangeText}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <div>
+                    <span className="font-medium text-gray-900 dark:text-white">Previous Period</span>
+                    <p className="text-gray-600 dark:text-gray-400">{previousRangeText}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Descriptions */}
+              <div className="mt-4 text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                {registrationsDescription && (
+                  <p className="flex items-start space-x-2">
+                    <FiTrendingUp className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <span>{registrationsDescription}</span>
+                  </p>
+                )}
+                {previousRegistrationsDescription && (
+                  <p className="flex items-start space-x-2">
+                    <FiBarChart2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>{previousRegistrationsDescription}</span>
+                  </p>
+                )}
+              </div>
             </div>
           </>
         )}
-      </div>
+      </motion.div>
 
-      {/* Unemployed Chart */}
-      <div className="bg-white p-4 sm:p-6 shadow-lg rounded-lg w-full">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-700 mb-2">
-          Unemployed Alumni Over Time
-        </h2>
-        <p className="text-sm text-gray-500 mb-4">
-          Monthly unemployment trend among alumni (current vs previous).
-        </p>
+      {/* Unemployed Alumni Chart */}
+      <motion.div
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
+        transition={{ delay: 0.1 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
+              <FiUserX className="w-6 h-6 text-red-500" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Unemployed Alumni Trends
+              </h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Monthly unemployment rate monitoring
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <FiActivity className="w-4 h-4" />
+            <span>Real-time</span>
+          </div>
+        </div>
+
         {loading ? (
           <ChartLoading message="Loading unemployment chart..." />
         ) : (
           <>
             <div className="w-full min-w-0">
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={mergedMonthly}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" tickFormatter={monthFormatter} />
+                <LineChart data={mergedMonthly} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#E5E7EB"
+                    strokeOpacity={0.3}
+                  />
+                  <XAxis
+                    dataKey="month"
+                    tickFormatter={monthFormatter}
+                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                  />
                   <YAxis
                     allowDecimals={false}
-                    label={{ value: "Unemployed Alumni", angle: -90, position: "insideLeft" }}
+                    tick={{ fill: '#6B7280', fontSize: 12 }}
+                    label={{
+                      value: "Unemployed Alumni",
+                      angle: -90,
+                      position: "insideLeft",
+                      offset: -10,
+                      style: { textAnchor: 'middle', fill: '#6B7280' }
+                    }}
                   />
-                  <Tooltip
-                    formatter={(value, name) => [`${value || 0}`, name]}
-                    labelFormatter={(month) => `Month: ${monthFormatter(month)}`}
+                  <Tooltip content={<CustomTooltip />} />
+                  <Legend
+                    verticalAlign="top"
+                    height={36}
+                    wrapperStyle={{ fontSize: '14px' }}
                   />
-                  <Legend verticalAlign="top" height={36} />
                   <Line
                     type="monotone"
                     dataKey="currentUnemployed"
                     stroke="#EF4444"
-                    strokeWidth={2}
-                    name="Current Unemployed"
+                    strokeWidth={3}
+                    name="Current Period"
+                    dot={{ fill: '#EF4444', strokeWidth: 2, r: 4 }}
+                    activeDot={{ r: 6, fill: '#EF4444' }}
                     connectNulls={false}
+                    className="transition-all hover:stroke-width-4"
                   />
                   <Line
                     type="monotone"
                     dataKey="previousUnemployed"
                     stroke="#3B82F6"
                     strokeWidth={2}
-                    name="Previous Unemployed"
+                    name="Previous Period"
+                    strokeDasharray="5 5"
+                    dot={{ fill: '#3B82F6', strokeWidth: 2, r: 3 }}
+                    activeDot={{ r: 5, fill: '#3B82F6' }}
                     connectNulls={false}
+                    className="transition-all"
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
-            {/* Descriptions */}
-            <div className="mt-3 text-sm text-gray-600">
-              <p className="text-sm text-center text-gray-500 mb-2">Current: {currentRangeText}</p>
-              <p className="text-sm text-center text-gray-500 mb-2">Previous: {previousRangeText}</p>
 
-              <p>{unemploymentDescription}</p>
-              <p className="text-gray-500">{previousUnemploymentDescription}</p>
+            {/* Time Period Info */}
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-200 dark:border-gray-600">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div>
+                    <span className="font-medium text-gray-900 dark:text-white">Current Period</span>
+                    <p className="text-gray-600 dark:text-gray-400">{currentRangeText}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <div>
+                    <span className="font-medium text-gray-900 dark:text-white">Previous Period</span>
+                    <p className="text-gray-600 dark:text-gray-400">{previousRangeText}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Descriptions */}
+              <div className="mt-4 text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                {unemploymentDescription && (
+                  <p className="flex items-start space-x-2">
+                    <FiTrendingUp className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <span>{unemploymentDescription}</span>
+                  </p>
+                )}
+                {previousUnemploymentDescription && (
+                  <p className="flex items-start space-x-2">
+                    <FiBarChart2 className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <span>{previousUnemploymentDescription}</span>
+                  </p>
+                )}
+              </div>
             </div>
           </>
         )}
-      </div>
-
+      </motion.div>
     </div>
   );
 };

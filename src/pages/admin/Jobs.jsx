@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+    FiBriefcase,
+    FiPlus,
+    FiX,
+    FiUpload,
+    FiCalendar,
+    FiEdit,
+    FiTrash2,
+    FiImage,
+    FiFileText
+} from "react-icons/fi";
 import formatDate from "../../utils/helper";
 
 const Jobs = () => {
@@ -49,8 +61,7 @@ const Jobs = () => {
         if (jobImage) formData.append("job_image", jobImage);
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/admin/jobs`
-                , formData, {
+            const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/admin/jobs`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",
@@ -58,155 +69,292 @@ const Jobs = () => {
             });
 
             if (response.status === 201) {
-                window.location.reload(); // Reload the page after successful action
+                window.location.reload();
                 alert("Job created successfully!");
                 setShowModal(false);
                 setJobTitle("");
                 setJobDetails("");
                 setJobImage(null);
             }
-            setPostLoading(false);
-
         } catch (error) {
             console.error("Error creating job:", error);
+        } finally {
+            setPostLoading(false);
         }
     };
 
+    const cardVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
+
+    const modalVariants = {
+        hidden: { opacity: 0, scale: 0.9 },
+        visible: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0.9 }
+    };
 
     return (
-        <div className={`flex flex-col h-screen p-6 ${showModal ? "backdrop-blur-md" : ""}`}>
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Job Posts</h1>
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700"
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+            <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex justify-between items-center mb-8"
                 >
-                    + Create Job
-                </button>
-            </div>
+                    <div>
+                        <div className="flex items-center space-x-3 mb-2">
+                            <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+                                <FiBriefcase className="w-6 h-6 text-indigo-500" />
+                            </div>
+                            <h1 className="text-3xl font-light text-gray-900 dark:text-white">Job Posts Management</h1>
+                        </div>
+                        <div className="w-12 h-0.5 bg-indigo-500"></div>
+                        <p className="text-gray-600 dark:text-gray-400 mt-3">
+                            Manage and create job postings for alumni opportunities.
+                        </p>
+                    </div>
 
-            <div className="p-4 bg-white shadow-md rounded-lg">
-                <h2 className="text-2xl font-semibold text-gray-700 mb-4">Job Listings</h2>
-                {loading ? (
-                    <p className="text-gray-500">Loading job posts data...</p>
-                ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full border-collapse bg-white shadow-lg rounded-lg">
-                            <thead className="bg-blue-600 text-white">
-                                <tr>
-                                    <th className="px-6 py-3 text-left">Job Title</th>
-                                    <th className="px-6 py-3 text-left">Job Details</th>
-                                    <th className="px-6 py-3 text-left">Job Image</th>
-                                    <th className="px-6 py-3 text-left">Date Posted</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {jobsPosts.length > 0 ? (
-                                    jobsPosts.map((item, index) => (
-                                        <tr
-                                            key={item.id}
-                                            className={`border-b ${index % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-gray-200 transition`}
-                                        >
-                                            <td className="px-6 py-4 text-gray-700">{item.job_title || "N/A"}</td>
-                                            <td className="px-6 py-4 text-gray-700">{item.job_details || "N/A"}</td>
-                                            <td className="px-6 py-4">
-                                                {item.job_image ? (
-                                                    <img
-                                                        src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/job_posts/${item.job_image}`}
-                                                        alt="Job Post"
-                                                        className="w-20 h-20 object-cover rounded-md shadow-sm"
-                                                    />
-                                                ) : (
-                                                    <span className="text-gray-400">No Image</span>
-                                                )}
-                                            </td>
-                                            <td className="px-6 py-4 text-gray-700">
-                                                {formatDate(item.created_at)}
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setShowModal(true)}
+                        className="flex items-center space-x-2 px-6 py-3 bg-indigo-600 text-white rounded-xl shadow-sm hover:bg-indigo-700 transition-all duration-300 font-medium"
+                    >
+                        <FiPlus className="w-5 h-5" />
+                        <span>Create Job</span>
+                    </motion.button>
+                </motion.div>
 
+                {/* Jobs Table */}
+                <motion.div
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
+                >
+                    <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Job Listings</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            {jobsPosts.length} job posting{jobsPosts.length !== 1 ? 's' : ''} found
+                        </p>
+                    </div>
+
+                    {loading ? (
+                        <div className="flex justify-center items-center py-12">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-gray-50 dark:bg-gray-700/50">
+                                    <tr>
+                                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            Job Details
+                                        </th>
+                                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            Image
+                                        </th>
+                                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                            Date Posted
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                                    {jobsPosts.length > 0 ? (
+                                        jobsPosts.map((item, index) => (
+                                            <motion.tr
+                                                key={item.id}
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ delay: index * 0.1 }}
+                                                className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
+                                            >
+                                                <td className="px-6 py-4">
+                                                    <div>
+                                                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                                                            {item.job_title || "N/A"}
+                                                        </h3>
+                                                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                                                            {item.job_details || "No details provided"}
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    {item.job_image ? (
+                                                        <div className="relative group">
+                                                            <img
+                                                                src={`${import.meta.env.VITE_STORAGE_BASE_URL}/public/storage/job_posts/${item.job_image}`}
+                                                                alt="Job Post"
+                                                                className="w-16 h-16 object-cover rounded-lg shadow-sm transition-transform group-hover:scale-110"
+                                                            />
+                                                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all flex items-center justify-center">
+                                                                <FiImage className="w-4 h-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                                            <FiImage className="w-6 h-6 text-gray-400" />
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                                                        <FiCalendar className="w-4 h-4 mr-2" />
+                                                        {formatDate(item.created_at)}
+                                                    </div>
+                                                </td>
+
+                                            </motion.tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="4" className="px-6 py-12 text-center">
+                                                <div className="flex flex-col items-center justify-center">
+                                                    <FiBriefcase className="w-12 h-12 text-gray-400 mb-3" />
+                                                    <p className="text-gray-500 dark:text-gray-400 text-lg mb-2">No job posts found</p>
+                                                    <p className="text-gray-400 dark:text-gray-500 text-sm">
+                                                        Get started by creating your first job posting.
+                                                    </p>
+                                                </div>
                                             </td>
                                         </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="4" className="text-center p-4 text-gray-500">
-                                            No job data found
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </div>
-
-            {/* Job Creation Modal */}
-            {showModal && (
-                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg w-full max-w-lg p-6">
-                        <h2 className="text-lg font-semibold mb-4">Create Job</h2>
-                        <form onSubmit={handleCreateJob} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Job Title</label>
-                                <input
-                                    type="text"
-                                    value={jobTitle}
-                                    onChange={(e) => setJobTitle(e.target.value)}
-                                    required
-                                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
-                                    disabled={postLoading}
-
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Job Details</label>
-                                <textarea
-                                    value={jobDetails}
-                                    onChange={(e) => setJobDetails(e.target.value)}
-                                    required
-                                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
-                                    disabled={postLoading}
-
-                                ></textarea>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Upload Image</label>
-                                <input
-                                    type="file"
-                                    onChange={(e) => setJobImage(e.target.files[0])}
-                                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-300 hover:border-green-500 focus:scale-[1.02]"
-                                    disabled={postLoading}
-
-                                />
-                            </div>
-                            <div className="flex justify-end space-x-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowModal(false)}
-                                    className="px-4 py-2 bg-gray-300 rounded-lg"
-                                    disabled={postLoading}
-
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="bg-green-600 text-white p-2 w-full rounded-md hover:bg-blue-600 flex justify-center items-center"
-                                    disabled={postLoading}
-                                >
-                                    {postLoading ? (
-                                        <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8H4z"></path>
-                                        </svg>
-                                    ) : (
-                                        "Create Job"
                                     )}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </motion.div>
+
+                {/* Create Job Modal */}
+                <AnimatePresence>
+                    {showModal && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+                            onClick={() => setShowModal(false)}
+                        >
+                            <motion.div
+                                variants={modalVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg shadow-xl"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                {/* Modal Header */}
+                                <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700">
+                                    <div className="flex items-center space-x-3">
+                                        <FiBriefcase className="w-5 h-5 text-indigo-500" />
+                                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                            Create Job Post
+                                        </h2>
+                                    </div>
+                                    <button
+                                        className="p-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                                        onClick={() => setShowModal(false)}
+                                    >
+                                        <FiX className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                {/* Modal Form */}
+                                <form onSubmit={handleCreateJob} className="p-6 space-y-6">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Job Title
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={jobTitle}
+                                            onChange={(e) => setJobTitle(e.target.value)}
+                                            required
+                                            disabled={postLoading}
+                                            placeholder="Enter job title..."
+                                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Job Details
+                                        </label>
+                                        <textarea
+                                            value={jobDetails}
+                                            onChange={(e) => setJobDetails(e.target.value)}
+                                            required
+                                            disabled={postLoading}
+                                            rows={4}
+                                            placeholder="Describe the job position, requirements, and details..."
+                                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Job Image
+                                        </label>
+                                        <div className="flex items-center space-x-3">
+                                            <label className="flex-1 cursor-pointer">
+                                                <input
+                                                    type="file"
+                                                    onChange={(e) => setJobImage(e.target.files[0])}
+                                                    disabled={postLoading}
+                                                    className="hidden"
+                                                    accept="image/*"
+                                                />
+                                                <div className="flex items-center justify-center space-x-2 p-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-indigo-400 transition-colors">
+                                                    <FiUpload className="w-5 h-5 text-gray-400" />
+                                                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                                                        {jobImage ? jobImage.name : "Upload job image"}
+                                                    </span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Modal Actions */}
+                                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+                                        <motion.button
+                                            type="button"
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={() => setShowModal(false)}
+                                            disabled={postLoading}
+                                            className="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                                        >
+                                            Cancel
+                                        </motion.button>
+                                        <motion.button
+                                            type="submit"
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            disabled={postLoading}
+                                            className="flex items-center space-x-2 px-6 py-3 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                                        >
+                                            {postLoading ? (
+                                                <>
+                                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                                    <span>Creating...</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <FiPlus className="w-4 h-4" />
+                                                    <span>Create Job</span>
+                                                </>
+                                            )}
+                                        </motion.button>
+                                    </div>
+                                </form>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
     );
 };
