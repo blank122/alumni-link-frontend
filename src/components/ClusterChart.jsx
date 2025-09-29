@@ -17,26 +17,36 @@ import {
     Scatter,
     ZAxis
 } from "recharts";
+import { motion } from 'framer-motion';
+import {
+    FiBarChart2,
+    FiPieChart,
+    FiTrendingUp,
+    FiMap,
+    FiUsers,
+    FiAward,
+    FiGlobe
+} from 'react-icons/fi';
 
-// Color mapping (your existing code)
+// Color mapping with Tailwind colors
 const CLUSTER_COLORS = {
-    "Cluster A: Highly Certified Professionals": "#4f46e5",
-    "Cluster B: Early-Career Alumni": "#10b981",
-    "Cluster C: Experienced but Less Certified": "#f59e0b",
-    "Experienced Alumni (5+ work experienced years)": "#4f46e5",
-    "Masters Degree Holder": "#10b981",
-    "Early Career Alumni (<1 work experienced year)": "#f59e0b",
-    "Mid-Level Alumni (2-5 years)": "#06b6d4",
-    "Cluster A: Working Abroad": "#06b6d4",
-    "Cluster B: Working in the Philippines": "#8b5cf6",
-    "Cluster A: NCR": "#1f77b4",       // Blue
-    "Cluster B: Luzon": "#ff7f0e",     // Orange
-    "Cluster C: Visayas": "#2ca02c",   // Green
-    "Cluster D: Mindanao": "#d62728",  // Red
-    "Cluster E: Outside Philippines": "#9467bd", // Purple
+    "Cluster A: Highly Certified Professionals": "#3B82F6", // blue-500
+    "Cluster B: Early-Career Alumni": "#10B981", // green-500
+    "Cluster C: Experienced but Less Certified": "#F59E0B", // amber-500
+    "Experienced Alumni (5+ work experienced years)": "#8B5CF6", // violet-500
+    "Masters Degree Holder": "#06B6D4", // cyan-500
+    "Early Career Alumni (<1 work experienced year)": "#EF4444", // red-500
+    "Mid-Level Alumni (2-5 years)": "#F97316", // orange-500
+    "Cluster A: Working Abroad": "#6366F1", // indigo-500
+    "Cluster B: Working in the Philippines": "#84CC16", // lime-500
+    "Cluster A: NCR": "#3B82F6", // blue-500
+    "Cluster B: Luzon": "#F59E0B", // amber-500
+    "Cluster C: Visayas": "#10B981", // green-500
+    "Cluster D: Mindanao": "#EF4444", // red-500
+    "Cluster E: Outside Philippines": "#8B5CF6", // violet-500
 };
 
-// Label generator (your existing code)
+// Label generator
 const getClusterLabel = (clusteringType, clusterNumber) => {
     switch (clusteringType) {
         case "kmeans-profile":
@@ -70,11 +80,51 @@ const getClusterLabel = (clusteringType, clusterNumber) => {
     }
 };
 
+const getChartIcon = (chartType) => {
+    switch (chartType) {
+        case "bar": return FiBarChart2;
+        case "pie": return FiPieChart;
+        case "line": return FiTrendingUp;
+        case "scatter": return FiMap;
+        case "heatmap": return FiUsers;
+        default: return FiBarChart2;
+    }
+};
+
+const getChartTitle = (chartType, clusteringType) => {
+    const baseTitles = {
+        "bar": "Distribution",
+        "pie": "Composition",
+        "line": "Trends",
+        "scatter": "Overview",
+        "heatmap": "Density"
+    };
+
+    const typeTitles = {
+        "kmeans-profile": "Alumni Profile",
+        "kmeans-location": "Location",
+        "kmeans-certificate": "Certification",
+        "kmeans-ph-regions": "Philippine Regions"
+    };
+
+    return `${typeTitles[clusteringType] || 'Cluster'} ${baseTitles[chartType] || 'Analysis'}`;
+};
+
 const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "bar" }) => {
     const clusteredData = Array.isArray(data) ? data : data?.clustered_data || [];
 
     if (!clusteredData.length) {
-        return <p>No clustering data available.</p>;
+        return (
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                <div className="text-center py-12">
+                    <FiUsers className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500 dark:text-gray-400 text-lg">No clustering data available</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+                        Cluster data will appear here once available
+                    </p>
+                </div>
+            </div>
+        );
     }
 
     // Calculate cluster counts
@@ -90,264 +140,175 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
         .map(([name, count]) => ({
             name,
             count,
-            fill: CLUSTER_COLORS[name] || "#8884d8"
+            percentage: (count / clusteredData.length * 100).toFixed(1),
+            fill: CLUSTER_COLORS[name] || "#6B7280"
         }));
 
-    // For scatter plot - group data by cluster
-    const scatterDataByCluster = sortedClusters.reduce((acc, cluster) => {
-        acc[cluster.name] = {
-            name: cluster.name,
-            data: [{ x: sortedClusters.findIndex(c => c.name === cluster.name), y: cluster.count }],
-            fill: cluster.fill
-        };
-        return acc;
-    }, {});
-
-    // For heatmap - group data by cluster
-    const heatmapDataByCluster = sortedClusters.reduce((acc, cluster, index) => {
-        acc[cluster.name] = {
-            name: cluster.name,
-            data: [{
-                x: index % 3,
-                y: Math.floor(index / 3),
-                value: cluster.count,
-                intensity: cluster.count / Math.max(...sortedClusters.map(c => c.count))
-            }],
-            fill: cluster.fill
-        };
-        return acc;
-    }, {});
-
-    const truncateLabel = (label, maxLength = 15) => {
+    const truncateLabel = (label, maxLength = 20) => {
         if (!label) return "";
         return label.length > maxLength ? label.substring(0, maxLength) + "…" : label;
     };
 
+    // Custom Tooltip Component
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            const data = payload[0].payload;
+            return (
+                <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                    <p className="font-semibold text-gray-900 dark:text-white mb-2">
+                        {data.name || label}
+                    </p>
+                    <div className="space-y-1 text-sm">
+                        <p className="text-gray-600 dark:text-gray-400">
+                            Alumni Count: <span className="font-semibold text-gray-900 dark:text-white">{data.count || data.value}</span>
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-400">
+                            Percentage: <span className="font-semibold text-gray-900 dark:text-white">{data.percentage || ((data.count / clusteredData.length) * 100).toFixed(1)}%</span>
+                        </p>
+                    </div>
+                </div>
+            );
+        }
+        return null;
+    };
 
     const renderChart = () => {
+        const ChartIcon = getChartIcon(chartType);
+
         switch (chartType) {
             case "scatter":
-                return (
-                    <ResponsiveContainer width="100%" height={400}>
-                        <ScatterChart
-                            margin={{ top: 20, right: 20, bottom: 70, left: 70 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis
-                                type="number"
-                                dataKey="x"
-                                name="Cluster Index"
-                                tick={false}
-                                label={{ value: 'Clusters', position: 'insideBottom', offset: -10 }}
-                            />
-                            <YAxis
-                                type="number"
-                                dataKey="y"
-                                name="Alumni Count"
-                                label={{ value: 'Number of Alumni', angle: -90, position: 'insideLeft' }}
-                            />
-                            <Tooltip
-                                cursor={{ strokeDasharray: "3 3" }}
-                                formatter={(value, name, props) => {
-                                    if (name === 'y') return [value, 'Alumni Count'];
-                                    return [value, name];
-                                }}
-                                labelFormatter={(label, payload) => {
-                                    if (payload && payload[0]) {
-                                        return payload[0].payload.clusterName || '';
-                                    }
-                                    return '';
-                                }}
-                            />
-                            <Legend />
-                            {Object.entries(scatterDataByCluster).map(([clusterName, clusterData]) => (
-                                <Scatter
-                                    key={clusterName}
-                                    name={clusterName}
-                                    data={clusterData.data.map(item => ({
-                                        ...item,
-                                        clusterName: clusterName
-                                    }))}
-                                    fill={clusterData.fill}
-                                    shape={(props) => {
-                                        const { cx, cy, payload } = props;
-                                        const size = Math.sqrt(payload.y) * 2 + 10;
-                                        return (
-                                            <circle
-                                                cx={cx}
-                                                cy={cy}
-                                                r={size}
-                                                fill={clusterData.fill}
-                                                stroke="#fff"
-                                                strokeWidth={2}
-                                                opacity={0.8}
-                                            />
-                                        );
-                                    }}
-                                />
-                            ))}
-                        </ScatterChart>
-                    </ResponsiveContainer>
-                );
+                const scatterData = sortedClusters.map((cluster, index) => ({
+                    x: index,
+                    y: cluster.count,
+                    z: cluster.count,
+                    ...cluster
+                }));
 
-            case "heatmap":
                 return (
                     <ResponsiveContainer width="100%" height={400}>
-                        <ScatterChart
-                            margin={{ top: 20, right: 20, bottom: 70, left: 70 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
+                        <ScatterChart data={scatterData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" strokeOpacity={0.3} />
                             <XAxis
-                                type="number"
                                 dataKey="x"
-                                name="Column"
                                 tick={false}
-                                domain={[-0.5, 2.5]}
-                                label={{ value: '', position: 'insideBottom' }}
+                                label={{ value: 'Clusters', position: 'insideBottom', offset: -5, style: { fill: '#6B7280' } }}
                             />
                             <YAxis
-                                type="number"
                                 dataKey="y"
-                                name="Row"
-                                tick={false}
-                                domain={[-0.5, Math.ceil(sortedClusters.length / 3) - 0.5]}
-                                label={{ value: '', angle: -90, position: 'insideLeft' }}
+                                label={{ value: 'Alumni Count', angle: -90, position: 'insideLeft', style: { fill: '#6B7280' } }}
+                                tick={{ fill: '#6B7280' }}
                             />
-                            <Tooltip
-                                formatter={(value, name, props) => {
-                                    if (name === 'value') return [value, 'Alumni Count'];
-                                    return [value, name];
-                                }}
-                                labelFormatter={(label, payload) => {
-                                    if (payload && payload[0]) {
-                                        return payload[0].payload.clusterName || '';
-                                    }
-                                    return '';
-                                }}
-                            />
+                            <Tooltip content={<CustomTooltip />} />
                             <Legend />
-                            {Object.entries(heatmapDataByCluster).map(([clusterName, clusterData]) => (
-                                <Scatter
-                                    key={clusterName}
-                                    name={clusterName}
-                                    data={clusterData.data.map(item => ({
-                                        ...item,
-                                        clusterName: clusterName
-                                    }))}
-                                    fill={clusterData.fill}
-                                    shape={(props) => {
-                                        const { cx, cy, payload } = props;
-                                        const size = 40;
-                                        return (
-                                            <rect
-                                                x={cx - size / 2}
-                                                y={cy - size / 2}
-                                                width={size}
-                                                height={size}
-                                                fill={clusterData.fill}
-                                                fillOpacity={payload.intensity * 0.7 + 0.3}
-                                                stroke="#fff"
-                                                strokeWidth={2}
-                                                rx={5}
-                                            />
-                                        );
-                                    }}
-                                />
-                            ))}
+                            <Scatter
+                                dataKey="y"
+                                fill="#3B82F6"
+                                shape={(props) => {
+                                    const { cx, cy, payload } = props;
+                                    const size = Math.sqrt(payload.y) * 0.5 + 20;
+                                    return (
+                                        <circle
+                                            cx={cx}
+                                            cy={cy}
+                                            r={size}
+                                            fill={payload.fill}
+                                            stroke="#fff"
+                                            strokeWidth={2}
+                                            opacity={0.8}
+                                            className="transition-all hover:r-8"
+                                        />
+                                    );
+                                }}
+                            />
                         </ScatterChart>
                     </ResponsiveContainer>
                 );
 
             case "pie":
                 return (
-                    <ResponsiveContainer width="100%" height={300}>
-                        <PieChart>
-                            <Tooltip
-                                formatter={(value, name, props) => [
-                                    value,
-                                    props.payload.name // always show full name here
-                                ]}
-                            />
-
-                            <Legend />
-                            <Pie
-                                data={sortedClusters}
-                                dataKey="count"
-                                nameKey="name"
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={100}
-                                label={({ name, percent }) => {
-                                    const screenWidth = window.innerWidth;
-                                    const maxLen = screenWidth < 640 ? 10 : 20;
-                                    return `${truncateLabel(name, maxLen)}: ${(percent * 100).toFixed(1)}%`;
-                                }}
-                            >
-
-                                {sortedClusters.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                                ))}
-                            </Pie>
-                        </PieChart>
-                    </ResponsiveContainer>
+                    <div className="h-80">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={sortedClusters}
+                                    dataKey="count"
+                                    nameKey="name"
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={120}
+                                    innerRadius={60}
+                                    paddingAngle={2}
+                                    label={({ name, percent }) =>
+                                        `${truncateLabel(name, 12)}: ${(percent * 100).toFixed(0)}%`
+                                    }
+                                    labelLine={false}
+                                >
+                                    {sortedClusters.map((entry, index) => (
+                                        <Cell
+                                            key={`cell-${index}`}
+                                            fill={entry.fill}
+                                            className="transition-opacity hover:opacity-80"
+                                        />
+                                    ))}
+                                </Pie>
+                                <Tooltip content={<CustomTooltip />} />
+                                <Legend
+                                    wrapperStyle={{
+                                        fontSize: '14px',
+                                        paddingTop: '20px'
+                                    }}
+                                    formatter={(value) => truncateLabel(value, 18)}
+                                />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
                 );
 
             case "line":
                 const lineChartData = sortedClusters.map((cluster, index) => ({
                     ...cluster,
-                    rank: index + 1,
-                    percentage: (cluster.count / clusteredData.length * 100).toFixed(1) + '%'
+                    rank: index + 1
                 }));
 
                 return (
-                    <ResponsiveContainer width="100%" height={300}>
+                    <ResponsiveContainer width="100%" height={400}>
                         <LineChart data={lineChartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" strokeOpacity={0.3} />
                             <XAxis
                                 dataKey="name"
-                                tick={({ x, y, payload }) => {
-                                    const screenWidth = window.innerWidth;
-                                    const maxLen = screenWidth < 640 ? 12 : 20; // shorter on mobile
-                                    return (
-                                        <text
-                                            x={x}
-                                            y={y + 15}
-                                            textAnchor="middle"
-                                            fontSize={screenWidth < 640 ? 10 : 12}
-                                        >
-                                            {truncateLabel(payload.value, maxLen)}
-                                        </text>
-                                    );
+                                tick={{
+                                    fill: '#6B7280',
+                                    fontSize: 12,
+                                    angle: -45,
+                                    textAnchor: 'end'
                                 }}
+                                height={80}
                                 interval={0}
-                                height={screenWidth < 640 ? 40 : 70}
                             />
-
-                            <YAxis allowDecimals={false} />
-                            <Tooltip
-                                formatter={(value, name, props) => [
-                                    value,
-                                    `${props.payload.name} (Rank ${props.payload.rank})`
-                                ]}
-                                labelFormatter={() => "Cluster"}
+                            <YAxis
+                                allowDecimals={false}
+                                tick={{ fill: '#6B7280' }}
                             />
+                            <Tooltip content={<CustomTooltip />} />
                             <Legend />
                             <Line
                                 type="monotone"
                                 dataKey="count"
-                                stroke="#8884d8"
-                                strokeWidth={2}
+                                stroke="#3B82F6"
+                                strokeWidth={3}
                                 dot={({ cx, cy, payload }) => (
                                     <circle
                                         cx={cx}
                                         cy={cy}
                                         r={6}
-                                        fill={CLUSTER_COLORS[payload.name] || "#8884d8"}
+                                        fill={payload.fill}
                                         stroke="#fff"
                                         strokeWidth={2}
+                                        className="transition-all hover:r-8"
                                     />
                                 )}
-                                activeDot={{ r: 8 }}
+                                activeDot={{ r: 8, fill: '#3B82F6' }}
+                                className="transition-all"
                             />
                         </LineChart>
                     </ResponsiveContainer>
@@ -356,43 +317,37 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
             case "bar":
             default:
                 return (
-                    <ResponsiveContainer width="100%" height={300}>
+                    <ResponsiveContainer width="100%" height={400}>
                         <BarChart data={sortedClusters}>
-                            <CartesianGrid strokeDasharray="3 3" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" strokeOpacity={0.3} />
                             <XAxis
                                 dataKey="name"
-                                tick={({ x, y, payload }) => {
-                                    const screenWidth = window.innerWidth;
-                                    const maxLen = screenWidth < 640 ? 12 : 20; // shorter on mobile
-                                    return (
-                                        <text
-                                            x={x}
-                                            y={y + 15}
-                                            textAnchor="middle"
-                                            fontSize={screenWidth < 640 ? 10 : 12}
-                                        >
-                                            {truncateLabel(payload.value, maxLen)}
-                                        </text>
-                                    );
+                                tick={{
+                                    fill: '#6B7280',
+                                    fontSize: 12,
+                                    angle: -45,
+                                    textAnchor: 'end'
                                 }}
+                                height={80}
                                 interval={0}
-                                height={screenWidth < 640 ? 40 : 70}
                             />
-
-                            <YAxis allowDecimals={false} />
-                            <Tooltip
-                                formatter={(value, name, props) => [
-                                    value,
-                                    `${props.payload.name} (${(
-                                        (value / clusteredData.length) *
-                                        100
-                                    ).toFixed(1)}%)`
-                                ]}
+                            <YAxis
+                                allowDecimals={false}
+                                tick={{ fill: '#6B7280' }}
                             />
+                            <Tooltip content={<CustomTooltip />} />
                             <Legend />
-                            <Bar dataKey="count" name="Number of Alumni">
+                            <Bar
+                                dataKey="count"
+                                name="Number of Alumni"
+                                radius={[4, 4, 0, 0]}
+                            >
                                 {sortedClusters.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={entry.fill}
+                                        className="transition-opacity hover:opacity-80"
+                                    />
                                 ))}
                             </Bar>
                         </BarChart>
@@ -401,11 +356,55 @@ const ClusterChart = ({ data, clusteringType = "kmeans-profile", chartType = "ba
         }
     };
 
+    const ChartIcon = getChartIcon(chartType);
+
     return (
-        <div>
-            <h3>{chartType.charAt(0).toUpperCase() + chartType.slice(1)} Chart</h3>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6"
+        >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+                        <ChartIcon className="w-6 h-6 text-indigo-500" />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                            {getChartTitle(chartType, clusteringType)}
+                        </h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            {sortedClusters.length} cluster{sortedClusters.length !== 1 ? 's' : ''} • {clusteredData.length} total alumni
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Chart */}
             {renderChart()}
-        </div>
+
+            {/* Cluster Legend */}
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-200 dark:border-gray-600">
+                <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Cluster Legend</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {sortedClusters.map((cluster, index) => (
+                        <div key={index} className="flex items-center space-x-2 text-sm">
+                            <div
+                                className="w-3 h-3 rounded-full flex-shrink-0"
+                                style={{ backgroundColor: cluster.fill }}
+                            />
+                            <span className="text-gray-600 dark:text-gray-400 flex-1">
+                                {truncateLabel(cluster.name, 25)}
+                            </span>
+                            <span className="font-semibold text-gray-900 dark:text-white">
+                                {cluster.count}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </motion.div>
     );
 };
 
