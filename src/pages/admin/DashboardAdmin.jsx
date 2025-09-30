@@ -11,7 +11,15 @@ import GraduatesLineChart from "../../components/GraduatesLineChart";
 import ChartLoading from "../../components/ChartLoading";
 
 import Select from 'react-select';
-
+import { 
+  FiFilter, 
+  FiCalendar, 
+  FiTool, 
+  FiUsers, 
+  FiBook,
+  FiSearch,
+  FiX
+} from "react-icons/fi";
 const DashboardAdmin = () => {
     const { token } = useAuth();
     const [fromDate, setFromDate] = useState("");
