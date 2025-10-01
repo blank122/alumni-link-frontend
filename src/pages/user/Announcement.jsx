@@ -174,7 +174,7 @@ const Announcements = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
                             onClick={() => setSelectedAnnouncement(null)}
                         >
                             <motion.div
@@ -224,7 +224,7 @@ const Announcements = () => {
                                 <div className="px-8 py-6 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-600">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                            <FiMegaphone className="w-4 h-4 mr-2" />
+                                            <FiBell className="w-4 h-4 mr-2" />
                                             Official Announcement
                                         </div>
                                         <motion.button

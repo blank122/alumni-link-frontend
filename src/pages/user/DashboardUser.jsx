@@ -104,7 +104,7 @@ const DashboardUser = () => {
                     className="mb-8"
                 >
                     <h1 className="text-4xl font-light text-gray-900 dark:text-white mb-2">
-                        Welcome back, {user?.name || 'User'}!
+                        Welcome back, {user?.alumni.alm_first_name || 'User'}!
                     </h1>
                     <div className="w-16 h-0.5 bg-blue-500 mb-4"></div>
                     <p className="text-gray-600 dark:text-gray-400">

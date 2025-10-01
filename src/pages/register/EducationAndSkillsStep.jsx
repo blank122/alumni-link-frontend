@@ -489,6 +489,42 @@ const EducationAndSkillsStep = ({ userData, handleChange, errors, currentStepInd
                                 <option value="other">Other (Not listed)</option>
                             </select>
 
+                            {/* Custom Tech Skill Input */}
+                            {showCustomTechInput && (
+                                <div className="flex gap-2 mt-2">
+                                    <input
+                                        type="text"
+                                        value={customTechSkill}
+                                        onChange={(e) => setCustomTechSkill(e.target.value)}
+                                        placeholder="Enter custom technical skill"
+                                        className="flex-1 p-2 border border-gray-300 rounded-md"
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                addCustomTechSkill();
+                                            }
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={addCustomTechSkill}
+                                        className="px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                                    >
+                                        Add
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowCustomTechInput(false);
+                                            setCustomTechSkill("");
+                                        }}
+                                        className="px-3 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            )}
+
                             {/* Chips for skills */}
                             <div className="flex flex-wrap gap-2 mt-3">
                                 {userData.technical_skills_logs.map((skillId, index) => {
@@ -553,6 +589,42 @@ const EducationAndSkillsStep = ({ userData, handleChange, errors, currentStepInd
                                 <option value="other">Other (Not listed)</option>
                             </select>
 
+                            {/* Custom Soft Skill Input */}
+                            {showCustomSoftInput && (
+                                <div className="flex gap-2 mt-2">
+                                    <input
+                                        type="text"
+                                        value={customSoftSkill}
+                                        onChange={(e) => setCustomSoftSkill(e.target.value)}
+                                        placeholder="Enter custom soft skill"
+                                        className="flex-1 p-2 border border-gray-300 rounded-md"
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                addCustomSoftSkill();
+                                            }
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={addCustomSoftSkill}
+                                        className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                                    >
+                                        Add
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowCustomSoftInput(false);
+                                            setCustomSoftSkill("");
+                                        }}
+                                        className="px-3 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            )}
+                            
                             {/* Chips for skills */}
                             <div className="flex flex-wrap gap-2 mt-3">
                                 {userData.soft_skills_logs.map((skillId, index) => {
@@ -595,6 +667,7 @@ const EducationAndSkillsStep = ({ userData, handleChange, errors, currentStepInd
                         </>
                     )}
                 </div>
+
             </div>
         </motion.div>
     );

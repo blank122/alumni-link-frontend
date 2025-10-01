@@ -4,7 +4,7 @@ const DataPrivacyModal = ({ isOpen, onAgree }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white p-6 rounded-xl w-full max-w-2xl max-h-[80vh] overflow-y-auto shadow-lg">
         <h2 className="text-xl font-bold mb-4 text-gray-800">Data Privacy Policy</h2>
         <div className="text-sm text-gray-700 space-y-3">
