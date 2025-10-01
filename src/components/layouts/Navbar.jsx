@@ -30,12 +30,6 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Search Bar */}
-                    <div className="hidden md:flex items-center bg-white text-black px-3 py-1 rounded-md">
-                        <input type="text" placeholder="Search..." className="outline-none w-40" />
-                        🔍
-                    </div>
-
                     {/* Login / Register */}
                     <div className="hidden md:flex space-x-4">
                         <Link to="/login" className="bg-white text-green-700 px-4 py-1 rounded-md">Login</Link>
