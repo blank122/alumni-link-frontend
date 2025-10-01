@@ -17,7 +17,7 @@ import {
     FiChevronRight,
     FiStar,
     FiTool,
-    FiBookOpen 
+    FiBookOpen
 } from "react-icons/fi";
 import EmploymentModal from "./Components/EmploymentModal";
 import AddressModal from "./Components/AddressModal";
@@ -309,7 +309,6 @@ const Profile = () => {
                         </div>
                     )}
                 </motion.div>
-
                 {/* Technical Skills */}
                 <motion.div
                     variants={cardVariants}
@@ -463,7 +462,17 @@ const Profile = () => {
 
             {/* Modals */}
             <EmploymentModal isOpen={showModal} onClose={() => setShowModal(false)} />
-            <SkillsModal isOpen={showTechSkillsModal} onClose={() => setShowTechSkillsModal(false)} />
+            {/* Modals */}
+            <SkillsModal
+                isOpen={showTechSkillsModal}
+                onClose={() => setShowTechSkillsModal(false)}
+                skillType="techSkills"
+            />
+            <SkillsModal
+                isOpen={showSoftSkillsModal}
+                onClose={() => setShowSoftSkillsModal(false)}
+                skillType="softSkills"
+            />
             <AddressModal isOpen={showAddressModal} onClose={() => setShowAddressModal(false)} />
         </div>
     );

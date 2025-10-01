@@ -139,7 +139,7 @@ const SkillsModal = ({ key, isOpen, onClose, skillType }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-white rounded-lg w-full max-w-lg p-6 max-h-[95vh] overflow-y-auto">
                 <h2 className="text-xl font-bold mb-4">
                     {skillType === "softSkills" ? "Add Soft Skills" : "Add Technical Skills"}
